@@ -66,3 +66,15 @@ async def quality_exception_handler(request, exc: QualityException):
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
+
+    # .\venv\Scripts\activate    python main.py  http://127.0.0.1:8000
+    # pip install -r requirements.txt (라이브러리 설치)
+    # winget install Gyan.FFmpeg
+    # ollama 홈페이지가서 다운로드
+    # exe 설치하고 vscode 껏다키기
+    # 가상환경이나 터미널가서 ollama pull llama3 (라마 다운로드)
+    # http://127.0.0.1:8000/chat
+
+    # --------------핸드폰으로 실행 방법-----------------
+    # .\venv\Scripts\activate
+    # uvicorn main:app --host 0.0.0.0 --port 8000 (서버 키기)
