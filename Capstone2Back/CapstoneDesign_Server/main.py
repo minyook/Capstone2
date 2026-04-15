@@ -6,6 +6,9 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.responses import JSONResponse
+import argparse
+import sys
+
 
 # 🌟 CORS 및 챗봇 데이터 처리를 위한 추가 임포트
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,7 +43,19 @@ async def lifespan(app: FastAPI):
         load_local_whisper_model()
         print("✅ AI 모델 로드 완료! 클라이언트(앱)의 요청을 대기 중입니다...\n")
         
-        # 🗑️ (기존에 있던 test_file 자동 분석 코드는 싹 지웠습니다!)
+        #아래 3줄포함 else까지 테스트용으로 추가한것
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--test_video", type=str, help="자동 분석할 영상 경로")
+        args, _ = parser.parse_known_args()
+        
+        if args.test_video:
+            test_path = Path(args.test_video)
+            if test_path.exists():
+                print(f"🚀 [자동 분석 모드] '{test_path.name}' 분석을 즉시 시작합니다...")
+                # 발표용이므로 별도 백그라운드 없이 직접 실행
+                run_analysis_task("AUTO_DEMO", test_path, Path("frames"), Path("uploads"), [])
+            else:
+                print(f"❌ 자동 분석 실패: {test_path} 파일을 찾을 수 없습니다.")
 
     except Exception as e:
         print(f"❌ 초기화 오류: {e}")
@@ -97,7 +112,7 @@ async def quality_exception_handler(request, exc: QualityException):
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
 
-    # .\venv\Scripts\activate    python main.py  http://127.0.0.1:8000
+    # .\venv\Scripts\activate    빽에서python main.py  프론트에서 npm run dev  http://127.0.0.1:8000
     # pip install -r requirements.txt (라이브러리 설치)
     # winget install Gyan.FFmpeg
     # ollama 홈페이지가서 다운로드

@@ -135,6 +135,8 @@ def analyze_frame_face(frame_path: str) -> MediaPipeFaceResult:
         squint=float(f.get("squint", 0.0)),
         gaze_h=float(f.get("gaze_h", 0.0)),
         gaze_v=float(f.get("gaze_v", 0.0)),
+        # 🌟 추가된 부분: MediaPipe에서 추출한 52개 상세 좌표를 DTO에 매핑
+        all_blendshapes=f.get("all_blendshapes", {}),
         error=None,
     )
 

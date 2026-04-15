@@ -1,6 +1,7 @@
 from pathlib import Path
 import time as timer 
 import traceback
+import json  # 🌟 추가: JSON 파일 저장을 위해 필요
 
 # 모든 처리 모듈 임포트
 from processing.video_analyzer import extract_all_frames, extract_audio, analyze_frame_vision
@@ -36,7 +37,6 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         extract_audio(video_path, audio_path)
         frame_paths = extract_all_frames(video_path, frame_dir, FRAME_RATE)
         if not frame_paths: raise Exception("비디오 프레임 추출 실패.")
-        total_frames = len(frame_paths)
         
         # 3. YOLO(제스처) + MediaPipe(표정/시선) 실시간 분석
         print(f"\n[3/6] 👀 시각 데이터(YOLO & MediaPipe) 추출 중... (터미널 출력 생략)")
@@ -48,14 +48,14 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             # 가시성 업데이트
             if frame.face.has_face:
                 max_visibility["face"] = True
-            if "골반" in frame.yolo.detected_parts:
-                max_visibility["pelvis"] = True
-            if "발/다리" in frame.yolo.detected_parts:
-                max_visibility["ankles"] = True
             
-            # 🗑️ (여기에 있던 길고 긴 print() 두 개를 지웠습니다. 이제 터미널이 조용해집니다!)
+            # YOLO 감지 데이터 업데이트 (객체 속성 확인 방식 대응)
+            yolo_data = frame.yolo
+            if hasattr(yolo_data, 'has_pelvis'):
+                if yolo_data.has_pelvis: max_visibility["pelvis"] = True
+                if yolo_data.has_ankles: max_visibility["ankles"] = True
             
-        print(f"  > ✅ 시각 데이터 추출 완료.")
+        print(f"   > ✅ 시각 데이터 추출 완료.")
 
         # 4 & 5. Whisper 및 Praat 음성 분석
         job_status[job_id] = {"status": "Analyzing", "message": "4/6: 로컬 음성 인식 실행 중..."}
@@ -74,7 +74,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             aligned_data = align_data(all_vision_results, audio_segments)
 
         # ==========================================
-        # 🌟 4단계 비디오 분류 및 LLaMA 코칭 (이전 코드와 동일하게 유지)
+        # 🌟 4단계 비디오 분류 및 LLaMA 코칭
         # ==========================================
         if max_visibility["ankles"]: video_type = VideoType.FULL_BODY
         elif max_visibility["pelvis"]: video_type = VideoType.UPPER_BODY
@@ -83,22 +83,59 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         
         print(f"\n📊 [분석 결과] 영상 타입 판별: {video_type.value}")
         
-        # LLaMA 프롬프트 조립
-        ppt_context = "현재 슬라이드 내용: 서론 및 연구 배경" # 임시
-        voice_summary = f"총 {len(audio_segments)}개 음성 구간 검출, 떨림(Jitter/Shimmer) 분석 완료."
+        # LLaMA 피드백 요청
+        ppt_context = "현재 슬라이드 내용: 서론 및 연구 배경"
+        voice_summary = f"총 {len(audio_segments)}개 음성 구간 검출 완료."
         
-        llama_prompt = f"""
-        영상 타입: {video_type.value}
-        [PPT 요약] {ppt_context}
-        [목소리 분석] {voice_summary}
-        위 데이터를 바탕으로 발표자에게 적절한 자세와 목소리 톤에 대한 조언을 작성하세요.
-        """
-        
+        llama_prompt = f"영상 타입: {video_type.value}\n[목소리 분석] {voice_summary}\n발표자 조언 작성."
         llama_feedback = get_feedback_from_coach(llama_prompt)
         
         print(f"\n{'='*20} 🤖 LLaMA 발표 코치 피드백 {'='*20}")
         print(llama_feedback)
-        print(f"{'='*60}")
+
+        # ==========================================
+        # 🌟 [신규 추가] 시간대별 상세 좌표 통합 JSON 저장 (요청 포맷 반영)
+        # ==========================================
+        time_series_detail = {}
+        for i, res in enumerate(all_vision_results):
+            # 1. 00:00:00.00 형식의 타임스탬프 계산
+            seconds = i / FRAME_RATE
+            mins, secs = divmod(seconds, 60)
+            hours, mins = divmod(mins, 60)
+            timestamp_key = f"{int(hours):02d}:{int(mins):02d}:{int(secs):02d}.{int((seconds % 1) * 100):02d}"
+            
+            # 2. 메인 상태(main_state) 판별 로직
+            main_state = "정면 응시 / 진지함"
+            if res.face.has_face:
+                if res.face.smile > 0.5: main_state = "미소 감지"
+                elif res.face.squint > 0.5: main_state = "집중 / 찌푸림"
+                elif abs(res.face.gaze_h) > 0.3: main_state = "시선 분산 (좌우)"
+                elif res.face.brow_up > 0.5: main_state = "눈썹 치켜뜸 (강조)"
+            else:
+                main_state = "얼굴 미검출"
+            
+            # 3. MediaPipe 52개 상세 좌표 추출
+            face_data = res.face.to_dict()
+            blendshapes = face_data.get("all_blendshapes", {})
+
+            time_series_detail[timestamp_key] = {
+                "info": {
+                    "frame_index": i,
+                    "main_state": main_state
+                },
+                "blendshapes": blendshapes
+            }
+
+        # 파일 저장 (MediaPipe_json 폴더 내)
+        json_out_dir = Path("processing/MediaPipe_json")
+        json_out_dir.mkdir(parents=True, exist_ok=True)
+        final_json_path = json_out_dir / "final_time_series.json"
+        
+        with open(final_json_path, 'w', encoding='utf-8') as f:
+            json.dump(time_series_detail, f, indent=4, ensure_ascii=False)
+        
+        print(f"\n✨ [분석 완료] 시계열 통합 데이터 저장됨: {final_json_path}")
+        # ==========================================
 
         raw_data_json = [f.to_dict() for f in all_vision_results]
         final_result = {
@@ -109,11 +146,11 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         }
         
         job_status[job_id] = {"status": "Complete", "result": final_result}
-        print(f"✅ 작업 완료! 모든 데이터가 터미널에 정리되었습니다. (Job: {job_id})")
+        print(f"✅ 모든 분석 작업 완료! (Job: {job_id})")
 
     except Exception as e:
         print(f"\n❌ 작업 실패 (Job: {job_id}) | 오류: {e}")
-        traceback.print_exc() # 🌟 핵심! 이제 에러가 나면 몇 번째 줄인지 쫙 알려줍니다.
+        traceback.print_exc()
         job_status[job_id] = {"status": "Error", "message": str(e)}
     finally:
         cleanup_dirs(video_dir, frame_dir)

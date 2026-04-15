@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import os
+import json
 from pathlib import Path
+from datetime import datetime
 
 import numpy as np
 
@@ -35,6 +37,10 @@ face_landmarker_instance = None
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "face_landmarker.task"
 
+# 🌟 참고: 이제 개별 저장은 하지 않고 상위 모듈(task_manager)에서 통합 저장합니다.
+# 하지만 폴더 경로는 구조 유지를 위해 남겨둡니다.
+JSON_SAVE_DIR = Path(__file__).resolve().parent / "MediaPipe_json"
+
 def setup_face_landmarker():
     """MediaPipe 모델을 로드합니다."""
     global face_landmarker_instance
@@ -51,11 +57,9 @@ def setup_face_landmarker():
         raise FileNotFoundError(f"모델 파일이 없습니다.")
 
     try:
-        # 🌟 핵심 수정 부분: 파이썬이 파일을 직접 읽어서 바이트 데이터로 만듭니다! (한글 경로 에러 원천 차단)
         with open(model_path_str, 'rb') as f:
             model_data = f.read()
             
-        # 경로(model_asset_path) 대신 데이터(model_asset_buffer)를 전달합니다.
         base_options = python.BaseOptions(model_asset_buffer=model_data)
         
         options = FaceLandmarkerOptions(
@@ -71,17 +75,18 @@ def setup_face_landmarker():
         print(f"❌ 로드 실패: {e}")
         raise
 
-def _process_blendshapes(blendshapes: list) -> dict:
-    """얼굴 특징 수치를 계산하여 반환합니다."""
+def _process_blendshapes(blendshapes: list, image_path: str = None) -> dict:
+    """얼굴 특징 수치를 계산하여 반환합니다. 원천 데이터는 결과 딕셔너리에 포함됩니다."""
     if not blendshapes:
         return {}
         
+    # 52개의 모든 카테고리와 점수를 추출
     cats = {c.category_name: c.score for c in blendshapes[0]}
     
     def pick(n):
         return cats.get(n, 0)
 
-    # 시선, 웃음, 찡그림 등 계산
+    # 시선, 웃음, 찡그림 등 주요 지표 계산
     gaze_h = ((pick('eyeLookOutLeft') - pick('eyeLookInLeft')) + (pick('eyeLookInRight') - pick('eyeLookOutRight'))) / 2
     gaze_v = ((pick('eyeLookUpLeft') - pick('eyeLookDownLeft')) + (pick('eyeLookUpRight') - pick('eyeLookDownRight'))) / 2
     smile = (pick('mouthSmileLeft') + pick('mouthSmileRight')) / 2
@@ -93,6 +98,8 @@ def _process_blendshapes(blendshapes: list) -> dict:
     mouth_open = pick('mouthOpen')
     squint = (pick('eyeSquintLeft') + pick('eyeSquintRight')) / 2
     
+    # 🌟 핵심: 모든 좌표 데이터(cats)를 'all_blendshapes'라는 키로 반환합니다.
+    # 이를 통해 task_manager에서 이 데이터를 모아 하나의 통합 JSON을 만들 수 있습니다.
     return {
         "gaze_h": gaze_h,
         "gaze_v": gaze_v,
@@ -103,20 +110,21 @@ def _process_blendshapes(blendshapes: list) -> dict:
         "brow_up": brow_up,
         "mouth_open": mouth_open,
         "squint": squint,
-        "all_blendshapes": cats
+        "all_blendshapes": cats  # 통합 저장을 위한 원천 데이터 전송
     }
 
 def analyze_image(image_path: str) -> dict:
-    """task_manager에서 호출하는 핵심 함수입니다."""
+    """프레임을 분석하여 표정 및 시선 데이터를 반환합니다."""
     landmarker = setup_face_landmarker()
     if not landmarker:
         if not _MP_AVAILABLE:
-            return {"error": "mediapipe 미설치(가상환경에 mediapipe가 없음)"}
+            return {"error": "mediapipe 미설치"}
         return {"error": "모델 미로드"}
     
     try:
         if cv2 is None or mp is None:
-            return {"error": "mediapipe/cv2 초기화 실패"}
+            return {"error": "라이브러리 초기화 실패"}
+            
         image_bgr = cv2.imread(image_path)
         if image_bgr is None:
             return {"error": "이미지 읽기 실패"}
@@ -126,7 +134,8 @@ def analyze_image(image_path: str) -> dict:
         results = landmarker.detect(mp_image)
         
         if results.face_blendshapes:
-            return _process_blendshapes(results.face_blendshapes)
+            # 통합 처리를 위해 원본 이미지 경로와 함께 결과를 넘깁니다.
+            return _process_blendshapes(results.face_blendshapes, image_path)
         else:
             return {"error": "얼굴 미검출"}
             

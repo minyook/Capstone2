@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field # field 추가
 from typing import Any, Optional
 
 
@@ -38,6 +38,8 @@ class MediaPipeFaceResult:
     gaze_h: float = 0.0
     gaze_v: float = 0.0
     error: Optional[str] = None
+    # 🌟 추가: 52개 상세 좌표 수치를 저장할 필드 (기본값은 빈 딕셔너리)
+    all_blendshapes: dict[str, float] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -61,4 +63,3 @@ class FrameVisionResult:
             "yolo": self.yolo.to_dict(),
             "face": self.face.to_dict(),
         }
-
