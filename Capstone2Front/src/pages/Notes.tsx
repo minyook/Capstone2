@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { IconArrowLeft } from "../components/Icons";
 
 import { useFolders } from "../context/FoldersContext";
 
 import { formatFolderDate } from "../data/folderStorage";
+import {
+  listFolderSubmissions,
+  submissionPrimaryFileName,
+} from "../data/folderFilesStorage";
 
 import "./Notes.css";
 
@@ -14,15 +18,42 @@ import "./Notes.css";
 
 const NOTES_FOLDER_KEY = "overnight-notes-selected-folder";
 
+const NOTES_SUB_BY_FOLDER = "overnight-notes-submission-by-folder";
+
+function readSubmissionByFolder(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem(NOTES_SUB_BY_FOLDER);
+    return raw ? (JSON.parse(raw) as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeSubmissionForFolder(folderId: string, submissionId: string): void {
+  const m = readSubmissionByFolder();
+  m[folderId] = submissionId;
+  try {
+    localStorage.setItem(NOTES_SUB_BY_FOLDER, JSON.stringify(m));
+  } catch {
+    /* ignore */
+  }
+}
+
 
 
 export function Notes() {
 
   const { folders } = useFolders();
 
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
   const [folderSheet, setFolderSheet] = useState(false);
 
   const [fileSheet, setFileSheet] = useState(false);
+
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
 
   const [selectedFolderId, setSelectedFolderId] = useState<string>(() => {
 
@@ -90,7 +121,55 @@ export function Notes() {
 
 
 
+  useEffect(() => {
+
+    if (!selectedFolderId) {
+
+      setSelectedSubmissionId(null);
+
+      return;
+
+    }
+
+    const map = readSubmissionByFolder();
+
+    const saved = map[selectedFolderId];
+
+    const subs = listFolderSubmissions(selectedFolderId);
+
+    if (saved && subs.some((s) => s.id === saved)) {
+
+      setSelectedSubmissionId(saved);
+
+    } else {
+
+      setSelectedSubmissionId(null);
+
+    }
+
+  }, [selectedFolderId]);
+
+
+
+  const folderSubmissions = useMemo(
+
+    () => (selectedFolderId ? listFolderSubmissions(selectedFolderId) : []),
+
+    [selectedFolderId, fileSheet, location.key]
+
+  );
+
+
+
   const selected = folders.find((f) => f.id === selectedFolderId);
+
+  const pickedSubmission =
+
+    selectedSubmissionId && selected
+
+      ? folderSubmissions.find((s) => s.id === selectedSubmissionId)
+
+      : undefined;
 
 
 
@@ -152,11 +231,23 @@ export function Notes() {
 
             <button type="button" className="notes-select" onClick={() => setFileSheet(true)}>
 
-              <span className="notes-select__label">저장 파일</span>
+              <span className="notes-select__label">저장 파일 (제출별)</span>
 
               <span className="notes-select__row">
 
-                <span>기록을 선택해 주세요</span>
+                <span className="notes-select__value">
+
+                  {pickedSubmission
+
+                    ? `${submissionPrimaryFileName(pickedSubmission)} · ${formatFolderDate(pickedSubmission.submittedAt)}`
+
+                    : folderSubmissions.length === 0
+
+                      ? "아직 제출 없음"
+
+                      : "기록을 선택해 주세요"}
+
+                </span>
 
                 <span className="notes-select__ico" aria-hidden>
 
@@ -258,33 +349,119 @@ export function Notes() {
 
             <div className="sheet-handle" />
 
-            <h2 id="sheet-file-title" className="sheet-file-heading">
+            <div className="sheet-head">
 
-              발표 파일 선택
+              <span className="sheet-head__icon" aria-hidden>
 
-            </h2>
+                📄
 
-            <p className="notes-file-hint">
-
-              {selected
-
-                ? `「${selected.name}」에 저장된 발표 기록은 백엔드 연동 후 표시됩니다.`
-
-                : "폴더를 선택해 주세요."}
-
-            </p>
-
-            <button type="button" className="sheet-file-row" onClick={() => setFileSheet(false)}>
-
-              <span className="sheet-file-row__icon">📄</span>
+              </span>
 
               <div>
 
-                <strong>데모 기록</strong>
+                <h2 id="sheet-file-title" className="sheet-head__title">
 
-                <span className="sheet-item__meta">추후 API 연동</span>
+                  발표 파일 · 제출 선택
+
+                </h2>
+
+                <p className="sheet-head__sub">
+
+                  {selected
+
+                    ? `「${selected.name}」폴더에서 채점 시작할 때마다 쌓인 제출입니다. 고르면 채점 결과 화면으로 이동합니다.`
+
+                    : "폴더를 선택해 주세요."}
+
+                </p>
 
               </div>
+
+            </div>
+
+            <hr className="sheet-rule" />
+
+            {selected && folderSubmissions.length === 0 ? (
+
+              <p className="notes-file-hint">
+
+                이 폴더에 아직 제출이 없습니다.{" "}
+
+                <Link to="/evaluate" className="notes-empty__link" onClick={() => setFileSheet(false)}>
+
+                  발표 평가
+
+                </Link>
+
+                에서 자료를 올리면 여기에 표시됩니다.
+
+              </p>
+
+            ) : selected ? (
+
+              <ul className="notes-submission-sheet-list">
+
+                {folderSubmissions.map((sub) => (
+
+                  <li key={sub.id}>
+
+                    <button
+
+                      type="button"
+
+                      className="sheet-item notes-submission-sheet-item"
+
+                      onClick={() => {
+
+                        if (!selectedFolderId) return;
+
+                        writeSubmissionForFolder(selectedFolderId, sub.id);
+
+                        setSelectedSubmissionId(sub.id);
+
+                        setFileSheet(false);
+
+                        navigate(`/analysis?submissionId=${encodeURIComponent(sub.id)}`);
+
+                      }}
+
+                    >
+
+                      <span className="sheet-item__icon" aria-hidden>
+
+                        📋
+
+                      </span>
+
+                      <div>
+
+                        <strong>{submissionPrimaryFileName(sub)}</strong>
+
+                        <span className="sheet-item__meta">
+
+                          제출 {formatFolderDate(sub.submittedAt)} · 채점 결과 보기
+
+                        </span>
+
+                      </div>
+
+                    </button>
+
+                  </li>
+
+                ))}
+
+              </ul>
+
+            ) : (
+
+              <p className="notes-file-hint">폴더를 먼저 선택해 주세요.</p>
+
+            )}
+
+            <button type="button" className="sheet-file-row" onClick={() => setFileSheet(false)}>
+
+              닫기
 
             </button>
 

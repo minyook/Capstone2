@@ -48,7 +48,7 @@ export type FirestoreFolder = {
 export type GradingStatus = "draft" | "queued" | "processing" | "completed" | "failed";
 
 /**
- * 항목별 점수 — analysisDemo / Analysis UI 와 동일한 형태
+ * 항목별 점수 — `analysisResultStorage` / Analysis UI 와 동일한 형태
  * 백엔드(STT·비전·융합)가 채운다.
  */
 export type CategoryScores = {

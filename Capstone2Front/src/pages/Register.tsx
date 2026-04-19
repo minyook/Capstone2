@@ -30,7 +30,7 @@ export function Register() {
     e.preventDefault();
     setError(null);
     if (!auth || !db) {
-      setError("Firebase Auth·Firestore가 연결되지 않았습니다. .env와 콘솔 설정을 확인해 주세요.");
+      setError("회원가입을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.");
       return;
     }
     if (password !== password2) {
@@ -63,9 +63,7 @@ export function Register() {
       if (code.startsWith("auth/")) {
         setError(mapAuthError(code));
       } else if (code === "permission-denied") {
-        setError(
-          "가입은 되었지만 Firestore에 프로필을 저장하지 못했습니다. 콘솔 → Firestore → 규칙에서 쓰기를 허용했는지 확인해 주세요."
-        );
+        setError("프로필을 저장하지 못했습니다. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.");
       } else {
         setError(code ? `오류: ${code}` : "요청을 처리하지 못했습니다. 잠시 후 다시 시도해 주세요.");
       }
@@ -83,19 +81,16 @@ export function Register() {
           </button>
           <h1 className="auth-form__title">회원가입</h1>
         </div>
-        <p className="auth-form__desc">
-          Authentication에 계정을 만들고, 프로필은 Firestore <code>users/&lt;uid&gt;</code>에 저장됩니다.
-        </p>
+        <p className="auth-form__desc">이름과 이메일을 입력하고 비밀번호를 설정하면 가입이 완료됩니다.</p>
 
         {!firebaseConfigured && (
           <div className="auth-banner auth-banner--info" role="status">
-            <strong>Firebase 미연결.</strong> <code>.env</code>에 <code>VITE_FIREBASE_*</code>를 넣고 개발 서버를 재시작한
-            뒤, 콘솔에서 Firestore 데이터베이스를 생성하세요.
+            지금은 회원가입을 이용할 수 없습니다. 잠시 후 다시 시도하거나, 문제가 계속되면 관리자에게 문의해 주세요.
           </div>
         )}
         {firebaseConfigured && !db && (
           <div className="auth-banner auth-banner--info" role="status">
-            Firestore 클라이언트를 초기화할 수 없습니다. <code>.env</code>의 projectId 등을 확인하세요.
+            일시적으로 가입을 완료할 수 없습니다. 잠시 후 다시 시도해 주세요.
           </div>
         )}
 

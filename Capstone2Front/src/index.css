@@ -1,25 +1,27 @@
 :root {
-  --bg-page: #fafbfc;
-  --bg-muted: #f3f4f6;
+  --bg-page: #f4f6fb;
+  --bg-muted: #eef1f8;
   --bg-card: #ffffff;
-  --text-primary: #1a1d26;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --border: #e5e7eb;
-  --border-strong: #d1d5db;
+  --bg-elevated: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
   --primary: #5d5fef;
   --primary-hover: #4f52e0;
   --primary-soft: #ebe8ff;
+  --primary-glow: rgba(93, 95, 239, 0.12);
   --accent-blue: #2563eb;
   --danger: #dc2626;
   --danger-soft: #fef2f2;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
   --radius-pill: 999px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.07);
-  --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.1);
   --shadow-panel: 0 1px 3px rgba(0, 0, 0, 0.04);
   --font: "Inter", "Noto Sans KR", system-ui, sans-serif;
   --content-pad-x: clamp(1rem, 4vw, 2rem);
@@ -60,9 +62,14 @@ body,
 body {
   margin: 0;
   font-family: var(--font);
-  background-color: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(93, 95, 239, 0.09), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(37, 99, 235, 0.06), transparent 50%),
+    radial-gradient(800px 400px at 50% 100%, rgba(93, 95, 239, 0.05), transparent 45%);
+  background-attachment: fixed;
 }
 
 a {
@@ -90,7 +97,7 @@ textarea {
   width: 100%;
   max-width: min(100%, 46rem);
   margin: 0 auto;
-  padding: 1.75rem var(--content-pad-x) 3rem;
+  padding: 2rem var(--content-pad-x) 3.25rem;
   flex: 1;
 }
 

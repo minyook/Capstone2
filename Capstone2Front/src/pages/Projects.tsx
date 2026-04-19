@@ -1,11 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Link } from "react-router-dom";
 
 import { useFolders } from "../context/FoldersContext";
-
 import { formatFolderDate } from "../data/folderStorage";
+import { listFolderSubmissions } from "../data/folderFilesStorage";
 
+import "./Notes.css";
 import "./Projects.css";
 
 
@@ -26,7 +27,7 @@ export function Projects() {
 
   const [sort, setSort] = useState<SortKey>("latest");
 
-
+  const [fileSheetFolderId, setFileSheetFolderId] = useState<string | null>(null);
 
   const sorted = useMemo(() => {
 
@@ -46,7 +47,21 @@ export function Projects() {
 
   }, [folders, sort]);
 
+  const fileSheetFolder = useMemo(
+    () => (fileSheetFolderId ? folders.find((x) => x.id === fileSheetFolderId) : undefined),
+    [fileSheetFolderId, folders]
+  );
 
+  const fileSheetSubmissions = useMemo(
+    () => (fileSheetFolderId ? listFolderSubmissions(fileSheetFolderId) : []),
+    [fileSheetFolderId]
+  );
+
+  useEffect(() => {
+    if (fileSheetFolderId && !folders.some((f) => f.id === fileSheetFolderId)) {
+      setFileSheetFolderId(null);
+    }
+  }, [folders, fileSheetFolderId]);
 
   const handleCreate = () => {
 
@@ -112,7 +127,8 @@ export function Projects() {
 
       <p className="doc-lead">
 
-        발표 영상 녹화·PPT·채점 결과를 주제별 폴더에 모읍니다. 데이터는 <strong>이 브라우저</strong>에 저장됩니다.
+        발표 영상·PPT·채점 결과를 주제별 폴더에 모읍니다. 폴더 목록은 <strong>이 기기</strong>에만 저장되며, 다른 기기와는
+        자동으로 맞춰지지 않을 수 있습니다.
 
       </p>
 
@@ -136,7 +152,19 @@ export function Projects() {
 
           <li key={f.id}>
 
-            <article className="doc-card">
+            <article
+              className="doc-card doc-card--clickable"
+              role="button"
+              tabIndex={0}
+              onClick={() => setFileSheetFolderId(f.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setFileSheetFolderId(f.id);
+                }
+              }}
+              aria-label={`${f.name} 폴더 — 저장 파일 보기`}
+            >
 
               <div className="doc-card__thumb">
 
@@ -168,7 +196,10 @@ export function Projects() {
                   type="button"
                   className="doc-card__menu"
                   aria-label={`${f.name} 폴더 삭제`}
-                  onClick={() => handleDelete(f.id, f.name)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(f.id, f.name);
+                  }}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
                     <path
@@ -292,6 +323,74 @@ export function Projects() {
 
         </div>
 
+      )}
+
+      {fileSheetFolderId && fileSheetFolder && (
+        <div className="sheet-root" role="dialog" aria-modal="true" aria-labelledby="projects-sheet-files-title">
+          <button
+            type="button"
+            className="sheet-backdrop"
+            onClick={() => setFileSheetFolderId(null)}
+            aria-label="닫기"
+          />
+          <div className="sheet-panel">
+            <div className="sheet-handle" />
+            <div className="sheet-head">
+              <span className="sheet-head__icon" aria-hidden>
+                📄
+              </span>
+              <div>
+                <h2 id="projects-sheet-files-title" className="sheet-head__title">
+                  저장 파일
+                </h2>
+                <p className="sheet-head__sub">「{fileSheetFolder.name}」에 연결된 자료입니다.</p>
+              </div>
+            </div>
+            <hr className="sheet-rule" />
+            {fileSheetSubmissions.length === 0 ? (
+              <p className="notes-file-hint doc-projects-file-empty">
+                저장된 파일이 없습니다.{" "}
+                <Link to="/evaluate" className="notes-empty__link" onClick={() => setFileSheetFolderId(null)}>
+                  발표 평가
+                </Link>
+                에서 PPT·영상을 올리면 여기에 표시됩니다.
+              </p>
+            ) : (
+              <ul className="doc-projects-submission-list">
+                {fileSheetSubmissions.map((submission) => (
+                  <li key={submission.id} className="doc-projects-submission">
+                    <p className="doc-projects-submission__label" id={`sub-${submission.id}`}>
+                      제출 · {formatFolderDate(submission.submittedAt)}
+                    </p>
+                    <ul
+                      className="doc-projects-file-list doc-projects-file-list--in-submission"
+                      aria-labelledby={`sub-${submission.id}`}
+                    >
+                      {submission.files.map((file) => (
+                        <li key={file.id}>
+                          <div className="doc-projects-file-row" role="group" aria-label={file.name}>
+                            <span className="sheet-item__icon" aria-hidden>
+                              {file.kind === "ppt" ? "📊" : "🎬"}
+                            </span>
+                            <div>
+                              <strong>{file.name}</strong>
+                              <span className="sheet-item__meta">
+                                {file.kind === "ppt" ? "프레젠테이션" : "영상"}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button type="button" className="sheet-file-row" onClick={() => setFileSheetFolderId(null)}>
+              닫기
+            </button>
+          </div>
+        </div>
       )}
 
     </div>

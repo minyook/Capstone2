@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useFolders } from "../context/FoldersContext";
 import "./MyPage.css";
 
 export function MyPage() {
   const navigate = useNavigate();
   const { user, signOutUser } = useAuth();
+  const { folders } = useFolders();
   const [loggingOut, setLoggingOut] = useState(false);
+
+  const folderCount = folders.length;
+  const totalPresentationCount = 0;
+  const gradeACount = 0;
 
   const label = user?.displayName?.trim() || user?.email?.split("@")[0] || "게스트";
   const email = user?.email ?? "로그인이 필요합니다";
@@ -43,21 +49,21 @@ export function MyPage() {
         <div className="mypage-card">
           <div className="mypage-stat">
             <span>총 발표 횟수</span>
-            <strong>1회</strong>
+            <strong>{totalPresentationCount}회</strong>
           </div>
           <div className="mypage-stat">
-            <span>등록된 과목</span>
-            <strong>1개</strong>
+            <span>등록된 폴더</span>
+            <strong>{folderCount}개</strong>
           </div>
           <div className="mypage-stat">
             <span>우수 발표(A등급)</span>
-            <strong>0회</strong>
+            <strong>{gradeACount}회</strong>
           </div>
         </div>
 
         <div className="mypage-notes-head">
           <span className="mypage-notes-head__t">전체 노트</span>
-          <span className="mypage-notes-head__c">Total 0</span>
+          <span className="mypage-notes-head__c">Total {folderCount}</span>
         </div>
         <Link to="/notes" className="mypage-notes-card">
           <span className="mypage-notes-card__icon">📁</span>

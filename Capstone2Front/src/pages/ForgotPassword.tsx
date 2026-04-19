@@ -45,8 +45,7 @@ export function ForgotPassword() {
 
         {!firebaseConfigured && (
           <div className="auth-banner auth-banner--info" role="status">
-            비밀번호 재설정 메일은 <strong>Firebase 인증</strong>이 켜져 있어야 합니다. <code>.env</code>에 Firebase
-            값을 넣고 Authentication에서 이메일 로그인을 사용 설정하세요.
+            지금은 비밀번호 재설정 메일을 보낼 수 없습니다. 잠시 후 다시 시도해 주세요.
           </div>
         )}
 

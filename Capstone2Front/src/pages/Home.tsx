@@ -1,104 +1,73 @@
 import { Link } from "react-router-dom";
-
-import { useAuth } from "../context/AuthContext";
-
 import "./Home.css";
 
-
-
-/** 캡스톤 계획서 기준: 멀티모달 발표 자동 채점 — 음성+영상 융합, 리포트, 가중치 */
+const FEATURES = [
+  {
+    title: "음성",
+    desc: "말하는 내용을 글로 옮겨 억양·말버릇까지 살펴봅니다.",
+    icon: "🎙️",
+  },
+  {
+    title: "영상",
+    desc: "시선·제스처·표정을 수치로 정리합니다.",
+    icon: "🎬",
+  },
+  {
+    title: "채점",
+    desc: "항목별 점수를 합산하고, 교수 설정에 맞게 가중치를 조정할 수 있습니다.",
+    icon: "📊",
+  },
+  {
+    title: "리포트",
+    desc: "피드백을 PDF·Excel로 내보내 보관·제출하기 쉽게 정리합니다.",
+    icon: "📄",
+  },
+] as const;
 
 export function Home() {
-
-  const { user, loading } = useAuth();
-
-
-
   return (
-
     <div className="page landing">
-
+      <div className="landing__mesh" aria-hidden />
       <div className="landing__inner">
+        <section className="landing__hero" aria-labelledby="landing-title">
+          <div className="landing__hero-copy">
+            <p className="landing__eyebrow">AI Presentation Grading</p>
+            <h1 id="landing-title" className="landing__title">
+              OvernightAI
+            </h1>
+            <p className="landing__lead">
+              음성과 영상을 함께 분석해 <strong>내용·논리</strong>와 <strong>태도·음성</strong>을 정리합니다. 점수와
+              리포트로 한눈에 확인하고, 필요한 형식으로 내보낼 수 있습니다.
+            </p>
+            <div className="landing__cta">
+              <Link to="/evaluate" className="landing__btn landing__btn--primary">
+                발표 평가 시작
+              </Link>
+              <Link to="/projects" className="landing__btn landing__btn--ghost">
+                문서 열기
+              </Link>
+            </div>
+          </div>
+        </section>
 
-        <p className="landing__eyebrow">Computer Vision–Based Presentation Grading</p>
-
-        <h1 className="landing__title">멀티모달 발표 자동 채점</h1>
-
-        <p className="landing__lead">
-
-          음성(STT)과 영상(컴퓨터 비전)을 함께 분석해 <strong>내용·논리</strong>와{" "}
-
-          <strong>태도·음성</strong>을 정량적으로 평가합니다. 결과는 PDF·Excel 리포트로 내보낼 수 있습니다.
-
-        </p>
-
-
-
-        <div className="landing__cta">
-
-          <Link to="/evaluate" className="landing__btn landing__btn--primary">
-
-            발표 평가
-
-          </Link>
-
-          <Link to="/projects" className="landing__btn landing__btn--ghost">
-
-            문서
-
-          </Link>
-
-        </div>
-
-
-
-        <ul className="landing__pills" aria-label="시스템 구성 (계획서 기준)">
-
-          <li>Whisper STT · 발화·억양·말버릇</li>
-
-          <li>MediaPipe · 시선·제스처·표정</li>
-
-          <li>항목별 융합 점수 · 가중치 조정</li>
-
-          <li>PDF · Excel 피드백 리포트</li>
-
-        </ul>
-
-
-
-        <p className="landing__foot">
-
-          {!loading && !user && (
-
-            <Link to="/login" className="landing__link">
-
-              로그인
-
-            </Link>
-
-          )}
-
-          {!loading && user && (
-            <span className="landing__muted">
-              {user.displayName?.trim() || user.email?.split("@")[0]} 님
-            </span>
-          )}
-
-          <span className="landing__dot" aria-hidden>
-
-            ·
-
-          </span>
-
-          <span className="landing__muted">동의대 캡스톤 · 무박2일 · Overnight</span>
-
-        </p>
-
+        <section className="landing__features" aria-labelledby="landing-features-heading">
+          <h2 id="landing-features-heading" className="landing__section-title">
+            핵심 기능
+          </h2>
+          <p className="landing__section-lead">음성·영상 분석부터 채점, 리포트까지 이어지는 흐름입니다.</p>
+          <ul className="landing__feature-grid">
+            {FEATURES.map((f) => (
+              <li key={f.title} className="landing__feature">
+                <span className="landing__feature-icon" aria-hidden>
+                  {f.icon}
+                </span>
+                <h3 className="landing__feature-title">{f.title}</h3>
+                <p className="landing__feature-desc">{f.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
-
     </div>
-
   );
-
 }
-

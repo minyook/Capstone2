@@ -55,10 +55,9 @@ export function Guide() {
         {tab === "criteria" && (
           <>
             <p className="guide-intro">
-              컴퓨터 비전·음성 분석과 PPT 대조를 통해 아래 세 영역을 채점합니다. 각 항목은 보고서에서 세부 피드백과 함께
-              제공됩니다.
+              슬라이드와 말하는 내용을 비교하고, 영상·음성을 함께 보며 아래 세 영역을 채점합니다. 항목별 피드백은 결과
+              화면에서 확인할 수 있습니다.
             </p>
-            <hr className="guide-rule" />
 
             <div className="guide-criteria-grid">
               {RUBRIC.map((cat) => (
@@ -106,55 +105,69 @@ export function Guide() {
         )}
 
         {tab === "howto" && (
-          <>
-            <h2 className="guide-how-title">폴더 지정부터 채점 결과까지</h2>
-            <p className="guide-how-sub">
-              Overnight는 <strong>발표 폴더</strong>마다 녹화·PPT·채점 기록을 묶어 두고, 슬라이드와 영상·음성을 함께
-              분석해 피드백을 제공합니다.
-            </p>
+          <section className="howto" aria-labelledby="howto-title">
+            <header className="howto__header">
+              <h2 id="howto-title" className="howto__title">
+                처음부터 끝까지, 이렇게 쓰면 됩니다
+              </h2>
+              <p className="howto__lead">
+                녹화·PPT·채점 기록은 <strong>폴더 하나</strong>에 모입니다. 슬라이드와 말하는 내용, 영상·음성을 함께
+                분석해 피드백으로 이어집니다.
+              </p>
+            </header>
 
-            <ol className="how-list">
-              <li>
-                <span className="how-list__num how-list__num--1">1</span>
-                <div>
-                  <strong>발표 폴더 만들기 · 선택</strong>
-                  <ul>
-                    <li>
-                      <strong>폴더</strong> 화면에서 주제·과목별로 새 폴더를 만들거나, 기존 폴더를 선택합니다. 이 안에 발표
-                      영상 녹화, PPT, 채점 결과가 함께 쌓입니다.
-                    </li>
-                    <li>
-                      <strong>발표 평가</strong>를 시작할 때도 &apos;저장할 발표 폴더&apos;를 먼저 고르면 같은 규칙으로
-                      정리됩니다.
-                    </li>
-                  </ul>
+            <div className="howto__steps">
+              <article className="howto-step howto-step--1">
+                <div className="howto-step__badge" aria-hidden>
+                  1
                 </div>
-              </li>
-              <li>
-                <span className="how-list__num how-list__num--2">2</span>
-                <div>
-                  <strong>PPT와 발표 영상 제출</strong>
-                  <ul>
-                    <li>선택한 폴더를 기준으로 PPT를 업로드하고, 카메라로 녹화하거나 영상 파일을 올립니다.</li>
-                    <li>시스템이 슬라이드 내용과 발화를 대조해 <strong>내용 일치·논리성</strong>을 평가합니다.</li>
-                  </ul>
+                <div className="howto-step__body">
+                  <h3 className="howto-step__name">폴더 만들기 · 선택</h3>
+                  <p className="howto-step__text">
+                    <Link to="/projects" className="howto-step__link">
+                      문서
+                    </Link>
+                    에서 주제별로 새 폴더를 만들거나 기존 폴더를 고릅니다. 그 안에 영상·PPT·채점 결과가 같이 쌓입니다.
+                  </p>
+                  <p className="howto-step__text">
+                    <Link to="/evaluate" className="howto-step__link">
+                      발표 평가
+                    </Link>
+                    를 시작할 때도 &lsquo;저장할 발표 폴더&rsquo;를 먼저 선택하면 같은 방식으로 정리됩니다.
+                  </p>
                 </div>
-              </li>
-              <li>
-                <span className="how-list__num how-list__num--3">3</span>
-                <div>
-                  <strong>항목별 점수·리포트</strong>
-                  <ul>
-                    <li>
-                      <strong>발표 태도</strong>(시선·표정·제스처)와 <strong>발표 음성</strong>(속도·안정성·말버릇·반복)은
-                      영상·음성 분석 결과로 채워집니다.
-                    </li>
-                    <li>결과는 화면에서 확인하고, Excel 또는 PDF로 내려받을 수 있습니다.</li>
-                  </ul>
+              </article>
+
+              <article className="howto-step howto-step--2">
+                <div className="howto-step__badge" aria-hidden>
+                  2
                 </div>
-              </li>
-            </ol>
-          </>
+                <div className="howto-step__body">
+                  <h3 className="howto-step__name">PPT와 영상 올리기</h3>
+                  <p className="howto-step__text">
+                    선택한 폴더를 기준으로 PPT를 업로드하고, 카메라로 녹화하거나 영상 파일을 올립니다. 슬라이드와 실제
+                    발화를 맞춰 보며 <strong>내용 일치와 논리 흐름</strong>을 평가합니다.
+                  </p>
+                </div>
+              </article>
+
+              <article className="howto-step howto-step--3">
+                <div className="howto-step__badge" aria-hidden>
+                  3
+                </div>
+                <div className="howto-step__body">
+                  <h3 className="howto-step__name">점수 확인 · 리포트</h3>
+                  <p className="howto-step__text">
+                    시선·표정·제스처 같은 <strong>발표 태도</strong>와 말하기 속도·말버릇 등 <strong>발표 음성</strong>은
+                    영상·음성 분석 결과로 점수에 반영됩니다.
+                  </p>
+                  <p className="howto-step__text">
+                    항목별 점수는 화면에서 확인하고, 필요하면 Excel이나 PDF로 내려받을 수 있습니다.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </section>
         )}
       </div>
     </div>

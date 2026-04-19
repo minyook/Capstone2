@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useFolders } from "../context/FoldersContext";
+import { registerFolderFiles } from "../data/folderFilesStorage";
 
 import "./Evaluate.css";
 
@@ -46,11 +47,9 @@ export function Evaluate() {
 
         <p className="evaluate-lead">
 
-          계획서 기준으로 <strong>Whisper STT</strong>로 발화를 텍스트화하고, <strong>MediaPipe</strong> 등 비전
+          발표 음성은 글자로 옮겨 내용을 보고, 영상에서는 시선·제스처·표정을 함께 봅니다. <strong>저장 폴더</strong>를 고른
 
-          모듈로 시선·제스처·표정을 분석합니다. <strong>저장 폴더</strong>를 고른 뒤 PPT와 영상을 올리면 항목별 점수와
-
-          PDF·Excel 리포트로 이어집니다.
+          뒤 PPT와 영상을 올리면 항목별 점수와 PDF·Excel 리포트로 이어집니다.
 
         </p>
 
@@ -248,9 +247,10 @@ export function Evaluate() {
 
           </p>
 
-          <div className="evaluate-preview" role="region" aria-label="카메라 미리보기 (연동 예정)">
+          <div className="evaluate-preview" role="region" aria-label="카메라 미리보기">
 
-            카메라 프리뷰 · 녹화는 백엔드·브라우저 권한 연동 후 활성화
+            카메라 미리보기와 녹화는 곧 이 화면에서 이용할 수 있도록 준비 중입니다. 지금은 아래에서 영상 파일을 선택해
+            주세요.
 
           </div>
 
@@ -326,7 +326,14 @@ export function Evaluate() {
 
             disabled={!canAnalyze}
 
-            onClick={() => navigate("/analysis")}
+            onClick={() => {
+              const submission = registerFolderFiles(folderId, { pptName, videoName });
+              navigate(
+                submission
+                  ? `/analysis?submissionId=${encodeURIComponent(submission.id)}`
+                  : "/analysis"
+              );
+            }}
 
           >
 
@@ -352,7 +359,7 @@ export function Evaluate() {
 
               ※ <strong>폴더</strong>, PPT, 영상을 모두 준비하면 채점을 시작할 수 있습니다. 폴더 목록은 문서 화면과
 
-              동일하게 이 브라우저에 저장됩니다.
+              문서 화면과 같이 이 기기에만 저장됩니다.
 
             </p>
 

@@ -22,8 +22,8 @@ export function Trash() {
         </Link>
         <h1 className="trash-title">휴지통</h1>
         <p className="trash-sub">
-          문서에서 삭제한 폴더가 여기에 보관됩니다. 복구하면 다시 목록에 나타나고, 영구 삭제하면 이
-          브라우저에서 완전히 지워집니다.
+          문서에서 삭제한 폴더가 여기에 보관됩니다. 복구하면 다시 목록에 나타나고, 영구 삭제하면 이 기기에서 완전히
+          지워집니다.
         </p>
 
         {sorted.length === 0 ? (

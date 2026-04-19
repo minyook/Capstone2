@@ -24,55 +24,70 @@
 }
 
 .guide-tabs {
-  display: flex;
-  justify-content: center;
-  width: fit-content;
-  max-width: 100%;
-  padding: 5px;
-  background: var(--bg-muted);
-  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: min(100%, 22rem);
+  padding: 4px;
+  gap: 4px;
   margin: 0 auto 1.75rem;
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 480px) {
+  .guide-tabs {
+    max-width: min(100%, 26rem);
+  }
 }
 
 .guide-tab {
-  min-width: 7.5rem;
+  min-width: 0;
   border: none;
   background: transparent;
-  padding: 0.65rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  border-radius: calc(var(--radius-md) - 4px);
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @media (min-width: 640px) {
   .guide-tab {
-    min-width: 9rem;
-    padding: 0.7rem 1.5rem;
+    padding: 0.7rem 1rem;
     font-size: 1rem;
   }
+}
+
+.guide-tab:hover:not(.guide-tab--on) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .guide-tab--on {
   background: var(--primary);
   color: #fff;
+  font-weight: var(--weight-bold);
+  box-shadow: 0 1px 4px rgba(93, 95, 239, 0.35);
 }
 
 .guide-intro {
-  margin: 0 0 1.25rem;
-  max-width: 65ch;
-  font-size: 1rem;
+  margin: 0 auto 1.75rem;
+  max-width: 52rem;
+  padding: 1rem 1.15rem;
+  font-size: 0.9375rem;
   color: var(--text-secondary);
   line-height: 1.65;
-}
-
-.guide-rule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 0 0 1.75rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .guide-criteria-grid {
@@ -97,7 +112,9 @@
   padding: 1.25rem 1.25rem 1.35rem;
   border-radius: var(--radius-md);
   margin-bottom: 0;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .c-card h3 {
@@ -145,6 +162,13 @@
 
 .c-card--mint {
   background: #ecfdf5;
+}
+
+@media (hover: hover) {
+  .c-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
 }
 
 .c-card__icon {
@@ -195,82 +219,150 @@
   flex-shrink: 0;
 }
 
-.guide-how-title {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.35;
+/* ——— 이용 방법 ——— */
+
+.howto {
+  margin: 0 auto;
+  width: 100%;
+  max-width: min(100%, 52rem);
 }
 
-.guide-how-sub {
-  margin: 0 0 1.5rem;
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
+.howto__header {
+  margin-bottom: 1.75rem;
+  text-align: center;
 }
 
-.how-list {
-  list-style: none;
+@media (min-width: 640px) {
+  .howto__header {
+    text-align: left;
+  }
+}
+
+.howto__title {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.2rem, 2.8vw, 1.45rem);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.howto__lead {
   margin: 0;
-  padding: 0;
+  padding: 1rem 1.1rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.howto__lead strong {
+  color: var(--text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.howto__steps {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
-.how-list > li {
-  display: flex;
-  gap: 0.85rem;
+.howto-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem 1rem;
   align-items: flex-start;
+  padding: 1.15rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
-.how-list__num {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+@media (hover: hover) {
+  .howto-step:hover {
+    box-shadow: var(--shadow-md);
+    border-color: rgba(93, 95, 239, 0.2);
+  }
+}
+
+.howto-step__badge {
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.875rem;
+  font-weight: var(--weight-extrabold);
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
-.how-list__num--1 {
+.howto-step--1 .howto-step__badge {
   background: #dbeafe;
   color: #1d4ed8;
 }
 
-.how-list__num--2 {
+.howto-step--2 .howto-step__badge {
   background: var(--primary-soft);
   color: var(--primary);
 }
 
-.how-list__num--3 {
+.howto-step--3 .howto-step__badge {
   background: #d1fae5;
   color: #047857;
 }
 
-.how-list strong {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 1rem;
+.howto-step__body {
+  min-width: 0;
 }
 
-.how-list ul {
-  margin: 0;
-  padding-left: 1.1rem;
+.howto-step__name {
+  margin: 0 0 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.howto-step__text {
+  margin: 0 0 0.65rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.55;
+}
+
+.howto-step__text:last-child {
+  margin-bottom: 0;
+}
+
+.howto-step__text strong {
+  color: var(--text-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.howto-step__link {
+  color: var(--primary);
+  font-weight: var(--weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.howto-step__link:hover {
+  color: var(--primary-hover);
 }
 
 @media (min-width: 900px) {
-  .guide-how-title,
-  .guide-how-sub {
-    max-width: 50rem;
+  .howto {
+    max-width: min(100%, 62rem);
   }
 
-  .how-list {
-    max-width: 52rem;
+  .howto-step {
+    padding: 1.25rem 1.5rem 1.35rem;
+    gap: 1rem 1.25rem;
   }
 }

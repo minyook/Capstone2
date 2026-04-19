@@ -238,8 +238,7 @@
   cursor: not-allowed;
 }
 
-.auth-social-btn--google:hover:not(:disabled),
-.auth-social-btn--ms:hover:not(:disabled) {
+.auth-social-btn--google:hover:not(:disabled) {
   border-color: var(--border-strong);
 }
 
