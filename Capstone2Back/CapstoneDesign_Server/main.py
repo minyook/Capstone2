@@ -23,8 +23,8 @@ from processing.task_manager import run_analysis_task, job_status
 
 # 🌟 신규 임포트
 from core.exceptions import QualityException
-# 🌟 챗봇 함수 임포트
-from core.llama_client import chat_with_mentor
+# 🌟 챗봇 함수 임포트 (Gemini로 교체)
+from core.gemini_client import chat_with_gemini
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -95,7 +95,7 @@ def chat_with_ai(request: ChatRequest):
     print(f"\n[📱 프론트엔드에서 온 메시지]: {request.message}")
     
     # 챗봇 AI에게 메시지와 기록을 던져서 답변 생성
-    updated_history = chat_with_mentor(request.message, request.chat_history)
+    updated_history = chat_with_gemini(request.message, request.chat_history)
     
     print(f"[🤖 챗봇 AI의 답변]: {updated_history[-1]['content']}\n")
     

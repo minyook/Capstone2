@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import "./Chatbot.css";
 
 type ChatRole = "user" | "bot";
@@ -169,8 +170,8 @@ export function Chatbot() {
                 <span className="chatbot-bubble__tag">PPT</span>
               ) : null}
               {/* 줄바꿈 처리를 위해 백틱/엔터를 <br/>로 치환하는 스타일 추가 */}
-              <div className="chatbot-bubble__text" style={{ whiteSpace: "pre-wrap" }}>
-                {m.text}
+              <div className="chatbot-bubble__text markdown-container">
+                <ReactMarkdown>{m.text}</ReactMarkdown>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-FROM llama3
+FROM qwen2.5
 
 # 분석 및 피드백 전용 성격 부여
 SYSTEM """

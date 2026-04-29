@@ -1,5 +1,5 @@
 # 베이스 모델은 다운받아둔 llama3를 사용합니다.
-FROM llama3
+FROM qwen2.5
 
 # AI의 창의성 조절 (0.0~1.0). 코칭은 정확해야 하므로 약간 낮게 설정.
 PARAMETER temperature 0.6

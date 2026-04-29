@@ -12,3 +12,4 @@ praat-parselmouth
 # ppt-analysis-engine
 python-pptx>=1.0.0
 scikit-learn>=1.4.0
+google-generativeai
