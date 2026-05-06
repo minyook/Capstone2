@@ -1,15 +1,25 @@
+# --- Core Web Framework ---
 fastapi
 uvicorn[standard]
 python-multipart
-ultralytics
+pydantic
+
+# --- AI & LLM Clients ---
+google-generativeai
 ollama
-opencv-python-headless
 openai
-numpy
 python-dotenv
+
+# --- Computer Vision & Media Analysis ---
+mediapipe
+opencv-python-headless
+ultralytics
+numpy
+
+# --- Audio Analysis (STT & Prosody) ---
 openai-whisper
 praat-parselmouth
-# ppt-analysis-engine
-python-pptx>=1.0.0
-scikit-learn>=1.4.0
-google-generativeai
+
+# --- Document & Data Analysis ---
+python-pptx
+scikit-learn
