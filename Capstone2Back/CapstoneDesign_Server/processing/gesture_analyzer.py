@@ -70,35 +70,53 @@ def analyze_frame_gesture_yolo(frame_path: str) -> dict:
         # 신뢰도 추출
         l_wr_conf, r_wr_conf = kp_conf[9], kp_conf[10]
 
-        def get_hand_state(wrist, shoulder, hip, confidence):
-            # 🌟 핵심: 신뢰도가 낮으면 "안 보임"으로 반환
+        def get_hand_state_kr(wrist, shoulder, hip, confidence):
             if confidence < 0.5: 
-                return "Not Visible"
+                return "확인 불가"
             
-            # 신뢰도가 높을 때만 위치 판단
-            if wrist[1] < shoulder[1]: return "High"
-            if wrist[1] < hip[1]: return "Middle"
-            return "Low"
+            if wrist[1] < shoulder[1]: return "높음"
+            if wrist[1] < hip[1]: return "중간"
+            return "낮음"
 
-        data["left_hand_state"] = get_hand_state(l_wr, l_sh, l_hip, l_wr_conf)
-        data["right_hand_state"] = get_hand_state(r_wr, r_sh, r_hip, r_wr_conf)
+        data["left_hand_state"] = get_hand_state_kr(l_wr, l_sh, l_hip, l_wr_conf)
+        data["right_hand_state"] = get_hand_state_kr(r_wr, r_sh, r_hip, r_wr_conf)
 
-        # 팔짱 끼기 체크 (두 손이 모두 보이고 신뢰도가 높을 때만)
+        # 1. 상세 제스처 판별
+        gesture_name = "기본 자세"
+
+        # 팔짱 끼기
         if l_wr_conf > 0.5 and r_wr_conf > 0.5:
-            dist_l = np.linalg.norm(l_wr - r_el)
-            dist_r = np.linalg.norm(r_wr - l_el)
-            if dist_l < 50 and dist_r < 50: 
+            dist_l_to_r_el = np.linalg.norm(l_wr - r_el)
+            dist_r_to_l_el = np.linalg.norm(r_wr - l_el)
+            if dist_l_to_r_el < 60 and dist_r_to_l_el < 60:
                 data["is_arm_crossed"] = True
+                gesture_name = "팔짱 끼기"
 
-            # 몸의 기울기
-            if l_sh[1] > 0 and r_sh[1] > 0:
-                data["body_tilt"] = float(l_sh[1] - r_sh[1])
+        # 양손 모으기 (경청/대기 자세)
+        if not data["is_arm_crossed"] and l_wr_conf > 0.5 and r_wr_conf > 0.5:
+            hand_dist = np.linalg.norm(l_wr - r_wr)
+            if hand_dist < 50:
+                gesture_name = "양손 모으기"
 
-            # 대표 제스처 이름 결정
-            if data["is_arm_crossed"]: data["gesture_name"] = "Arms Crossed"
-            elif data["left_hand_state"] == "High" or data["right_hand_state"] == "High": data["gesture_name"] = "Emphasizing"
-            elif data["left_hand_state"] == "Middle" or data["right_hand_state"] == "Middle": data["gesture_name"] = "Active"
-            else: data["gesture_name"] = "Normal Stand"
+        # 가리키기 (Pointing)
+        if gesture_name == "기본 자세":
+            # 오른손으로 왼쪽 가리키기 (발표 스크린 방향)
+            if r_wr_conf > 0.5 and r_wr[0] < l_sh[0] and r_wr[1] < r_hip[1]:
+                gesture_name = "오른손으로 왼쪽 가리키기"
+            # 왼손으로 오른쪽 가리키기
+            elif l_wr_conf > 0.5 and l_wr[0] > r_sh[0] and l_wr[1] < l_hip[1]:
+                gesture_name = "왼손으로 오른쪽 가리키기"
+            # 강조 제스처 (손이 높을 때)
+            elif data["left_hand_state"] == "높음" or data["right_hand_state"] == "높음":
+                gesture_name = "손을 높여 강조"
+            elif data["left_hand_state"] == "중간" or data["right_hand_state"] == "중간":
+                gesture_name = "활발한 손동작"
+
+        data["gesture_name"] = gesture_name
+
+        # 몸의 기울기
+        if l_sh[1] > 0 and r_sh[1] > 0:
+            data["body_tilt"] = float(l_sh[1] - r_sh[1])
 
     return data
 
@@ -118,28 +136,56 @@ def analyze_frame_yolo_pose(frame_path: str) -> YoloPoseResult:
     )
 
 def save_gesture_data(all_vision_results: list, frame_rate: int, job_id: str = "default"):
-    """YOLO 제스처 데이터를 시계열 JSON으로 저장합니다."""
-    time_series_gesture = {}
+    """YOLO 데이터를 AI 피드백에 최적화된 구간별 이벤트 형식으로 가공하여 저장합니다."""
+    processed_events = []
+    if not all_vision_results:
+        return
+
+    current_gesture = None
+    start_time = 0.0
 
     for i, res in enumerate(all_vision_results):
-        seconds = i / frame_rate
-        timestamp_key = f"{seconds:.2f}" # 시각화 편의를 위해 초 단위 키 사용
-        
-        yolo_data = res.yolo.to_dict()
-        time_series_gesture[timestamp_key] = {
-            "gesture_name": yolo_data["gesture_name"],
-            "left_hand": yolo_data["left_hand_state"],
-            "right_hand": yolo_data["right_hand_state"],
-            "is_arm_crossed": yolo_data["is_arm_crossed"],
-            "body_tilt": yolo_data["body_tilt"],
-            "keypoints": yolo_data["keypoints"]
-        }
+        time_s = i / frame_rate
+        gesture = res.yolo.gesture_name
+
+        # 제스처가 바뀌거나 마지막 프레임인 경우 저장
+        if gesture != current_gesture:
+            if current_gesture is not None:
+                processed_events.append({
+                    "start": round(start_time, 2),
+                    "end": round(time_s, 2),
+                    "duration": round(time_s - start_time, 2),
+                    "gesture": current_gesture
+                })
+            current_gesture = gesture
+            start_time = time_s
+
+    # 마지막 구간 추가
+    processed_events.append({
+        "start": round(start_time, 2),
+        "end": round(len(all_vision_results) / frame_rate, 2),
+        "duration": round((len(all_vision_results) / frame_rate) - start_time, 2),
+        "gesture": current_gesture
+    })
+
+    # 제스처 통계 요약 (AI가 선호하는 데이터)
+    gesture_counts = {}
+    for event in processed_events:
+        g = event["gesture"]
+        gesture_counts[g] = gesture_counts.get(g, 0) + event["duration"]
+
+    summary = {
+        "job_id": job_id,
+        "total_duration": round(len(all_vision_results) / frame_rate, 2),
+        "gesture_events": processed_events,
+        "gesture_stats": {k: round(v, 2) for k, v in gesture_counts.items()}
+    }
 
     yolo_out_dir = Path("processing/Yolo_json")
     yolo_out_dir.mkdir(parents=True, exist_ok=True)
     file_name = f"gesture_results_{job_id}.json"
     with open(yolo_out_dir / file_name, 'w', encoding='utf-8') as f:
-        json.dump(time_series_gesture, f, indent=4, ensure_ascii=False)
+        json.dump(summary, f, indent=4, ensure_ascii=False)
     
-    print(f"   > YOLO JSON 저장 완료: {yolo_out_dir / file_name}")
+    print(f"   > [데이터 가공] 제스처 분석 결과를 AI용 구간 데이터로 압축 저장 완료.")
 

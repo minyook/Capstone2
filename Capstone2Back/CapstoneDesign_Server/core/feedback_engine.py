@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 from typing import Dict, Any, Optional
 from core.llama_client import get_feedback_from_coach
 from core.gemini_client import model as gemini_model
@@ -51,24 +52,30 @@ class FeedbackEngine:
             except Exception as e:
                 print(f"⚠️ PPT JSON 로드 실패: {e}")
 
-        # 2. MediaPipe 시계열 요약 (샘플링)
+        # 2. MediaPipe 구간 데이터 로드 (가공됨)
         face_path = paths.get("face")
         if face_path and face_path.exists():
             try:
                 with open(face_path, 'r', encoding='utf-8') as f:
                     face_data = json.load(f)
-                    # 데이터가 너무 크므로 주요 상태 변화 위주로 요약하거나 샘플링 필요
-                    detailed["face_summary"] = list(face_data.values())[::50] # 50개마다 하나씩 샘플링
+                    # 전체 구간 데이터와 통계 포함
+                    detailed["face_analysis"] = {
+                        "events": face_data.get("face_events", []),
+                        "stats": face_data.get("stats", {})
+                    }
             except Exception as e:
                 print(f"⚠️ Face JSON 로드 실패: {e}")
 
-        # 3. YOLO 시계열 요약 (샘플링)
+        # 3. YOLO 구간 데이터 로드 (가공됨)
         gesture_path = paths.get("gesture")
         if gesture_path and gesture_path.exists():
             try:
                 with open(gesture_path, 'r', encoding='utf-8') as f:
                     gesture_data = json.load(f)
-                    detailed["gesture_summary"] = list(gesture_data.values())[::50]
+                    detailed["gesture_analysis"] = {
+                        "events": gesture_data.get("gesture_events", []),
+                        "stats": gesture_data.get("gesture_stats", {})
+                    }
             except Exception as e:
                 print(f"⚠️ Gesture JSON 로드 실패: {e}")
 
@@ -90,7 +97,7 @@ class FeedbackEngine:
 [핵심 지표 요약]
 - 영상 타입: {data.get('video_type', '알 수 없음')}
 - 얼굴 검출률: {data.get('face_detection_rate', 0):.1f}%
-- 시선/표정 점수: Gaze({data.get('gaze_score', 0):.2f}), Smile({data.get('smile_score', 0):.2f})
+- 시선/표정 점수: 시선 집중도({data.get('gaze_score', 0):.2f} / 1.0)
 - 음성 지표: Pitch({data.get('avg_pitch', 0):.1f}Hz), Vol({data.get('avg_db', 0):.1f}dB), Speed({data.get('avg_speed', 1.0):.1f}x)
 
 [상세 분석 데이터 (JSON)]

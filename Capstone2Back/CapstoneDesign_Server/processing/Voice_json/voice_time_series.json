@@ -1,0 +1,558 @@
+{
+    "source": "audio_analyzer",
+    "segment_count": 46,
+    "segments": {
+        "00:00:00.00": {
+            "segment_index": 0,
+            "start": 0.0,
+            "end": 3.88,
+            "duration": 3.88,
+            "text": "area",
+            "speech_rate_cps": 1.031,
+            "prosody": {
+                "jitter": 0.0,
+                "shimmer": 0.0
+            }
+        },
+        "00:00:03.87": {
+            "segment_index": 1,
+            "start": 3.88,
+            "end": 5.62,
+            "duration": 1.74,
+            "text": "기교 좀 AR",
+            "speech_rate_cps": 4.023,
+            "prosody": {
+                "jitter": 0.833,
+                "shimmer": 16.911
+            }
+        },
+        "00:00:05.62": {
+            "segment_index": 2,
+            "start": 5.62,
+            "end": 7.08,
+            "duration": 1.46,
+            "text": "m",
+            "speech_rate_cps": 0.685,
+            "prosody": {
+                "jitter": 0.815,
+                "shimmer": 18.03
+            }
+        },
+        "00:00:07.08": {
+            "segment_index": 3,
+            "start": 7.08,
+            "end": 8.3,
+            "duration": 1.22,
+            "text": "전 제작명 kid",
+            "speech_rate_cps": 7.377,
+            "prosody": {
+                "jitter": 0.826,
+                "shimmer": 16.524
+            }
+        },
+        "00:00:08.30": {
+            "segment_index": 4,
+            "start": 8.3,
+            "end": 11.22,
+            "duration": 2.92,
+            "text": "b",
+            "speech_rate_cps": 0.342,
+            "prosody": {
+                "jitter": 1.246,
+                "shimmer": 18.285
+            }
+        },
+        "00:00:11.22": {
+            "segment_index": 5,
+            "start": 11.22,
+            "end": 14.44,
+            "duration": 3.22,
+            "text": "자�kö이기 때문에 공항해 Cait Zimmer",
+            "speech_rate_cps": 8.075,
+            "prosody": {
+                "jitter": 0.986,
+                "shimmer": 17.064
+            }
+        },
+        "00:00:14.43": {
+            "segment_index": 6,
+            "start": 14.44,
+            "end": 18.94,
+            "duration": 4.5,
+            "text": "아직 Rev",
+            "speech_rate_cps": 1.333,
+            "prosody": {
+                "jitter": 1.093,
+                "shimmer": 15.61
+            }
+        },
+        "00:00:19.71": {
+            "segment_index": 7,
+            "start": 19.72,
+            "end": 23.58,
+            "duration": 3.86,
+            "text": "있답니다",
+            "speech_rate_cps": 1.036,
+            "prosody": {
+                "jitter": 0.994,
+                "shimmer": 16.695
+            }
+        },
+        "00:00:23.58": {
+            "segment_index": 8,
+            "start": 23.58,
+            "end": 24.34,
+            "duration": 0.76,
+            "text": "시즌",
+            "speech_rate_cps": 2.632,
+            "prosody": {
+                "jitter": 0.0,
+                "shimmer": 0.0
+            }
+        },
+        "00:00:24.33": {
+            "segment_index": 9,
+            "start": 24.34,
+            "end": 27.5,
+            "duration": 3.16,
+            "text": "우리나라에는 이런 사항에 최� resolver",
+            "speech_rate_cps": 7.911,
+            "prosody": {
+                "jitter": 0.938,
+                "shimmer": 17.219
+            }
+        },
+        "00:00:27.50": {
+            "segment_index": 10,
+            "start": 27.5,
+            "end": 32.8,
+            "duration": 5.3,
+            "text": "바로 시업 준비와 아르바이트를 병해하는 글로 빈곤자 약 400만 명인데요.",
+            "speech_rate_cps": 7.736,
+            "prosody": {
+                "jitter": 1.032,
+                "shimmer": 17.366
+            }
+        },
+        "00:00:32.79": {
+            "segment_index": 11,
+            "start": 32.8,
+            "end": 37.5,
+            "duration": 4.7,
+            "text": "이들은 실제로 식사를 그냥 떼우거나 아니면 식사를 포기하는 상황에 처해있습니다.",
+            "speech_rate_cps": 9.362,
+            "prosody": {
+                "jitter": 0.998,
+                "shimmer": 15.906
+            }
+        },
+        "00:00:38.50": {
+            "segment_index": 12,
+            "start": 38.5,
+            "end": 45.5,
+            "duration": 7.0,
+            "text": "실제로 이들이 이런 상황이기 때문에 영양성치 부족자의 수는 굉장히 많고 전문가들은 계속 꾸준히 경고를 하고 있습니다.",
+            "speech_rate_cps": 9.286,
+            "prosody": {
+                "jitter": 1.013,
+                "shimmer": 17.233
+            }
+        },
+        "00:00:46.50": {
+            "segment_index": 13,
+            "start": 46.5,
+            "end": 51.0,
+            "duration": 4.5,
+            "text": "또 이에 대해서 현상적으로 건강 지표가 적시려가 나타나고 있습니다.",
+            "speech_rate_cps": 8.222,
+            "prosody": {
+                "jitter": 0.852,
+                "shimmer": 14.987
+            }
+        },
+        "00:00:52.00": {
+            "segment_index": 14,
+            "start": 52.0,
+            "end": 63.0,
+            "duration": 11.0,
+            "text": "이 사태에 대한 신각성황이 인제한 정부는 문제의 원인을 분석하고 또 그 문제의 원인에 대한 솔루션이 되고 있는데 딱 한 가지 경제역 여유가 없어서 영양성치가 안 되는 자료에 대한 지원을 못하고 있습니다.",
+            "speech_rate_cps": 10.273,
+            "prosody": {
+                "jitter": 0.947,
+                "shimmer": 17.84
+            }
+        },
+        "00:01:03.00": {
+            "segment_index": 15,
+            "start": 63.0,
+            "end": 70.0,
+            "duration": 7.0,
+            "text": "왜냐하면 사회적 병이 많이 들어가고 이들을 빈곤치호로 인정해야 된다는 사회적 정치적 문제가 있기 때문입니다.",
+            "speech_rate_cps": 8.571,
+            "prosody": {
+                "jitter": 1.019,
+                "shimmer": 15.72
+            }
+        },
+        "00:01:11.00": {
+            "segment_index": 16,
+            "start": 71.0,
+            "end": 73.0,
+            "duration": 2.0,
+            "text": "저희는 계속해서 하겠습니다. 영양점은 가능하다.",
+            "speech_rate_cps": 13.0,
+            "prosody": {
+                "jitter": 0.964,
+                "shimmer": 17.071
+            }
+        },
+        "00:01:13.00": {
+            "segment_index": 17,
+            "start": 73.0,
+            "end": 80.0,
+            "duration": 7.0,
+            "text": "왜냐하면 식사에 비해서 굉장히 효율적인 섭취 수단이기 때문입니다. 그래서 이를 이용한 영양솔루션 케어피를 소개합니다.",
+            "speech_rate_cps": 9.286,
+            "prosody": {
+                "jitter": 0.796,
+                "shimmer": 15.408
+            }
+        },
+        "00:01:22.00": {
+            "segment_index": 18,
+            "start": 82.0,
+            "end": 90.0,
+            "duration": 8.0,
+            "text": "저희는 타겟고객의 인터뷰와 사무수자 통해서 이 고객들이 영양제를 선택할 때 이러한 어려움이 있다고 인달하는 것을 파악했습니다.",
+            "speech_rate_cps": 8.75,
+            "prosody": {
+                "jitter": 0.932,
+                "shimmer": 16.581
+            }
+        },
+        "00:01:31.00": {
+            "segment_index": 19,
+            "start": 91.0,
+            "end": 95.0,
+            "duration": 4.0,
+            "text": "저희는 이 어려움이 이용해서 아주 핏한 제품과 서비스를 만들어냈습니다.",
+            "speech_rate_cps": 9.75,
+            "prosody": {
+                "jitter": 0.953,
+                "shimmer": 20.141
+            }
+        },
+        "00:01:36.00": {
+            "segment_index": 20,
+            "start": 96.0,
+            "end": 98.0,
+            "duration": 2.0,
+            "text": "첫 번째 아주 직관적인 것입니다.",
+            "speech_rate_cps": 9.0,
+            "prosody": {
+                "jitter": 0.675,
+                "shimmer": 17.431
+            }
+        },
+        "00:01:39.00": {
+            "segment_index": 21,
+            "start": 99.0,
+            "end": 102.0,
+            "duration": 3.0,
+            "text": "기존의 영양제 구매 및 선택 알고리즘은 이렇게 복잡합니다.",
+            "speech_rate_cps": 10.667,
+            "prosody": {
+                "jitter": 0.774,
+                "shimmer": 14.765
+            }
+        },
+        "00:01:43.00": {
+            "segment_index": 22,
+            "start": 103.0,
+            "end": 109.0,
+            "duration": 6.0,
+            "text": "하지만 저희는 증상에 바로 대응되는 제품을 만들어서 아주 쉽고 간편한 제품을 만들었는데요.",
+            "speech_rate_cps": 8.333,
+            "prosody": {
+                "jitter": 0.999,
+                "shimmer": 17.408
+            }
+        },
+        "00:01:49.00": {
+            "segment_index": 23,
+            "start": 109.0,
+            "end": 115.0,
+            "duration": 6.0,
+            "text": "보시는 것처럼 같은 영양소지만 저희 제품은 어린아이도 고를 수 있을 정도로 굉장히 쉽고 직관적인 것을 알 수 있습니다.",
+            "speech_rate_cps": 11.0,
+            "prosody": {
+                "jitter": 0.782,
+                "shimmer": 16.434
+            }
+        },
+        "00:01:56.00": {
+            "segment_index": 24,
+            "start": 116.0,
+            "end": 119.0,
+            "duration": 3.0,
+            "text": "두 번째 저희는 판매가 끝이 아닙니다.",
+            "speech_rate_cps": 7.0,
+            "prosody": {
+                "jitter": 0.621,
+                "shimmer": 14.357
+            }
+        },
+        "00:02:00.00": {
+            "segment_index": 25,
+            "start": 120.0,
+            "end": 124.0,
+            "duration": 4.0,
+            "text": "저희는 판매 후에도 고객이 영양제를 통해서 이걸 왜 먹지?",
+            "speech_rate_cps": 8.0,
+            "prosody": {
+                "jitter": 0.975,
+                "shimmer": 14.631
+            }
+        },
+        "00:02:04.00": {
+            "segment_index": 26,
+            "start": 124.0,
+            "end": 133.0,
+            "duration": 9.0,
+            "text": "이게 어떻게 좋지? 라는 거 알게 함으로써 효과를 진지시키기 위해서 직접 커뮤니케이션 채널을 이용해서 고객과 상당하고 정보를 제공하고",
+            "speech_rate_cps": 8.222,
+            "prosody": {
+                "jitter": 0.765,
+                "shimmer": 16.302
+            }
+        },
+        "00:02:14.00": {
+            "segment_index": 27,
+            "start": 134.0,
+            "end": 138.0,
+            "duration": 4.0,
+            "text": "또 더 나아가 꾸준히 섭취하기 위해서 영양 관리까지 섭취 관리까지 하고 있습니다.",
+            "speech_rate_cps": 11.25,
+            "prosody": {
+                "jitter": 0.751,
+                "shimmer": 17.838
+            }
+        },
+        "00:02:19.00": {
+            "segment_index": 28,
+            "start": 139.0,
+            "end": 145.0,
+            "duration": 6.0,
+            "text": "마지막 가장 중요한 가격 부분입니다. 저희는 가격 부분에 대한 솔루션을 위해서 직접 제조를 한번 알아봤습니다.",
+            "speech_rate_cps": 10.167,
+            "prosody": {
+                "jitter": 0.838,
+                "shimmer": 18.227
+            }
+        },
+        "00:02:26.00": {
+            "segment_index": 29,
+            "start": 146.0,
+            "end": 154.0,
+            "duration": 8.0,
+            "text": "실제로 다행히 우리나라 영양제 외주제작이 굉장히 잘 되어 있어서 제조에는 문제가 없었고 저희는 이미 경적 무늬까지 맞춰 놓은 상태입니다.",
+            "speech_rate_cps": 9.5,
+            "prosody": {
+                "jitter": 0.941,
+                "shimmer": 17.381
+            }
+        },
+        "00:02:35.00": {
+            "segment_index": 30,
+            "start": 155.0,
+            "end": 163.0,
+            "duration": 8.0,
+            "text": "또 한 가지. 지금 기존의 영양의 시장에서는 중간 류통 마진과 또 연예인 플러서 마케팅 비용이 매출원가의 50%를 찾아오고 있습니다.",
+            "speech_rate_cps": 9.25,
+            "prosody": {
+                "jitter": 0.886,
+                "shimmer": 15.87
+            }
+        },
+        "00:02:43.00": {
+            "segment_index": 31,
+            "start": 163.0,
+            "end": 173.0,
+            "duration": 10.0,
+            "text": "저희는 이미 과감히 제외해서 아주 기존의 종일 스태크들이 65% 수준의 가격으로 저희 제품을 제공할 수 있었습니다.",
+            "speech_rate_cps": 6.4,
+            "prosody": {
+                "jitter": 0.873,
+                "shimmer": 16.428
+            }
+        },
+        "00:02:54.00": {
+            "segment_index": 32,
+            "start": 174.0,
+            "end": 181.0,
+            "duration": 7.0,
+            "text": "그 제품들입니다. 이 제품들은 저희 타격고위가 가장 공감할 수 있는 4가지 증상으로 기방을 만들었고요.",
+            "speech_rate_cps": 8.143,
+            "prosody": {
+                "jitter": 0.787,
+                "shimmer": 15.649
+            }
+        },
+        "00:03:02.00": {
+            "segment_index": 33,
+            "start": 182.0,
+            "end": 188.0,
+            "duration": 6.0,
+            "text": "기본적으로 20대와 부족한 7대 영양소를 포함하여 이걸 먹었을 때 영양 섭취 문제를 해결할 수 있도록 설계하였습니다.",
+            "speech_rate_cps": 10.833,
+            "prosody": {
+                "jitter": 0.89,
+                "shimmer": 14.963
+            }
+        },
+        "00:03:09.00": {
+            "segment_index": 34,
+            "start": 189.0,
+            "end": 195.0,
+            "duration": 6.0,
+            "text": "또한 휴대가 용의하도록 소포장을 하였고 또 먹기 편하도록 작은 사이즈로 제품 차별할 시도가 있습니다.",
+            "speech_rate_cps": 9.333,
+            "prosody": {
+                "jitter": 0.787,
+                "shimmer": 17.224
+            }
+        },
+        "00:03:16.00": {
+            "segment_index": 35,
+            "start": 196.0,
+            "end": 203.0,
+            "duration": 7.0,
+            "text": "사실 시장에는 영양제 표가 너무 많습니다. 하지만 저희는 딱 우리 고객에 맞는 이지의 반영한 경쟁의 있는 제품을 판단하고 있습니다.",
+            "speech_rate_cps": 10.429,
+            "prosody": {
+                "jitter": 1.168,
+                "shimmer": 17.182
+            }
+        },
+        "00:03:24.00": {
+            "segment_index": 36,
+            "start": 204.0,
+            "end": 213.0,
+            "duration": 9.0,
+            "text": "그걸 확인하기 위해서 저희는 랜딩 페이지를 저번 주 오픈했습니다. 마케팅을 통해서 홍보로 통해서 사전 예약을 집 받았는데요.",
+            "speech_rate_cps": 7.667,
+            "prosody": {
+                "jitter": 0.845,
+                "shimmer": 16.315
+            }
+        },
+        "00:03:33.00": {
+            "segment_index": 37,
+            "start": 213.0,
+            "end": 222.0,
+            "duration": 9.0,
+            "text": "일주일 만에 이렇게 유의 있는 성과 지표를 달성하였는데 중요한 건 무엇이냐? 저희가 타격에서 하는 고객 영양대가 정확히 반응했다는 점.",
+            "speech_rate_cps": 8.333,
+            "prosody": {
+                "jitter": 0.971,
+                "shimmer": 17.129
+            }
+        },
+        "00:03:43.00": {
+            "segment_index": 38,
+            "start": 223.0,
+            "end": 226.0,
+            "duration": 3.0,
+            "text": "그리고 이분들이 이것에 대해서 굉장히 후환 피드백이 됐다는 점입니다.",
+            "speech_rate_cps": 12.667,
+            "prosody": {
+                "jitter": 0.911,
+                "shimmer": 15.245
+            }
+        },
+        "00:03:47.00": {
+            "segment_index": 39,
+            "start": 227.0,
+            "end": 244.0,
+            "duration": 17.0,
+            "text": "저희는 그리고 온라인 통해서 고객과 소통한 결과 고객이 업체와의 소통에 굉장히 좋아하는 거라는 점을 파악해서 국내외에 그런 고객 유치 전략을 잘 하는 업체를 조사하여서 그에 대한 카피켓 전략을 사용해서 앞으로 고객 유치에 계속할 예정입니다.",
+            "speech_rate_cps": 7.882,
+            "prosody": {
+                "jitter": 1.096,
+                "shimmer": 17.279
+            }
+        },
+        "00:04:05.00": {
+            "segment_index": 40,
+            "start": 245.0,
+            "end": 255.0,
+            "duration": 10.0,
+            "text": "저희의 비즈니스에 간단합니다. 영양제를 판매하는데 리턴싱을 올리기 위해서 케어 서비스를 제공하고 그리고 가격 할인에 통한 전기 배송을 유도하는 식으로 전략을 세울 것입니다.",
+            "speech_rate_cps": 9.6,
+            "prosody": {
+                "jitter": 0.972,
+                "shimmer": 15.905
+            }
+        },
+        "00:04:16.00": {
+            "segment_index": 41,
+            "start": 256.0,
+            "end": 263.0,
+            "duration": 7.0,
+            "text": "시장 규모는 다음으로 나왔습니다. 저희는 타격시장에 진출하고 일반시장 화장하는 모델입니다. 해상시장은 충분히 성장하고 있고 규마가 큽니다.",
+            "speech_rate_cps": 11.0,
+            "prosody": {
+                "jitter": 0.672,
+                "shimmer": 15.809
+            }
+        },
+        "00:04:24.00": {
+            "segment_index": 42,
+            "start": 264.0,
+            "end": 273.0,
+            "duration": 9.0,
+            "text": "저희는 1년 내로 1만 명의 고객 확보해서 3억 원에 매출되는 것입니다. 또한 다음 가수 사회적 지표를 통해서 영양석치 문제를 반드시 해결하겠습니다.",
+            "speech_rate_cps": 9.222,
+            "prosody": {
+                "jitter": 0.979,
+                "shimmer": 16.092
+            }
+        },
+        "00:04:34.00": {
+            "segment_index": 43,
+            "start": 274.0,
+            "end": 281.0,
+            "duration": 7.0,
+            "text": "핵심 요소는 다른 세 가지입니다. 브랜드, 커뮤니케이션, 가성비. 저희는 이걸 다 할 수 있는 영양을 주로 갖춘 팀입니다.",
+            "speech_rate_cps": 9.714,
+            "prosody": {
+                "jitter": 0.815,
+                "shimmer": 17.351
+            }
+        },
+        "00:04:42.00": {
+            "segment_index": 44,
+            "start": 282.0,
+            "end": 291.0,
+            "duration": 9.0,
+            "text": "지난주에 저희 어머니께서 젊은시를 영양부정에서 위장에 대한 수소하셨습니다. 저는 이런 문제를 계속 반복되는 것을 원치 않습니다.",
+            "speech_rate_cps": 7.889,
+            "prosody": {
+                "jitter": 0.963,
+                "shimmer": 16.255
+            }
+        },
+        "00:04:52.00": {
+            "segment_index": 45,
+            "start": 292.0,
+            "end": 295.0,
+            "duration": 3.0,
+            "text": "저희 케어 핵심은 이 문제를 해결하기에 채도 다하겠습니다. 이상 발표하시겠습니다.",
+            "speech_rate_cps": 15.0,
+            "prosody": {
+                "jitter": 0.904,
+                "shimmer": 17.339
+            }
+        }
+    }
+}

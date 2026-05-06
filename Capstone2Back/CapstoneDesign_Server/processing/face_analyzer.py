@@ -149,33 +149,65 @@ def analyze_image(image_input: str | np.ndarray) -> dict:
         return {"error": str(e)}
 
 def save_face_data(all_vision_results: list, frame_rate: int, job_id: str = "default"):
-    """MediaPipe 얼굴 데이터를 시계열 JSON으로 저장합니다."""
-    time_series_face = {}
-    
+    """MediaPipe 데이터를 AI 피드백에 최적화된 구간별 이벤트 형식으로 가공하여 저장합니다."""
+    processed_events = []
+    if not all_vision_results:
+        return
+
+    current_state = None
+    start_time = 0.0
+
     for i, res in enumerate(all_vision_results):
-        seconds = i / frame_rate
-        timestamp_key = f"{seconds:.2f}" # 시각화 편의를 위해 초 단위 키 사용
-        
+        time_s = i / frame_rate
         face = res.face
-        main_state = "정면 응시 / 진지함"
-        if face.has_face:
-            if face.smile > 0.5: main_state = "미소 감지"
-            elif face.squint > 0.5: main_state = "집중 / 찌푸림"
-            elif abs(face.gaze_h) > 0.3: main_state = "시선 분산 (좌우)"
-            elif face.brow_up > 0.5: main_state = "눈썹 치켜뜸 (강조)"
-        else:
-            main_state = "얼굴 미검출"
         
-        face_data = face.to_dict()
-        time_series_face[timestamp_key] = {
-            "info": {"frame_index": i, "main_state": main_state},
-            "blendshapes": face_data.get("all_blendshapes", {})
+        # 상태 판별 (기존 로직 유지하되 한글 상태명 사용)
+        state = "정면 응시함"
+        if not face.has_face:
+            state = "얼굴 미검출"
+        elif abs(face.gaze_h) > 0.35:
+            state = "시선 분산 (좌우)"
+        elif face.gaze_v < -0.2:
+            state = "시선 분산 (바닥)"
+        elif face.gaze_v > 0.3:
+            state = "시선 분산 (천장)"
+        elif face.brow_up > 0.45:
+            state = "눈썹 강조 (열정적)"
+
+        # 상태가 바뀌거나 마지막 프레임인 경우 저장
+        if state != current_state:
+            if current_state is not None:
+                processed_events.append({
+                    "start": round(start_time, 2),
+                    "end": round(time_s, 2),
+                    "duration": round(time_s - start_time, 2),
+                    "state": current_state
+                })
+            current_state = state
+            start_time = time_s
+
+    # 마지막 구간 추가
+    processed_events.append({
+        "start": round(start_time, 2),
+        "end": round(len(all_vision_results) / frame_rate, 2),
+        "duration": round((len(all_vision_results) / frame_rate) - start_time, 2),
+        "state": current_state
+    })
+
+    # AI 피드백용 핵심 요약 데이터 생성
+    summary = {
+        "job_id": job_id,
+        "total_duration": round(len(all_vision_results) / frame_rate, 2),
+        "face_events": processed_events,
+        "stats": {
+            "face_detected_ratio": round(len([r for r in all_vision_results if r.face.has_face]) / len(all_vision_results) * 100, 1)
         }
+    }
 
     face_out_dir = Path("processing/MediaPipe_json")
     face_out_dir.mkdir(parents=True, exist_ok=True)
     file_name = f"face_results_{job_id}.json"
     with open(face_out_dir / file_name, 'w', encoding='utf-8') as f:
-        json.dump(time_series_face, f, indent=4, ensure_ascii=False)
+        json.dump(summary, f, indent=4, ensure_ascii=False)
     
-    print(f"   > MediaPipe JSON 저장 완료: {face_out_dir / file_name}")
+    print(f"   > [데이터 가공] 얼굴 분석 결과를 AI용 구간 데이터로 압축 저장 완료.")
