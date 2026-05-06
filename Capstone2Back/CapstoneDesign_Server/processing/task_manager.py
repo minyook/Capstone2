@@ -172,8 +172,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         print(llama_feedback)
 
         # 🌟 분리된 JSON 저장 함수 호출
-        save_face_data(all_vision_results, FRAME_RATE)
-        save_gesture_data(all_vision_results, FRAME_RATE)
+        save_face_data(all_vision_results, FRAME_RATE, job_id)
+        save_gesture_data(all_vision_results, FRAME_RATE, job_id)
 
         raw_data_json = [f.to_dict() for f in all_vision_results]
         final_result = {
@@ -191,4 +191,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         traceback.print_exc()
         job_status[job_id] = {"status": "Error", "message": str(e)}
     finally:
-        cleanup_dirs(video_dir, frame_dir)
+        # 비디오는 보존하고 프레임(이미지들)만 삭제하도록 변경
+        if frame_dir and frame_dir.exists():
+            cleanup_dirs(frame_dir)
+        if video_dir and video_dir.exists():
+            cleanup_dirs(video_dir)

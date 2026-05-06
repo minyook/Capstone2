@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overnight.AI | 발표 분석 대시보드</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --accent: #FF9800;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { margin: 0; color: var(--primary); font-size: 2.5em; }
+        
+        .upload-section {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .upload-section input[type="file"] { display: none; }
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, background 0.2s;
+            margin: 10px;
+        }
+        .btn:hover { background: #45a049; transform: translateY(-2px); }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+
+        .status-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            background: #333;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            display: none; /* 분석 완료 전엔 숨김 */
+        }
+        .video-box { 
+            flex: 2; 
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        video { width: 100%; display: block; }
+        
+        .info-box { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        .card { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 12px; 
+            border-left: 6px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .card.gesture { border-left-color: var(--secondary); }
+        .card.face { border-left-color: var(--accent); }
+        
+        h2 { margin: 0 0 15px 0; font-size: 1.3em; display: flex; align-items: center; gap: 10px; }
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1em; }
+        .data-label { color: #aaa; }
+        .data-value { color: #fff; font-weight: bold; }
+        
+        .timestamp { 
+            position: absolute; bottom: 10px; right: 10px;
+            background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 4px;
+            font-family: monospace; font-size: 0.9em;
+        }
+
+        .live-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f44336;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: bold;
+            vertical-align: middle;
+            margin-left: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.5;} 100% {opacity: 1;} }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Overnight.AI</h1>
+        <p>인공지능 기반 발표 자세 및 시선 분석 솔루션</p>
+    </div>
+    
+    <div class="upload-section" id="uploadSection">
+        <label for="videoInput" class="btn">📹 영상 선택하기</label>
+        <input type="file" id="videoInput" accept="video/*">
+        <button id="uploadBtn" class="btn" disabled>분석 시작하기</button>
+        
+        <div class="status-container" id="statusContainer">
+            <div id="statusMessage">파일 업로드 준비 중...</div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <div class="video-box">
+            <video id="videoPlayer" controls></video>
+            <div id="currentTimeDisplay" class="timestamp">0.00s</div>
+        </div>
+
+        <div class="info-box">
+            <div class="card face">
+                <h2>👤 얼굴 및 시선 <span class="live-badge">REAL-TIME</span></h2>
+                <div class="data-row">
+                    <span class="data-label">상태</span>
+                    <span class="data-value" id="faceStatus">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">미소 수치</span>
+                    <span class="data-value" id="smileStatus">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">시선 방향</span>
+                    <span class="data-value" id="gazeStatus">-</span>
+                </div>
+            </div>
+
+            <div class="card gesture">
+                <h2>✋ 제스처 및 자세 <span class="live-badge">REAL-TIME</span></h2>
+                <div class="data-row">
+                    <span class="data-label">주요 제스처</span>
+                    <span class="data-value" id="gestureStatus">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">왼손 상태</span>
+                    <span class="data-value" id="lHandStatus">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">오른손 상태</span>
+                    <span class="data-value" id="rHandStatus">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">팔짱 감지</span>
+                    <span class="data-value" id="armCrossedStatus">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoInput = document.getElementById('videoInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadSection = document.getElementById('uploadSection');
+        const statusContainer = document.getElementById('statusContainer');
+        const statusMessage = document.getElementById('statusMessage');
+        const progressFill = document.getElementById('progressFill');
+        const mainContent = document.getElementById('mainContent');
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        let faceData = {};
+        let gestureData = {};
+        let currentJobId = '';
+
+        videoInput.addEventListener('change', () => {
+            if (videoInput.files.length > 0) {
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = `분석 시작 (${videoInput.files[0].name})`;
+            }
+        });
+
+        uploadBtn.addEventListener('click', async () => {
+            const file = videoInput.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            uploadBtn.disabled = true;
+            statusContainer.style.display = 'block';
+            statusMessage.innerText = '서버로 영상을 업로드하고 있습니다...';
+            
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                currentJobId = data.job_id;
+                
+                // 영상 미리 로드 (업로드된 경로 사용)
+                videoPlayer.src = data.video_url;
+                
+                startPolling(currentJobId);
+            } catch (err) {
+                statusMessage.innerText = '업로드 실패: ' + err.message;
+                uploadBtn.disabled = false;
+            }
+        });
+
+        function startPolling(jobId) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/status/${jobId}`);
+                    const data = await response.json();
+                    
+                    statusMessage.innerText = data.message || data.status;
+                    
+                    if (data.status === 'Complete') {
+                        clearInterval(interval);
+                        await loadAnalysisResults(jobId);
+                    } else if (data.status === 'Error') {
+                        clearInterval(interval);
+                        statusMessage.innerText = '분석 중 오류 발생: ' + data.message;
+                    } else {
+                        // 간단한 진행률 표시 (메시지 기반)
+                        if (data.message && data.message.includes('/6')) {
+                            const step = parseInt(data.message.split('/')[0]);
+                            progressFill.style.width = (step / 6 * 100) + '%';
+                        }
+                    }
+                } catch (err) {
+                    console.error('Polling error:', err);
+                }
+            }, 2000);
+        }
+
+        async function loadAnalysisResults(jobId) {
+            statusMessage.innerText = '분석 완료! 데이터를 불러오는 중...';
+            try {
+                const faceRes = await fetch(`/results/face/face_results_${jobId}.json`);
+                const gestureRes = await fetch(`/results/gesture/gesture_results_${jobId}.json`);
+                
+                faceData = await faceRes.json();
+                gestureData = await gestureRes.json();
+                
+                statusContainer.style.display = 'none';
+                uploadSection.style.display = 'none';
+                mainContent.style.display = 'flex';
+                
+                alert('모든 분석이 완료되었습니다. 영상을 재생해 결과를 확인하세요!');
+            } catch (err) {
+                statusMessage.innerText = '결과 데이터 로드 실패';
+            }
+        }
+
+        videoPlayer.addEventListener('timeupdate', () => {
+            const time = videoPlayer.currentTime.toFixed(2);
+            document.getElementById('currentTimeDisplay').innerText = `${time}s`;
+
+            const keys = Object.keys(faceData);
+            if (keys.length === 0) return;
+
+            // 현재 시간과 가장 가까운 데이터 찾기
+            const currentKey = keys.find(k => Math.abs(parseFloat(k) - time) < 0.2);
+
+            if (currentKey) {
+                const f = faceData[currentKey];
+                const g = gestureData[currentKey];
+
+                if (f) {
+                    document.getElementById('faceStatus').innerText = f.info.main_state;
+                    document.getElementById('smileStatus').innerText = (f.blendshapes.mouthSmileLeft * 100 || 0).toFixed(1) + '%';
+                    
+                    let gazeText = "정면";
+                    if (f.blendshapes.eyeLookInLeft > 0.3) gazeText = "좌측";
+                    else if (f.blendshapes.eyeLookInRight > 0.3) gazeText = "우측";
+                    document.getElementById('gazeStatus').innerText = gazeText;
+                }
+
+                if (g) {
+                    document.getElementById('gestureStatus').innerText = g.gesture_name;
+                    document.getElementById('lHandStatus').innerText = g.left_hand;
+                    document.getElementById('rHandStatus').innerText = g.right_hand;
+                    document.getElementById('armCrossedStatus').innerText = g.is_arm_crossed ? "⚠️ 감지됨" : "정상";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

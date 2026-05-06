@@ -67,18 +67,84 @@ async def lifespan(app: FastAPI):
     print("서버가 종료됩니다.")
     print("="*50)
 
+from fastapi import FastAPI, BackgroundTasks, UploadFile, File, Form, Depends
+from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+import json
+
 app = FastAPI(lifespan=lifespan)
+
+# 🌟 필수 디렉토리 확인 및 생성 (RuntimeError 방지)
+for d in ["uploads", "processing/MediaPipe_json", "processing/Yolo_json"]:
+    Path(d).mkdir(parents=True, exist_ok=True)
+
+# 🌟 정적 파일 서버 설정
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/results/face", StaticFiles(directory="processing/MediaPipe_json"), name="face_results")
+app.mount("/results/gesture", StaticFiles(directory="processing/Yolo_json"), name="gesture_results")
+
+@app.get("/")
+async def read_index():
+    return FileResponse('analysis_viewer.html')
 
 # ==========================================
 # 🌟 1. CORS 미들웨어 설정 (프론트엔드 연결 허용)
 # ==========================================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 프론트엔드(리액트, 앱) 요청 허용
+    allow_origins=["*"], 
     allow_credentials=True,
-    allow_methods=["*"], # POST, GET 등 모든 방식 허용
+    allow_methods=["*"], 
     allow_headers=["*"],
 )
+
+# ==========================================
+# 🌟 3. 영상 업로드 및 분석 시작 API
+# ==========================================
+@app.post("/api/upload")
+async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    job_id = str(uuid.uuid4())[:8]
+    
+    # 작업 전용 폴더 생성
+    job_upload_dir = Path("uploads") / job_id
+    job_upload_dir.mkdir(parents=True, exist_ok=True)
+    
+    file_extension = Path(file.filename).suffix
+    save_filename = f"video{file_extension}" # 이름을 고정하거나 원본 유지
+    upload_path = job_upload_dir / save_filename
+    
+    # 파일 저장
+    content = await file.read()
+    with open(upload_path, "wb") as f:
+        f.write(content)
+    
+    # 분석 작업용 프레임 폴더
+    frame_dir = Path("frames") / job_id
+    frame_dir.mkdir(parents=True, exist_ok=True)
+    
+    # 분석 작업 백그라운드 실행
+    # video_dir로 job_upload_dir를 넘겨서 해당 폴더만 정리되게 함
+    # 단, 결과 확인을 위해 비디오는 남겨두고 싶다면 cleanup_dirs 호출 방식을 조정해야 함
+    # 현재 task_manager.py의 cleanup_dirs는 video_dir 전체를 지우므로, 
+    # 비디오를 남기려면 task_manager.py를 수정하거나 빈 경로를 넘겨야 함.
+    # 일단은 task_manager.py가 지우는 것을 방지하기 위해 빈 Path()를 넘기거나 
+    # 비디오 재생용으로 복사본을 유지하는 방법이 있음.
+    # 여기서는 비디오를 보존하기 위해 task_manager에 video_dir 대신 None을 넘기도록 수정하는게 안전함.
+    
+    background_tasks.add_task(
+        run_analysis_task, 
+        job_id, 
+        upload_path, 
+        frame_dir, 
+        None # video_dir를 None으로 주어 비디오 삭제 방지 (task_manager 수정 필요)
+    )
+    
+    return {"job_id": job_id, "video_url": f"/uploads/{job_id}/{save_filename}"}
+
+@app.get("/api/status/{job_id}")
+async def get_status(job_id: str):
+    status = job_status.get(job_id, {"status": "Waiting", "message": "대기 중..."})
+    return status
 
 # ==========================================
 # 🌟 2. 챗봇 API 엔드포인트 및 데이터 모델 세팅
@@ -103,11 +169,6 @@ def chat_with_ai(request: ChatRequest):
     # 업데이트된 전체 대화 기록을 프론트엔드로 다시 반환
     return {"chat_history": updated_history}
 
-from fastapi import FastAPI, BackgroundTasks, UploadFile, File, Form
-from fastapi.responses import JSONResponse, StreamingResponse
-
-# ... (기타 임포트 생략)
-
 @app.post("/api/chat/with-file")
 async def chat_with_ai_file(
     message: str = Form(...),
@@ -122,9 +183,6 @@ async def chat_with_ai_file(
     
     print(f"\n[📱 파일 첨부 메시지]: {message}")
     print(f"[📎 첨부 파일]: {file.filename}")
-
-    # 파일 저장 로직 (필요시)
-    # await save_upload_file(file, Path("uploads") / file.filename)
 
     # Gemini 답변 생성 (파일 정보 포함)
     full_message = f"[첨부 파일: {file.filename}]\n\n{message}"

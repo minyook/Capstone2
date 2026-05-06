@@ -21,6 +21,7 @@ class YoloPoseResult:
     is_arm_crossed: bool = False
     body_tilt: float = 0.0          # 몸의 기울기 (정면 기준)
     keypoints: list[list[float]] = field(default_factory=list) # 시각화용 원본 좌표 (선택사항)
+    person_bbox: list[float] = field(default_factory=list) # [x1, y1, x2, y2]
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

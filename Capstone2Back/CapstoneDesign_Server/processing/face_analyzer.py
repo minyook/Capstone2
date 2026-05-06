@@ -113,8 +113,10 @@ def _process_blendshapes(blendshapes: list, image_path: str = None) -> dict:
         "all_blendshapes": cats  # 통합 저장을 위한 원천 데이터 전송
     }
 
-def analyze_image(image_path: str) -> dict:
-    """프레임을 분석하여 표정 및 시선 데이터를 반환합니다."""
+def analyze_image(image_input: str | np.ndarray) -> dict:
+    """프레임을 분석하여 표정 및 시선 데이터를 반환합니다.
+    image_input: 이미지 파일 경로(str) 또는 로드된 이미지(np.ndarray)
+    """
     landmarker = setup_face_landmarker()
     if not landmarker:
         if not _MP_AVAILABLE:
@@ -125,32 +127,34 @@ def analyze_image(image_path: str) -> dict:
         if cv2 is None or mp is None:
             return {"error": "라이브러리 초기화 실패"}
             
-        image_bgr = cv2.imread(image_path)
-        if image_bgr is None:
-            return {"error": "이미지 읽기 실패"}
+        if isinstance(image_input, str):
+            image_bgr = cv2.imread(image_input)
+            if image_bgr is None:
+                return {"error": "이미지 읽기 실패"}
+        else:
+            image_bgr = image_input
         
         image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
         results = landmarker.detect(mp_image)
         
         if results.face_blendshapes:
-            # 통합 처리를 위해 원본 이미지 경로와 함께 결과를 넘깁니다.
-            return _process_blendshapes(results.face_blendshapes, image_path)
+            # 이미지 경로가 없는 경우(ROI인 경우) None 전달
+            img_path = image_input if isinstance(image_input, str) else None
+            return _process_blendshapes(results.face_blendshapes, img_path)
         else:
             return {"error": "얼굴 미검출"}
             
     except Exception as e:
         return {"error": str(e)}
 
-def save_face_data(all_vision_results: list, frame_rate: int):
+def save_face_data(all_vision_results: list, frame_rate: int, job_id: str = "default"):
     """MediaPipe 얼굴 데이터를 시계열 JSON으로 저장합니다."""
     time_series_face = {}
     
     for i, res in enumerate(all_vision_results):
         seconds = i / frame_rate
-        mins, secs = divmod(seconds, 60)
-        hours, mins = divmod(mins, 60)
-        timestamp_key = f"{int(hours):02d}:{int(mins):02d}:{int(secs):02d}.{int((seconds % 1) * 100):02d}"
+        timestamp_key = f"{seconds:.2f}" # 시각화 편의를 위해 초 단위 키 사용
         
         face = res.face
         main_state = "정면 응시 / 진지함"
@@ -170,7 +174,8 @@ def save_face_data(all_vision_results: list, frame_rate: int):
 
     face_out_dir = Path("processing/MediaPipe_json")
     face_out_dir.mkdir(parents=True, exist_ok=True)
-    with open(face_out_dir / "final_time_series.json", 'w', encoding='utf-8') as f:
+    file_name = f"face_results_{job_id}.json"
+    with open(face_out_dir / file_name, 'w', encoding='utf-8') as f:
         json.dump(time_series_face, f, indent=4, ensure_ascii=False)
     
-    print(f"   > MediaPipe JSON 저장 완료: {face_out_dir / 'final_time_series.json'}")
+    print(f"   > MediaPipe JSON 저장 완료: {face_out_dir / file_name}")
