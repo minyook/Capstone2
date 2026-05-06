@@ -1,5 +1,19 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  type Timestamp,
+} from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useAuth } from "../context/AuthContext";
 import "./Chatbot.css";
 
 type ChatRole = "user" | "bot";
@@ -9,6 +23,20 @@ type ChatMessage = {
   role: ChatRole;
   text: string;
   attachedFileName?: string;
+};
+
+type ChatThreadRow = {
+  id: string;
+  title: string;
+  preview: string;
+  updatedAt?: Timestamp;
+};
+
+const WELCOME_ID = "welcome-msg";
+const WELCOME_MSG: ChatMessage = {
+  id: WELCOME_ID,
+  role: "bot",
+  text: "발표 준비를 돕는 AI 코치입니다. **이미지** 또는 **PPT**를 끌어다 놓고 메시지와 함께 보내면 내용을 분석해 드립니다.",
 };
 
 function newId(): string {
@@ -36,6 +64,17 @@ function buildOutgoingApiMessage(textTrimmed: string, file: File | null): string
   return textTrimmed;
 }
 
+function formatThreadTime(ts?: Timestamp): string {
+  if (!ts?.toDate) return "";
+  const d = ts.toDate();
+  const now = new Date();
+  const diff = now.getTime() - d.getTime();
+  if (diff < 86_400_000 && d.getDate() === now.getDate()) {
+    return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  }
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
 const IMAGE_EXT = /\.(png|jpe?g|webp|gif|bmp)$/i;
 const PPT_EXT = /\.(pptx|ppt)$/i;
 
@@ -58,12 +97,18 @@ function isAllowedAttachment(file: File): boolean {
 }
 
 export function Chatbot() {
+  const { user } = useAuth();
+  const uid = user?.uid ?? null;
+
   const attachInputId = useId();
   const pageRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const bodyDragDepthRef = useRef(0);
   const footerDragDepthRef = useRef(0);
+  const creatingBootstrapRef = useRef(false);
+  const threadsRef = useRef<ChatThreadRow[]>([]);
+  const activeThreadIdRef = useRef<string | null>(null);
 
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -71,13 +116,126 @@ export function Chatbot() {
   const [footerDropActive, setFooterDropActive] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: "welcome-msg",
-      role: "bot",
-      text: "발표 준비를 돕는 AI 코치입니다. **이미지** 또는 **PPT**를 끌어다 놓고 메시지와 함께 보내면 내용을 분석해 드립니다.",
-    },
-  ]);
+  const [threads, setThreads] = useState<ChatThreadRow[]>([]);
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [WELCOME_MSG]);
+  const [firestoreError, setFirestoreError] = useState<string | null>(null);
+  const [persistHint, setPersistHint] = useState<string | null>(null);
+
+  threadsRef.current = threads;
+  activeThreadIdRef.current = activeThreadId;
+
+  useEffect(() => {
+    if (!uid) setFirestoreError(null);
+  }, [uid]);
+
+  /** 로그인 사용자: 스레드 목록 구독 + 비어 있으면 첫 스레드 생성 */
+  useEffect(() => {
+    if (!db || !uid) {
+      setThreads([]);
+      setActiveThreadId(null);
+      return;
+    }
+
+    const colRef = collection(db, "users", uid, "chatThreads");
+    const qRef = query(colRef, orderBy("updatedAt", "desc"));
+
+    const unsub = onSnapshot(
+      qRef,
+      (snap) => {
+        setFirestoreError(null);
+      const items: ChatThreadRow[] = snap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          title: typeof data.title === "string" ? data.title : "새 대화",
+          preview: typeof data.preview === "string" ? data.preview : "",
+          updatedAt: data.updatedAt as Timestamp | undefined,
+        };
+      });
+      setThreads(items);
+
+      if (snap.empty) {
+        if (!creatingBootstrapRef.current) {
+          creatingBootstrapRef.current = true;
+          const newRef = doc(colRef);
+          void setDoc(newRef, {
+            title: "새 대화",
+            preview: "",
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          }).finally(() => {
+            creatingBootstrapRef.current = false;
+          });
+        }
+        return;
+      }
+
+      setActiveThreadId((prev) => {
+        if (prev && items.some((t) => t.id === prev)) return prev;
+        return items[0]?.id ?? null;
+      });
+      },
+      (err) => {
+        console.error("[chatThreads]", err);
+        const code = "code" in err ? String((err as { code: string }).code) : "";
+        setFirestoreError(
+          code === "permission-denied"
+            ? "대화 목록을 불러올 수 없습니다. Firestore 규칙에서 본인 users/chatThreads 경로 쓰기가 허용되는지 확인해 주세요."
+            : `대화 목록 오류: ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+    );
+
+    return () => unsub();
+  }, [uid]);
+
+  /** 활성 스레드 메시지 구독 */
+  useEffect(() => {
+    if (!uid || !db) {
+      setMessages([WELCOME_MSG]);
+      return;
+    }
+    if (!activeThreadId) {
+      setMessages([WELCOME_MSG]);
+      return;
+    }
+
+    const qRef = query(
+      collection(db, "users", uid, "chatThreads", activeThreadId, "messages"),
+      orderBy("createdAt", "asc")
+    );
+
+    const unsub = onSnapshot(
+      qRef,
+      (snap) => {
+        setFirestoreError(null);
+      const list: ChatMessage[] = [];
+      snap.forEach((docSnap) => {
+        const d = docSnap.data();
+        list.push({
+          id: docSnap.id,
+          role: d.role === "assistant" ? "bot" : "user",
+          text: typeof d.text === "string" ? d.text : "",
+          attachedFileName:
+            typeof d.attachedFileName === "string" ? d.attachedFileName : undefined,
+        });
+      });
+      setMessages(list.length === 0 ? [WELCOME_MSG] : list);
+      },
+      (err) => {
+        console.error("[messages]", err);
+        const code = "code" in err ? String((err as { code: string }).code) : "";
+        setFirestoreError(
+          code === "permission-denied"
+            ? "메시지를 불러오거나 저장할 수 없습니다. Firestore 규칙을 게시했는지 확인해 주세요."
+            : `메시지 오류: ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+    );
+
+    return () => unsub();
+  }, [uid, activeThreadId]);
 
   useEffect(() => {
     const el = bodyRef.current;
@@ -142,6 +300,86 @@ export function Chatbot() {
   }, []);
 
   const canSend = !isLoading && (!!text.trim() || !!pendingFile);
+
+  /** 전송 직전 스레드 ID 확보 (목록 로딩 지연 시 activeThreadId가 비어 저장이 스킵되던 문제 방지) */
+  async function resolveThreadIdForSave(): Promise<string | null> {
+    if (!uid || !db) return null;
+    let tid = activeThreadIdRef.current;
+    if (tid) return tid;
+    const list = threadsRef.current;
+    if (list[0]?.id) {
+      tid = list[0].id;
+      setActiveThreadId(tid);
+      activeThreadIdRef.current = tid;
+      return tid;
+    }
+    // onSnapshot 부트스트랩 스레드 생성 직후 반영될 때까지 짧게 대기 (중복 스레드 생성 완화)
+    for (let i = 0; i < 20; i++) {
+      tid = activeThreadIdRef.current;
+      if (tid) return tid;
+      const first = threadsRef.current[0]?.id;
+      if (first) {
+        setActiveThreadId(first);
+        activeThreadIdRef.current = first;
+        return first;
+      }
+      await new Promise((r) => setTimeout(r, 80));
+    }
+    const colRef = collection(db, "users", uid, "chatThreads");
+    const newRef = doc(colRef);
+    await setDoc(newRef, {
+      title: "새 대화",
+      preview: "",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    tid = newRef.id;
+    setActiveThreadId(tid);
+    activeThreadIdRef.current = tid;
+    return tid;
+  }
+
+  async function persistMessage(
+    threadId: string,
+    role: "user" | "assistant",
+    textContent: string,
+    attachedFileName?: string | null,
+    options?: { threadTitleFrom?: string }
+  ) {
+    if (!db || !uid) return;
+    const messagesCol = collection(db, "users", uid, "chatThreads", threadId, "messages");
+    await addDoc(messagesCol, {
+      role,
+      text: textContent,
+      attachedFileName: attachedFileName ?? null,
+      createdAt: serverTimestamp(),
+    });
+
+    const threadRef = doc(db, "users", uid, "chatThreads", threadId);
+    const preview =
+      textContent.trim().slice(0, 200) || (attachedFileName ? `(첨부: ${attachedFileName})` : " ");
+    const patch: Record<string, unknown> = {
+      updatedAt: serverTimestamp(),
+      preview,
+    };
+    if (options?.threadTitleFrom?.trim()) {
+      patch.title = options.threadTitleFrom.trim().slice(0, 80);
+    }
+    await setDoc(threadRef, patch, { merge: true });
+  }
+
+  async function handleNewChat() {
+    if (!db || !uid) return;
+    const colRef = collection(db, "users", uid, "chatThreads");
+    const newRef = doc(colRef);
+    await setDoc(newRef, {
+      title: "새 대화",
+      preview: "",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    setActiveThreadId(newRef.id);
+  }
 
   function warnBadFile(name: string) {
     setMessages((prev) => [
@@ -250,14 +488,24 @@ export function Chatbot() {
     if (!raw && !file) return;
     if (isLoading) return;
 
+    setPersistHint(null);
+    const resolvedThreadId = uid && db ? await resolveThreadIdForSave() : null;
+    const canPersistNow = Boolean(uid && db && resolvedThreadId);
+
     const historyForBackend = messages
-      .filter((m) => m.id !== "welcome-msg")
+      .filter((m) => m.id !== WELCOME_ID)
       .map((m) => ({
         role: m.role === "bot" ? "assistant" : "user",
         content: m.role === "user" ? userMessageContentForApi(m) : m.text,
       }));
 
     const apiMessage = buildOutgoingApiMessage(raw, file);
+
+    const threadId = resolvedThreadId;
+    const isFirstPersistedTurn =
+      canPersistNow &&
+      threadId &&
+      messages.filter((m) => m.id !== WELCOME_ID).length === 0;
 
     setText("");
     setPendingFile(null);
@@ -273,8 +521,24 @@ export function Chatbot() {
     ]);
     setIsLoading(true);
 
+    if (canPersistNow && threadId) {
+      try {
+        await persistMessage(threadId, "user", raw, file?.name ?? null, {
+          threadTitleFrom: isFirstPersistedTurn ? raw || file?.name || "새 대화" : undefined,
+        });
+      } catch (e: unknown) {
+        console.error(e);
+        const code =
+          e && typeof e === "object" && "code" in e ? String((e as { code: string }).code) : "";
+        setPersistHint(
+          code === "permission-denied"
+            ? "대화 저장이 거부되었습니다. Firebase 콘솔에서 Firestore 규칙을 게시했는지 확인해 주세요."
+            : "대화를 저장하지 못했습니다. 네트워크와 Firebase 설정을 확인해 주세요."
+        );
+      }
+    }
+
     try {
-      // 3. 파일이 있으면 일반 API, 없으면 스트리밍 API 사용
       if (file) {
         const res = await fetch("http://127.0.0.1:8000/api/chat/with-file", {
           method: "POST",
@@ -293,12 +557,24 @@ export function Chatbot() {
         const updatedHistory = data.chat_history;
         const lastAiMessage = updatedHistory[updatedHistory.length - 1];
 
-        setMessages((prev) => [
-          ...prev,
-          { id: newId(), role: "bot", text: lastAiMessage.content },
-        ]);
+        const botText = lastAiMessage.content;
+        setMessages((prev) => [...prev, { id: newId(), role: "bot", text: botText }]);
+
+        if (canPersistNow && threadId) {
+          try {
+            await persistMessage(threadId, "assistant", botText, null);
+          } catch (e: unknown) {
+            console.error(e);
+            const code =
+              e && typeof e === "object" && "code" in e ? String((e as { code: string }).code) : "";
+            if (code === "permission-denied") {
+              setPersistHint(
+                "답변 저장이 거부되었습니다. Firestore 규칙에서 messages 경로 쓰기를 허용했는지 확인해 주세요."
+              );
+            }
+          }
+        }
       } else {
-        // 스트리밍 API 호출
         const res = await fetch("http://127.0.0.1:8000/api/chat/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -314,12 +590,9 @@ export function Chatbot() {
         if (!reader) throw new Error("스트림을 읽을 수 없습니다.");
 
         const decoder = new TextDecoder();
-        let botMessageId = newId();
+        const botMessageId = newId();
 
-        setMessages((prev) => [
-          ...prev,
-          { id: botMessageId, role: "bot", text: "" },
-        ]);
+        setMessages((prev) => [...prev, { id: botMessageId, role: "bot", text: "" }]);
         setIsLoading(false);
 
         let accumulatedText = "";
@@ -336,17 +609,27 @@ export function Chatbot() {
             )
           );
         }
+
+        if (canPersistNow && threadId && accumulatedText.trim()) {
+          try {
+            await persistMessage(threadId, "assistant", accumulatedText, null);
+          } catch (e: unknown) {
+            console.error(e);
+            const code =
+              e && typeof e === "object" && "code" in e ? String((e as { code: string }).code) : "";
+            if (code === "permission-denied") {
+              setPersistHint(
+                "답변 저장이 거부되었습니다. Firestore 규칙에서 messages 경로 쓰기를 허용했는지 확인해 주세요."
+              );
+            }
+          }
+        }
       }
     } catch (error) {
       console.error(error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: newId(),
-          role: "bot",
-          text: "서버와 연결할 수 없습니다. (FastAPI 서버가 켜져 있는지 확인해주세요!)",
-        },
-      ]);
+      const errMsg =
+        "서버와 연결할 수 없습니다. (FastAPI 서버가 켜져 있는지 확인해주세요!)";
+      setMessages((prev) => [...prev, { id: newId(), role: "bot", text: errMsg }]);
     } finally {
       setIsLoading(false);
     }
@@ -354,184 +637,236 @@ export function Chatbot() {
 
   return (
     <div className="chatbot-page" ref={pageRef}>
-      <header className="chatbot-page__head">
-        <h1 className="chatbot-page__title">챗봇</h1>
-        <p className="chatbot-page__sub">
-          이미지·PPT를 끌어다 놓거나, 채팅 화면에서 포커스를 둔 뒤{" "}
-          <strong>Ctrl+V</strong>(Mac: <strong>⌘V</strong>)로 캡처·복사 이미지를 붙여 넣을 수 있어요.
-        </p>
-      </header>
+      <div className="chatbot-layout">
+        {uid ? (
+          <aside className="chatbot-sidebar" aria-label="대화 목록">
+            <div className="chatbot-sidebar__top">
+              <button type="button" className="chatbot-sidebar__new" onClick={() => void handleNewChat()}>
+                새 대화
+              </button>
+            </div>
+            <ul className="chatbot-sidebar__list">
+              {threads.map((t) => (
+                <li key={t.id}>
+                  <button
+                    type="button"
+                    className={
+                      "chatbot-sidebar__item" +
+                      (t.id === activeThreadId ? " chatbot-sidebar__item--active" : "")
+                    }
+                    onClick={() => setActiveThreadId(t.id)}
+                  >
+                    <span className="chatbot-sidebar__item-title">{t.title}</span>
+                    <span className="chatbot-sidebar__item-meta">
+                      {formatThreadTime(t.updatedAt)}
+                    </span>
+                    {t.preview ? (
+                      <span className="chatbot-sidebar__item-preview">{t.preview}</span>
+                    ) : null}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        ) : null}
 
-      <div
-        className={
-          "chatbot-page__body" + (bodyDropActive ? " chatbot-page__body--drag" : "")
-        }
-        ref={bodyRef}
-        onDragEnter={handleBodyDragEnter}
-        onDragLeave={handleBodyDragLeave}
-        onDragOver={handleBodyDragOver}
-        onDrop={handleBodyDrop}
-      >
-        <div className="chatbot-page__thread">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={
-                "chatbot-msg" + (m.role === "user" ? " chatbot-msg--user" : "")
-              }
-            >
-              {m.role === "bot" && (
-                <div className="chatbot-msg__avatar" aria-hidden>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                    <path
-                      d="M12 7v5l3 2"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+        <div className="chatbot-main">
+          <header className="chatbot-page__head">
+            <h1 className="chatbot-page__title">챗봇</h1>
+            <p className="chatbot-page__sub">
+              이미지·PPT를 끌어다 놓거나, 채팅 화면에서 포커스를 둔 뒤{" "}
+              <strong>Ctrl+V</strong>(Mac: <strong>⌘V</strong>)로 캡처·복사 이미지를 붙여 넣을 수 있어요.
+            </p>
+            {!uid ? (
+              <p className="chatbot-page__hint">
+                로그인하면 대화가 계정에 저장되고, 새로고침 후에도 이어집니다.{" "}
+                <Link to="/login">로그인</Link>
+              </p>
+            ) : null}
+            {uid && firestoreError ? (
+              <p className="chatbot-page__hint chatbot-page__hint--error" role="alert">
+                {firestoreError}
+              </p>
+            ) : null}
+            {uid && persistHint ? (
+              <p className="chatbot-page__hint chatbot-page__hint--warn" role="status">
+                {persistHint}
+              </p>
+            ) : null}
+          </header>
+
+          <div
+            className={
+              "chatbot-page__body" + (bodyDropActive ? " chatbot-page__body--drag" : "")
+            }
+            ref={bodyRef}
+            onDragEnter={handleBodyDragEnter}
+            onDragLeave={handleBodyDragLeave}
+            onDragOver={handleBodyDragOver}
+            onDrop={handleBodyDrop}
+          >
+            <div className="chatbot-page__thread">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  className={
+                    "chatbot-msg" + (m.role === "user" ? " chatbot-msg--user" : "")
+                  }
+                >
+                  {m.role === "bot" && (
+                    <div className="chatbot-msg__avatar" aria-hidden>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                        <path
+                          d="M12 7v5l3 2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  <div
+                    className={
+                      "chatbot-bubble" +
+                      (m.role === "user" ? " chatbot-bubble--user" : "") +
+                      (m.attachedFileName ? " chatbot-bubble--attachment" : "")
+                    }
+                  >
+                    {m.role === "user" && m.attachedFileName ? (
+                      <div className="chatbot-bubble__file-row">
+                        <span className="chatbot-bubble__tag">
+                          {attachmentBadgeLabel(m.attachedFileName)}
+                        </span>
+                        <span className="chatbot-bubble__filename">{m.attachedFileName}</span>
+                      </div>
+                    ) : null}
+                    {m.text.trim() ? (
+                      <div className="chatbot-bubble__text markdown-container">
+                        <ReactMarkdown>{m.text}</ReactMarkdown>
+                      </div>
+                    ) : null}
+                    {m.role === "user" && m.attachedFileName && !m.text.trim() ? (
+                      <p className="chatbot-bubble__text-muted">(메시지 없이 첨부만 전송)</p>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+
+              {isLoading && (
+                <div className="chatbot-msg">
+                  <div className="chatbot-msg__avatar" aria-hidden>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                      <path
+                        d="M12 7v5l3 2"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className="chatbot-bubble">
+                    <div className="chatbot-bubble__text chatbot-bubble__text--loading">
+                      답변을 생성하고 있습니다...
+                    </div>
+                  </div>
                 </div>
               )}
-              <div
-                className={
-                  "chatbot-bubble" +
-                  (m.role === "user" ? " chatbot-bubble--user" : "") +
-                  (m.attachedFileName ? " chatbot-bubble--attachment" : "")
-                }
-              >
-                {m.role === "user" && m.attachedFileName ? (
-                  <div className="chatbot-bubble__file-row">
-                    <span className="chatbot-bubble__tag">
-                      {attachmentBadgeLabel(m.attachedFileName)}
-                    </span>
-                    <span className="chatbot-bubble__filename">{m.attachedFileName}</span>
-                  </div>
-                ) : null}
-                {m.text.trim() ? (
-                  <div className="chatbot-bubble__text markdown-container">
-                    <ReactMarkdown>{m.text}</ReactMarkdown>
-                  </div>
-                ) : null}
-                {m.role === "user" && m.attachedFileName && !m.text.trim() ? (
-                  <p className="chatbot-bubble__text-muted">(메시지 없이 첨부만 전송)</p>
-                ) : null}
-              </div>
             </div>
-          ))}
+          </div>
 
-          {isLoading && (
-            <div className="chatbot-msg">
-              <div className="chatbot-msg__avatar" aria-hidden>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+          <div
+            className={
+              "chatbot-composer" + (footerDropActive ? " chatbot-composer--drag" : "")
+            }
+            onDragEnter={handleFooterDragEnter}
+            onDragLeave={handleFooterDragLeave}
+            onDragOver={handleFooterDragOver}
+            onDrop={handleFooterDrop}
+          >
+            <input
+              ref={fileInputRef}
+              id={attachInputId}
+              type="file"
+              className="chatbot-composer__file-input"
+              accept=".ppt,.pptx,.png,.jpg,.jpeg,.webp,.gif,.bmp,image/*,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              onChange={(e) => {
+                stageFile(e.target.files?.[0] ?? null);
+                e.target.value = "";
+              }}
+            />
+
+            {pendingFile ? (
+              <div className="chatbot-composer__attachments">
+                <div className="chatbot-attach-chip">
+                  <span className="chatbot-attach-chip__badge">
+                    {attachmentBadgeLabel(pendingFile.name)}
+                  </span>
+                  <span className="chatbot-attach-chip__name" title={pendingFile.name}>
+                    {pendingFile.name}
+                  </span>
+                  <button
+                    type="button"
+                    className="chatbot-attach-chip__remove"
+                    aria-label="첨부 제거"
+                    onClick={() => setPendingFile(null)}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            <footer className="chatbot-inputbar">
+              <button
+                type="button"
+                className="chatbot-attach-btn"
+                aria-label="파일 첨부"
+                disabled={isLoading}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path
-                    d="M12 7v5l3 2"
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
-              </div>
-              <div className="chatbot-bubble">
-                <div className="chatbot-bubble__text chatbot-bubble__text--loading">
-                  답변을 생성하고 있습니다...
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div
-        className={
-          "chatbot-composer" + (footerDropActive ? " chatbot-composer--drag" : "")
-        }
-        onDragEnter={handleFooterDragEnter}
-        onDragLeave={handleFooterDragLeave}
-        onDragOver={handleFooterDragOver}
-        onDrop={handleFooterDrop}
-      >
-        <input
-          ref={fileInputRef}
-          id={attachInputId}
-          type="file"
-          className="chatbot-composer__file-input"
-          accept=".ppt,.pptx,.png,.jpg,.jpeg,.webp,.gif,.bmp,image/*,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-          onChange={(e) => {
-            stageFile(e.target.files?.[0] ?? null);
-            e.target.value = "";
-          }}
-        />
-
-        {pendingFile ? (
-          <div className="chatbot-composer__attachments">
-            <div className="chatbot-attach-chip">
-              <span className="chatbot-attach-chip__badge">
-                {attachmentBadgeLabel(pendingFile.name)}
-              </span>
-              <span className="chatbot-attach-chip__name" title={pendingFile.name}>
-                {pendingFile.name}
-              </span>
+              </button>
+              <input
+                className="chatbot-input"
+                placeholder={
+                  pendingFile
+                    ? "첨부와 함께 보낼 메시지를 입력하세요 (선택)"
+                    : "발표 관련 궁금한 점을 물어보세요!"
+                }
+                value={text}
+                disabled={isLoading}
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (canSend) void handleSend();
+                  }
+                }}
+              />
               <button
                 type="button"
-                className="chatbot-attach-chip__remove"
-                aria-label="첨부 제거"
-                onClick={() => setPendingFile(null)}
+                className="chatbot-send"
+                aria-label="보내기"
+                onClick={() => void handleSend()}
+                disabled={!canSend}
               >
-                ×
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" fill="currentColor" />
+                </svg>
               </button>
-            </div>
+            </footer>
           </div>
-        ) : null}
-
-        <footer className="chatbot-inputbar">
-          <button
-            type="button"
-            className="chatbot-attach-btn"
-            aria-label="파일 첨부"
-            disabled={isLoading}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path
-                d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-          <input
-            className="chatbot-input"
-            placeholder={
-              pendingFile
-                ? "첨부와 함께 보낼 메시지를 입력하세요 (선택)"
-                : "발표 관련 궁금한 점을 물어보세요!"
-            }
-            value={text}
-            disabled={isLoading}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                if (canSend) handleSend();
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="chatbot-send"
-            aria-label="보내기"
-            onClick={handleSend}
-            disabled={!canSend}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" fill="currentColor" />
-            </svg>
-          </button>
-        </footer>
+        </div>
       </div>
     </div>
   );

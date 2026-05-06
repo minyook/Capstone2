@@ -10,6 +10,9 @@ import type { RubricCategoryId } from "./rubric";
 // ——— 컬렉션 ID ———
 
 export const COL_USERS = "users";
+/** 챗봇 다중 대화: `users/{uid}/chatThreads/{threadId}` 및 하위 `messages` */
+export const COL_CHAT_THREADS = "chatThreads";
+export const COL_CHAT_MESSAGES = "messages";
 export const COL_FOLDERS = "folders";
 export const COL_GRADING_SESSIONS = "gradingSessions";
 

@@ -1,7 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // 프로필 문서
     match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 챗봇 스레드 (중첩 match 대신 전체 경로로 명시 — 콘솔 시뮬레이터와 동작 일치)
+    match /users/{userId}/chatThreads/{threadId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/chatThreads/{threadId}/messages/{messageId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
