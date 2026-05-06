@@ -1,0 +1,1655 @@
+{
+  "metadata": {
+    "file_name": "0c10e291d6e847e9b79f4c5705dbbd80_example.pptx",
+    "slide_count": 34,
+    "generated_at": "2026-05-06T12:17:37"
+  },
+  "normalized_metrics": {
+    "readability": 0.99,
+    "visual_balance": 0.507,
+    "consistency": 1.0
+  },
+  "quantitative_stats": {
+    "slide_count": 34,
+    "image_count_total": 211,
+    "text_box_count_total": 212,
+    "text_overload": [],
+    "readability_flags": {
+      "text_overload": []
+    }
+  },
+  "slides": [
+    {
+      "index": 0,
+      "title": "",
+      "summary_points": [
+        "Overnight.AI :",
+        "AI 기반 발표 자동 평가 시스템",
+        "컴퓨터소프트웨어공학과  |  20212979 임진호,  20212977 이규찬,  20213034 임민욱,  20233065 이지민"
+      ],
+      "images": [
+        {
+          "name": "Picture 2",
+          "context": "컴퓨터소프트웨어공학과  |  20212979 임진호,  20212977 이규찬,  20213034 임민욱,  20233065 이지민",
+          "distance_emu": 7538134
+        },
+        {
+          "name": "Picture 3",
+          "context": "1",
+          "distance_emu": 7963814
+        },
+        {
+          "name": "Picture 6",
+          "context": "Overnight.AI : \nAI 기반 발표 자동 평가 시스템",
+          "distance_emu": 4246987
+        },
+        {
+          "name": "Picture 8",
+          "context": "컴퓨터소프트웨어공학과  |  20212979 임진호,  20212977 이규찬,  20213034 임민욱,  20233065 이지민",
+          "distance_emu": 14199
+        },
+        {
+          "name": "Picture 10",
+          "context": "무박2일 팀",
+          "distance_emu": 25400
+        }
+      ],
+      "visual_balance_score": 0.732,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 1,
+      "title": "",
+      "summary_points": [
+        "문제 정의",
+        "해결 방안",
+        "향후 발전 방향"
+      ],
+      "images": [
+        {
+          "name": "Picture 2",
+          "context": "기술 스택 \n및 \n구조도",
+          "distance_emu": 1541428
+        },
+        {
+          "name": "Picture 3",
+          "context": "주요 기능 \n및 \n페이지 구성",
+          "distance_emu": 2742920
+        },
+        {
+          "name": "Picture 4",
+          "context": "발표 순서",
+          "distance_emu": 782313
+        },
+        {
+          "name": "Picture 5",
+          "context": "02",
+          "distance_emu": 1335675
+        },
+        {
+          "name": "Picture 7",
+          "context": "기술 스택 \n및 \n구조도",
+          "distance_emu": 1399436
+        },
+        {
+          "name": "Picture 9",
+          "context": "04",
+          "distance_emu": 1348354
+        },
+        {
+          "name": "Picture 11",
+          "context": "프로젝트\n추진 방법",
+          "distance_emu": 1415580
+        },
+        {
+          "name": "Picture 13",
+          "context": "06",
+          "distance_emu": 1297639
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "",
+      "summary_points": [
+        "1",
+        "프로젝트 필요성",
+        "01 프로젝트 개요"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "1. 프로젝트 필요성",
+          "distance_emu": 497908
+        },
+        {
+          "name": "Picture 4",
+          "context": "1. 프로젝트 필요성",
+          "distance_emu": 4279887
+        },
+        {
+          "name": "Picture 5",
+          "context": "1. 프로젝트 필요성",
+          "distance_emu": 3428772
+        }
+      ],
+      "visual_balance_score": 0.478,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 3,
+      "title": "",
+      "summary_points": [
+        "01 프로젝트 개요",
+        "AI 심사자와의 연습을 통해 발표 완성도 향상",
+        "AI의 사전 피드백으로 발표 전 부족한 점 보완"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "AI 심사자와의 연습을 통해 발표 완성도 향상",
+          "distance_emu": 2023289
+        },
+        {
+          "name": "Picture 4",
+          "context": "AI의 사전 피드백으로 발표 전 부족한 점 보완",
+          "distance_emu": 3050571
+        },
+        {
+          "name": "Picture 5",
+          "context": "발표자",
+          "distance_emu": 453035
+        },
+        {
+          "name": "Picture 6",
+          "context": "AI 심사자와의 연습을 통해 발표 완성도 향상",
+          "distance_emu": 1568565
+        },
+        {
+          "name": "Picture 7",
+          "context": "AI의 사전 피드백으로 발표 전 부족한 점 보완",
+          "distance_emu": 1568655
+        },
+        {
+          "name": "Picture 8",
+          "context": "발표자",
+          "distance_emu": 5476561
+        },
+        {
+          "name": "Picture 9",
+          "context": "4",
+          "distance_emu": 4214026
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 4,
+      "title": "",
+      "summary_points": [
+        "01 프로젝트 개요",
+        "반복되는 발표 평가로 인한 심사자의 피로도 감소",
+        "AI를 통해 모든 팀에 대해 객관적이고 공정한 평가 가능"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "반복되는 발표 평가로 인한 심사자의 피로도 감소",
+          "distance_emu": 2023289
+        },
+        {
+          "name": "Picture 4",
+          "context": "AI를 통해 모든 팀에 대해 객관적이고 공정한 평가 가능",
+          "distance_emu": 2925310
+        },
+        {
+          "name": "Picture 5",
+          "context": "심사자",
+          "distance_emu": 453035
+        },
+        {
+          "name": "Picture 8",
+          "context": "반복되는 발표 평가로 인한 심사자의 피로도 감소",
+          "distance_emu": 1568565
+        },
+        {
+          "name": "Picture 10",
+          "context": "심사자",
+          "distance_emu": 5444498
+        },
+        {
+          "name": "Picture 11",
+          "context": "AI를 통해 모든 팀에 대해 객관적이고 공정한 평가 가능",
+          "distance_emu": 1352788
+        },
+        {
+          "name": "Picture 13",
+          "context": "5",
+          "distance_emu": 4215507
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "",
+      "summary_points": [
+        "02 문제 정의 및 해결방안",
+        "2",
+        "문제 정의 및 해결 방안"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "2. 문제 정의 및 해결 방안",
+          "distance_emu": 906183
+        },
+        {
+          "name": "Picture 4",
+          "context": "2. 문제 정의 및 해결 방안",
+          "distance_emu": 4503157
+        },
+        {
+          "name": "Picture 5",
+          "context": "2. 문제 정의 및 해결 방안",
+          "distance_emu": 3366847
+        }
+      ],
+      "visual_balance_score": 0.488,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 6,
+      "title": "",
+      "summary_points": [
+        "문제 정의 - 발표자 입장",
+        "• 연습 후 객관적인 피드백을 받기 어려움",
+        "• 발표 내용 중 부족한 부분을 명확히"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "발표자 입장",
+          "distance_emu": 3639471
+        },
+        {
+          "name": "Picture 4",
+          "context": "• 연습 후 객관적인 피드백을 받기 어려움\n• 발표 내용 중 부족한 부분을 명확히\n   파악하기 어려움",
+          "distance_emu": 5314813
+        },
+        {
+          "name": "Picture 5",
+          "context": "문제 정의 - 발표자 입장",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 6",
+          "context": "7",
+          "distance_emu": 5480598
+        },
+        {
+          "name": "Picture 9",
+          "context": "• 연습 후 객관적인 피드백을 받기 어려움\n• 발표 내용 중 부족한 부분을 명확히\n   파악하기 어려움",
+          "distance_emu": 765596
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 7,
+      "title": "",
+      "summary_points": [
+        "• 반복적인 발표 채점은 시간이 오래 걸리고 \u000b  피로도가 큼",
+        "• 주관적인 판단으로 인해 점수 일관성 \u000b  확보 어려움",
+        "• 결과 정리 및 기록 또한 수작업으로"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "참여자 에게 피드백도 보내줘야 하는데...",
+          "distance_emu": 1940999
+        },
+        {
+          "name": "Picture 4",
+          "context": "참여자 에게 피드백도 보내줘야 하는데...",
+          "distance_emu": 4572043
+        },
+        {
+          "name": "Picture 5",
+          "context": "문제 정의 - 평가자 입장",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 8",
+          "context": "• 반복적인 발표 채점은 시간이 오래 걸리고 \u000b  피로도가 큼\n\n• 주관적인 판단으로 인해 점수 일관성 \u000b  확보 어려움\n\n• 결과 정리 및 기록 또한 수작업으로 \n   번거로움",
+          "distance_emu": 345302
+        },
+        {
+          "name": "Picture 6",
+          "context": "참여자 에게 피드백도 보내줘야 하는데...",
+          "distance_emu": 2373864
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 0.782,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 8,
+      "title": "",
+      "summary_points": [
+        "출처 : 한국 경제 신문, 2025.06.18",
+        "AI 평가 시스템 도입이 확대되고 있음",
+        "→ 이는 교육 현장의 공정성 확보와 채점 효율성 향상을 목표로 함"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "선정 배경",
+          "distance_emu": 4053130
+        },
+        {
+          "name": "Picture 4",
+          "context": "AI 평가 시스템 도입이 확대되고 있음\n\n→ 이는 교육 현장의 공정성 확보와 채점 효율성 향상을 목표로 함",
+          "distance_emu": 5407108
+        },
+        {
+          "name": "Picture 5",
+          "context": "선정 배경",
+          "distance_emu": 998909
+        },
+        {
+          "name": "Picture 7",
+          "context": "선정 배경",
+          "distance_emu": 3787347
+        },
+        {
+          "name": "Picture 8",
+          "context": "선정 배경",
+          "distance_emu": 3568462
+        },
+        {
+          "name": "Picture 9",
+          "context": "출처 : 한국 경제 신문, 2025.06.18.",
+          "distance_emu": 1769418
+        },
+        {
+          "name": "Picture 10",
+          "context": "출처 : 한국 경제 신문, 2025.06.18.",
+          "distance_emu": 1741903
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 9,
+      "title": "",
+      "summary_points": [
+        "02 문제 정의 및 해결방안",
+        "해외 연구에서도 활용 가능성 입증됨",
+        "출처: 도시샤대학교 Michael McGuire 교수팀 연구 (2025)"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "선정 배경",
+          "distance_emu": 3873687
+        },
+        {
+          "name": "Picture 4",
+          "context": "출처: 도시샤대학교 Michael McGuire 교수팀 연구 (2025)",
+          "distance_emu": 4916934
+        },
+        {
+          "name": "Picture 5",
+          "context": "선정 배경",
+          "distance_emu": 755676
+        },
+        {
+          "name": "Picture 6",
+          "context": "출처: 도시샤대학교 Michael McGuire 교수팀 연구 (2025)",
+          "distance_emu": 1921103
+        },
+        {
+          "name": "Picture 7",
+          "context": "출처: 도시샤대학교 Michael McGuire 교수팀 연구 (2025)",
+          "distance_emu": 4916565
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 10,
+      "title": "",
+      "summary_points": [
+        "• AI가 영상을 분석하여 시선, 제스처, 표정을 인식",
+        "• 사전 입력된 기준과 분석 데이터를 사용하여 점수 산출, GPT를 통해 자연어 기반 피드백 제공",
+        "• 결과는 PDF,엑셀로 저장되어 편리한 기록 관리 가능"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "• AI가 영상을 분석하여 시선, 제스처, 표정을 인식.\n\n• 사전 입력된 기준과 분석 데이터를 사용하여 점수 산출, GPT를 통해 자연어 기반 피드백 제공\n\n• 결과는 PDF,엑셀로 저장되어 편리한 기록 관리 가능",
+          "distance_emu": 2274984
+        },
+        {
+          "name": "Picture 4",
+          "context": "• AI가 영상을 분석하여 시선, 제스처, 표정을 인식.\n\n• 사전 입력된 기준과 분석 데이터를 사용하여 점수 산출, GPT를 통해 자연어 기반 피드백 제공\n\n• 결과는 PDF,엑셀로 저장되어 편리한 기록 관리 가능",
+          "distance_emu": 4544736
+        },
+        {
+          "name": "Picture 5",
+          "context": "해결 방안",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 8",
+          "context": "• AI가 영상을 분석하여 시선, 제스처, 표정을 인식.\n\n• 사전 입력된 기준과 분석 데이터를 사용하여 점수 산출, GPT를 통해 자연어 기반 피드백 제공\n\n• 결과는 PDF,엑셀로 저장되어 편리한 기록 관리 가능",
+          "distance_emu": 44254
+        },
+        {
+          "name": "그림 11",
+          "context": "11",
+          "distance_emu": 4682165
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 11,
+      "title": "",
+      "summary_points": [
+        "기술 스택 및 구조도",
+        "03 기술 스택 및 구조도",
+        "12"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "3. 기술 스택 및 구조도",
+          "distance_emu": 637787
+        },
+        {
+          "name": "Picture 4",
+          "context": "3. 기술 스택 및 구조도",
+          "distance_emu": 4456908
+        },
+        {
+          "name": "Picture 5",
+          "context": "3. 기술 스택 및 구조도",
+          "distance_emu": 3308404
+        }
+      ],
+      "visual_balance_score": 0.482,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 12,
+      "title": "",
+      "summary_points": [
+        "03 기술 스택 및 구조도",
+        "시스템 아키텍처",
+        "Open AI"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "응답",
+          "distance_emu": 1820634
+        },
+        {
+          "name": "Picture 4",
+          "context": "Excel",
+          "distance_emu": 2014712
+        },
+        {
+          "name": "Picture 5",
+          "context": "시스템 아키텍처",
+          "distance_emu": 781672
+        },
+        {
+          "name": "Picture 6",
+          "context": "요청",
+          "distance_emu": 464636
+        },
+        {
+          "name": "Picture 7",
+          "context": "응답",
+          "distance_emu": 515329
+        },
+        {
+          "name": "Picture 10",
+          "context": "Client",
+          "distance_emu": 1524052
+        },
+        {
+          "name": "Picture 11",
+          "context": "Client",
+          "distance_emu": 406598
+        },
+        {
+          "name": "Picture 12",
+          "context": "Client",
+          "distance_emu": 2043131
+        },
+        {
+          "name": "Picture 28",
+          "context": "Server",
+          "distance_emu": 1208169
+        },
+        {
+          "name": "Picture 29",
+          "context": "Server",
+          "distance_emu": 406400
+        },
+        {
+          "name": "Picture 31",
+          "context": "Server",
+          "distance_emu": 1028375
+        },
+        {
+          "name": "Picture 34",
+          "context": "Server",
+          "distance_emu": 1951580
+        },
+        {
+          "name": "Picture 35",
+          "context": "Server",
+          "distance_emu": 1528832
+        },
+        {
+          "name": "Picture 40",
+          "context": "Chat GPT-4.0",
+          "distance_emu": 241383
+        },
+        {
+          "name": "Picture 41",
+          "context": "Chat GPT-4.0",
+          "distance_emu": 222340
+        },
+        {
+          "name": "Picture 43",
+          "context": "Chat GPT-4.0",
+          "distance_emu": 628682
+        },
+        {
+          "name": "Picture 46",
+          "context": "PDF",
+          "distance_emu": 448833
+        },
+        {
+          "name": "Picture 47",
+          "context": "저장소",
+          "distance_emu": 254079
+        },
+        {
+          "name": "Picture 52",
+          "context": "PDF",
+          "distance_emu": 552450
+        },
+        {
+          "name": "Picture 54",
+          "context": "Excel",
+          "distance_emu": 552450
+        },
+        {
+          "name": "Picture 58",
+          "context": "요청",
+          "distance_emu": 464636
+        },
+        {
+          "name": "Picture 59",
+          "context": "응답",
+          "distance_emu": 463030
+        },
+        {
+          "name": "Picture 60",
+          "context": "저장",
+          "distance_emu": 553944
+        },
+        {
+          "name": "Picture 61",
+          "context": "제공",
+          "distance_emu": 476292
+        },
+        {
+          "name": "Picture 2",
+          "context": "JS",
+          "distance_emu": 1462600
+        },
+        {
+          "name": "Picture 4",
+          "context": "Server",
+          "distance_emu": 815641
+        },
+        {
+          "name": "그림 22",
+          "context": "Client",
+          "distance_emu": 2436651
+        },
+        {
+          "name": "그림 35",
+          "context": "Server",
+          "distance_emu": 1454157
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 0.917,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 13,
+      "title": "",
+      "summary_points": [
+        "Java와 100% 호환 → 기존 코드와 함께 사용 가능",
+        "문법이 간단하고 오류가 적음 → 개발 속도와 안정성 향상",
+        "비동기 처리 지원으로 네트워크·AI 연동 등 빠른 작업 가능"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "JetBrains에서 개발한 간결하고 안전한 프로그래밍 언어\n\nJava와 100% 호환 → 기존 코드와 함께 사용 가능\n\n안드로이드 공식 지원 언어\n\n문법이 간단하고 오류가 적음 → 개발 속도와 안정성 향상\n\n비동기",
+          "distance_emu": 1943976
+        },
+        {
+          "name": "Picture 4",
+          "context": "JetBrains에서 개발한 간결하고 안전한 프로그래밍 언어\n\nJava와 100% 호환 → 기존 코드와 함께 사용 가능\n\n안드로이드 공식 지원 언어\n\n문법이 간단하고 오류가 적음 → 개발 속도와 안정성 향상\n\n비동기",
+          "distance_emu": 4046220
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 스택 - Kotlin",
+          "distance_emu": 858753
+        },
+        {
+          "name": "Picture 6",
+          "context": "JetBrains에서 개발한 간결하고 안전한 프로그래밍 언어\n\nJava와 100% 호환 → 기존 코드와 함께 사용 가능\n\n안드로이드 공식 지원 언어\n\n문법이 간단하고 오류가 적음 → 개발 속도와 안정성 향상\n\n비동기",
+          "distance_emu": 1676684
+        },
+        {
+          "name": "Picture 2",
+          "context": "14",
+          "distance_emu": 4717506
+        }
+      ],
+      "visual_balance_score": 0.534,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 14,
+      "title": "",
+      "summary_points": [
+        "• 비동기 처리 지원으로 빠른 속도와 높은 성능 제공",
+        "• 자동 문서화 기능 제공 → API 테스트와 관리 용이",
+        "• Whisper, GPT 등 AI 모델과의 연동에 적합"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "• Python 기반의 최신 웹 프레임워크\n• 비동기 처리 지원으로 빠른 속도와 높은 성능 제공\n• 자동 문서화 기능 제공 → API 테스트와 관리 용이\n• Whisper, GPT 등 AI 모델과의 연동에 적합 \n•",
+          "distance_emu": 2284021
+        },
+        {
+          "name": "Picture 4",
+          "context": "• Python 기반의 최신 웹 프레임워크\n• 비동기 처리 지원으로 빠른 속도와 높은 성능 제공\n• 자동 문서화 기능 제공 → API 테스트와 관리 용이\n• Whisper, GPT 등 AI 모델과의 연동에 적합 \n•",
+          "distance_emu": 4335607
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 스택 – Fast API",
+          "distance_emu": 730939
+        },
+        {
+          "name": "Picture 6",
+          "context": "• Python 기반의 최신 웹 프레임워크\n• 비동기 처리 지원으로 빠른 속도와 높은 성능 제공\n• 자동 문서화 기능 제공 → API 테스트와 관리 용이\n• Whisper, GPT 등 AI 모델과의 연동에 적합 \n•",
+          "distance_emu": 2033978
+        },
+        {
+          "name": "Picture 4",
+          "context": "15",
+          "distance_emu": 5200260
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 15,
+      "title": "",
+      "summary_points": [
+        "Whisper – 오디오를 텍스트로 변환 (STT)",
+        "• 발표 오디오 파일을 텍스트로 변환하는 데 사용",
+        "• 다양한 억양, 잡음에도 강한 인식 성능 제공"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "• OpenAI의 고성능 음성 인식 모델\n• 발표 오디오 파일을 텍스트로 변환하는 데 사용\n• 다양한 억양, 잡음에도 강한 인식 성능 제공\n• 한국어 포함 다국어 지원",
+          "distance_emu": 2046247
+        },
+        {
+          "name": "Picture 4",
+          "context": "• OpenAI의 고성능 음성 인식 모델\n• 발표 오디오 파일을 텍스트로 변환하는 데 사용\n• 다양한 억양, 잡음에도 강한 인식 성능 제공\n• 한국어 포함 다국어 지원",
+          "distance_emu": 4359125
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 스택 - WhisperAI",
+          "distance_emu": 808048
+        },
+        {
+          "name": "Picture 6",
+          "context": "• OpenAI의 고성능 음성 인식 모델\n• 발표 오디오 파일을 텍스트로 변환하는 데 사용\n• 다양한 억양, 잡음에도 강한 인식 성능 제공\n• 한국어 포함 다국어 지원",
+          "distance_emu": 1943151
+        },
+        {
+          "name": "Picture 8",
+          "context": "16",
+          "distance_emu": 5360388
+        },
+        {
+          "name": "Picture 9",
+          "context": "16",
+          "distance_emu": 4561366
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 16,
+      "title": "",
+      "summary_points": [
+        "• Google의 AI 기반 멀티 모달 감지 프레임워크",
+        "• Python 파이프라인을 통해 FastAPI 백엔드 완벽호환",
+        "• 프레임 단위의 움직임 변화를 감지해 발표 태도 점수화"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "• Google의 AI 기반 멀티 모달 감지 프레임워크\n• Python 파이프라인을 통해 FastAPI 백엔드 완벽호환\n• 발표자의 표정，시선 방향등　정밀 추적\n• 프레임 단위의 움직임 변화를 감지해 발표 태도 점수",
+          "distance_emu": 1814160
+        },
+        {
+          "name": "Picture 4",
+          "context": "• Google의 AI 기반 멀티 모달 감지 프레임워크\n• Python 파이프라인을 통해 FastAPI 백엔드 완벽호환\n• 발표자의 표정，시선 방향등　정밀 추적\n• 프레임 단위의 움직임 변화를 감지해 발표 태도 점수",
+          "distance_emu": 4307727
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 스택 - MediaPipe",
+          "distance_emu": 808048
+        },
+        {
+          "name": "Picture 6",
+          "context": "• Google의 AI 기반 멀티 모달 감지 프레임워크\n• Python 파이프라인을 통해 FastAPI 백엔드 완벽호환\n• 발표자의 표정，시선 방향등　정밀 추적\n• 프레임 단위의 움직임 변화를 감지해 발표 태도 점수",
+          "distance_emu": 1723334
+        },
+        {
+          "name": "그림 14",
+          "context": "17",
+          "distance_emu": 5061088
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 17,
+      "title": "",
+      "summary_points": [
+        "• Parselmouth가 떨림(Jitter), 거칠기(Shimmer)를 정밀 분석함",
+        "• face_landmarker.task 모델이 얼굴의 478개 랜드마크(좌표)를 감지함",
+        "•  face_blendshapes 데이터로 미소, 찌푸림 등의 시선/표정 데이터를　추출"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "표정 추출 파이프라인",
+          "distance_emu": 2685127
+        },
+        {
+          "name": "Picture 4",
+          "context": "•  FFmpeg가 영상을 쪼개고 오디오를 추출함.\n• Whisper AI가 오디오를 텍스트로 변환(STT)함.\n• Parselmouth가 떨림(Jitter), 거칠기(Shimmer)를 정밀 분석함.\n• face_l",
+          "distance_emu": 4582752
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 －파이프라인",
+          "distance_emu": 808048
+        },
+        {
+          "name": "Picture 6",
+          "context": "•  FFmpeg가 영상을 쪼개고 오디오를 추출함.\n• Whisper AI가 오디오를 텍스트로 변환(STT)함.\n• Parselmouth가 떨림(Jitter), 거칠기(Shimmer)를 정밀 분석함.\n• face_l",
+          "distance_emu": 2618129
+        },
+        {
+          "name": "Picture 2",
+          "context": "18",
+          "distance_emu": 5416606
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 0.957,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 18,
+      "title": "",
+      "summary_points": [
+        "• 사용자의 텍스트 입력을 이해하고, 자연스러운 응답 생성 가능",
+        "• GPT 모델은 논리적 분석, 요약, 피드백 등 다양한 작업 수행",
+        "• 채점 기준과 분석 데이터를 바탕으로 피드백 자동 생성"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "• OpenAI에서 개발한 자연어 처리 인공지능\n\n• 사용자의 텍스트 입력을 이해하고, 자연스러운 응답 생성 가능\n\n• GPT 모델은 논리적 분석, 요약, 피드백 등 다양한 작업 수행",
+          "distance_emu": 973229
+        },
+        {
+          "name": "Picture 4",
+          "context": "• 채점 기준과 분석 데이터를 바탕으로 피드백 자동 생성\n\n• 프롬프트를 기반으로 논리성, 명확성 등 평가",
+          "distance_emu": 1671133
+        },
+        {
+          "name": "Picture 5",
+          "context": "기술 스택 - Chat GPT",
+          "distance_emu": 808048
+        },
+        {
+          "name": "Picture 6",
+          "context": "• OpenAI에서 개발한 자연어 처리 인공지능\n\n• 사용자의 텍스트 입력을 이해하고, 자연스러운 응답 생성 가능\n\n• GPT 모델은 논리적 분석, 요약, 피드백 등 다양한 작업 수행",
+          "distance_emu": 597440
+        },
+        {
+          "name": "Picture 7",
+          "context": "19",
+          "distance_emu": 5765302
+        },
+        {
+          "name": "Picture 12",
+          "context": "• 채점 기준과 분석 데이터를 바탕으로 피드백 자동 생성\n\n• 프롬프트를 기반으로 논리성, 명확성 등 평가",
+          "distance_emu": 98809
+        },
+        {
+          "name": "Picture 14",
+          "context": "19",
+          "distance_emu": 2777288
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 19,
+      "title": "",
+      "summary_points": [
+        "02 문제 정의 및 해결방안",
+        "주요 기능 및 페이지 구성",
+        "20"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "4. 주요 기능 및 페이지 구성",
+          "distance_emu": 1160991
+        },
+        {
+          "name": "Picture 4",
+          "context": "4. 주요 기능 및 페이지 구성",
+          "distance_emu": 4093603
+        },
+        {
+          "name": "Picture 5",
+          "context": "4. 주요 기능 및 페이지 구성",
+          "distance_emu": 3824208
+        }
+      ],
+      "visual_balance_score": 0.493,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 20,
+      "title": "",
+      "summary_points": [
+        "04 주요 기능 및 페이지 구성",
+        "채점 기준에 따라 점수를 산출하고, GPT로 피드백 생성",
+        "PDF / Excel로 채점결과 다운로드 가능"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "AI 채점",
+          "distance_emu": 267982
+        },
+        {
+          "name": "Picture 4",
+          "context": "채점 기준에 따라 점수를 산출하고, GPT로 피드백 생성",
+          "distance_emu": 2489655
+        },
+        {
+          "name": "Picture 5",
+          "context": "주요 기능",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 6",
+          "context": "기준 저장",
+          "distance_emu": 402511
+        },
+        {
+          "name": "Picture 7",
+          "context": "발표 녹화",
+          "distance_emu": 391543
+        },
+        {
+          "name": "Picture 8",
+          "context": "AI 채점",
+          "distance_emu": 460582
+        },
+        {
+          "name": "Picture 9",
+          "context": "리포트 생성",
+          "distance_emu": 403262
+        },
+        {
+          "name": "Picture 10",
+          "context": "시각화 분석",
+          "distance_emu": 389219
+        },
+        {
+          "name": "Picture 11",
+          "context": "기준 저장",
+          "distance_emu": 1251530
+        },
+        {
+          "name": "Picture 12",
+          "context": "발표 녹화",
+          "distance_emu": 1296660
+        },
+        {
+          "name": "Picture 13",
+          "context": "AI 채점",
+          "distance_emu": 1272062
+        },
+        {
+          "name": "Picture 14",
+          "context": "리포트 생성",
+          "distance_emu": 1346259
+        },
+        {
+          "name": "Picture 15",
+          "context": "시각화 분석",
+          "distance_emu": 1301889
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 21,
+      "title": "",
+      "summary_points": [
+        "비전, STT 처리",
+        "PDF/엑셀 저장",
+        "04 주요 기능 및 페이지 구성"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "비전, STT 처리 \n(영상 , 발표내용 분석)",
+          "distance_emu": 569455
+        },
+        {
+          "name": "Picture 4",
+          "context": "비전, STT 처리 \n(영상 , 발표내용 분석)",
+          "distance_emu": 3993278
+        },
+        {
+          "name": "Picture 5",
+          "context": "시스템 흐름",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 6",
+          "context": "시작",
+          "distance_emu": 14199
+        },
+        {
+          "name": "Picture 7",
+          "context": "서버에 팀명, \n채점 기준,\n영상 전달",
+          "distance_emu": 8980
+        },
+        {
+          "name": "Picture 8",
+          "context": "팀명 입력,\n채점 기준 입력,\n영상 업로드",
+          "distance_emu": 8980
+        },
+        {
+          "name": "Picture 9",
+          "context": "결과를\nPDF/엑셀 저장",
+          "distance_emu": 40659
+        },
+        {
+          "name": "Picture 10",
+          "context": "비전, STT 처리 \n(영상 , 발표내용 분석)",
+          "distance_emu": 42483
+        },
+        {
+          "name": "Picture 11",
+          "context": "기준 기반 \nGPT 피드백\n생성 요청",
+          "distance_emu": 0
+        },
+        {
+          "name": "Picture 18",
+          "context": "서버에 팀명, \n채점 기준,\n영상 전달",
+          "distance_emu": 1676448
+        },
+        {
+          "name": "Picture 19",
+          "context": "기준 기반 \nGPT 피드백\n생성 요청",
+          "distance_emu": 1587512
+        },
+        {
+          "name": "Picture 20",
+          "context": "결과를\nPDF/엑셀 저장",
+          "distance_emu": 1574915
+        },
+        {
+          "name": "Picture 21",
+          "context": "팀명 입력,\n채점 기준 입력,\n영상 업로드",
+          "distance_emu": 1587550
+        },
+        {
+          "name": "Picture 22",
+          "context": "시작",
+          "distance_emu": 787400
+        },
+        {
+          "name": "Picture 23",
+          "context": "종료",
+          "distance_emu": 838584
+        },
+        {
+          "name": "Picture 24",
+          "context": "종료",
+          "distance_emu": 14199
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 22,
+      "title": "",
+      "summary_points": [
+        "04 주요 기능 및 페이지 구성",
+        "페이지 구성 – 메인화면",
+        "23"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "페이지 구성 – 메인화면",
+          "distance_emu": 3876958
+        },
+        {
+          "name": "Picture 4",
+          "context": "페이지 구성 – 메인화면",
+          "distance_emu": 8426846
+        },
+        {
+          "name": "Picture 5",
+          "context": "페이지 구성 – 메인화면",
+          "distance_emu": 795103
+        }
+      ],
+      "visual_balance_score": 0.471,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 23,
+      "title": "",
+      "summary_points": [
+        "04 주요 기능 및 페이지 구성",
+        "페이지 구성 – 발표 채점",
+        "24"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "페이지 구성 – 발표 채점",
+          "distance_emu": 3876958
+        },
+        {
+          "name": "Picture 4",
+          "context": "페이지 구성 – 발표 채점",
+          "distance_emu": 8426846
+        },
+        {
+          "name": "Picture 5",
+          "context": "페이지 구성 – 발표 채점",
+          "distance_emu": 795103
+        }
+      ],
+      "visual_balance_score": 0.471,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 24,
+      "title": "",
+      "summary_points": [
+        "04 주요 기능 및 페이지 구성",
+        "페이지 구성 – 마이페이지",
+        "25"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "페이지 구성 – 마이페이지",
+          "distance_emu": 3885045
+        },
+        {
+          "name": "Picture 4",
+          "context": "페이지 구성 – 마이페이지",
+          "distance_emu": 8437995
+        },
+        {
+          "name": "Picture 5",
+          "context": "페이지 구성 – 마이페이지",
+          "distance_emu": 768481
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 25,
+      "title": "",
+      "summary_points": [
+        "05 프로젝트 추진 방법",
+        "프로젝트 추진 방법",
+        "26"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "5. 프로젝트 추진 방법",
+          "distance_emu": 895710
+        },
+        {
+          "name": "Picture 4",
+          "context": "5. 프로젝트 추진 방법",
+          "distance_emu": 4615231
+        },
+        {
+          "name": "Picture 5",
+          "context": "5. 프로젝트 추진 방법",
+          "distance_emu": 3256386
+        }
+      ],
+      "visual_balance_score": 0.485,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 26,
+      "title": "",
+      "summary_points": [
+        "05 프로젝트 추진 방법",
+        "27"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "05 프로젝트 추진 방법",
+          "distance_emu": 7875661
+        },
+        {
+          "name": "Picture 4",
+          "context": "27",
+          "distance_emu": 8558645
+        }
+      ],
+      "visual_balance_score": 0.445,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 27,
+      "title": "",
+      "summary_points": [
+        "서버 및 AI 모델, 비전 연동 개발",
+        "데이터 처리 및 시스템 안정성 관리",
+        "채점 로직 및 데이터 융합 처리 구현"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "서버 및 AI 모델, 비전 연동 개발\n데이터 처리 및 시스템 안정성 관리\n프로젝트 총괄 및 일정 조율",
+          "distance_emu": 1996031
+        },
+        {
+          "name": "Picture 4",
+          "context": "채점 로직 및 데이터 융합 처리 구현\n데이터베이스 및 API 관리\n프로젝트 보고서 작성",
+          "distance_emu": 2475661
+        },
+        {
+          "name": "Picture 5",
+          "context": "BackEnd",
+          "distance_emu": 685800
+        },
+        {
+          "name": "Picture 8",
+          "context": "채점 로직 및 데이터 융합 처리 구현\n데이터베이스 및 API 관리\n프로젝트 보고서 작성",
+          "distance_emu": 1541020
+        },
+        {
+          "name": "Picture 11",
+          "context": "서버 및 AI 모델, 비전 연동 개발\n데이터 처리 및 시스템 안정성 관리\n프로젝트 총괄 및 일정 조율",
+          "distance_emu": 775035
+        },
+        {
+          "name": "Picture 12",
+          "context": "채점 로직 및 데이터 융합 처리 구현\n데이터베이스 및 API 관리\n프로젝트 보고서 작성",
+          "distance_emu": 1194218
+        },
+        {
+          "name": "Picture 18",
+          "context": "이규찬",
+          "distance_emu": 1651000
+        },
+        {
+          "name": "Picture 19",
+          "context": "이규찬",
+          "distance_emu": 1428876
+        },
+        {
+          "name": "Picture 12",
+          "context": "임진호",
+          "distance_emu": 1498721
+        },
+        {
+          "name": "Picture 14",
+          "context": "임진호",
+          "distance_emu": 1365250
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 28,
+      "title": "",
+      "summary_points": [
+        "리포트 시각화(PDF/Excel) 및 프론트엔드 개발",
+        "사용자 경험 개선 및 디자인 지원",
+        "발표 자료(PPT 등) 제작 및 자료 조사 및 시연 지원"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "사용자 인터페이스(UI) 화면 구현\n발표 자료(PPT 등) 제작 및 자료 조사 및 시연 지원\n협업 도구 관리",
+          "distance_emu": 1034156
+        },
+        {
+          "name": "Picture 4",
+          "context": "전체적인 UI/UX 설계\n리포트 시각화(PDF/Excel) 및 프론트엔드 개발\n사용자 경험 개선 및 디자인 지원",
+          "distance_emu": 2742766
+        },
+        {
+          "name": "Picture 5",
+          "context": "FrontEnd",
+          "distance_emu": 712587
+        },
+        {
+          "name": "Picture 8",
+          "context": "사용자 인터페이스(UI) 화면 구현\n발표 자료(PPT 등) 제작 및 자료 조사 및 시연 지원\n협업 도구 관리",
+          "distance_emu": 299748
+        },
+        {
+          "name": "Picture 9",
+          "context": "전체적인 UI/UX 설계\n리포트 시각화(PDF/Excel) 및 프론트엔드 개발\n사용자 경험 개선 및 디자인 지원",
+          "distance_emu": 968973
+        },
+        {
+          "name": "Picture 10",
+          "context": "사용자 인터페이스(UI) 화면 구현\n발표 자료(PPT 등) 제작 및 자료 조사 및 시연 지원\n협업 도구 관리",
+          "distance_emu": 1446025
+        },
+        {
+          "name": "Picture 11",
+          "context": "사용자 인터페이스(UI) 화면 구현\n발표 자료(PPT 등) 제작 및 자료 조사 및 시연 지원\n협업 도구 관리",
+          "distance_emu": 244687
+        },
+        {
+          "name": "Picture 12",
+          "context": "전체적인 UI/UX 설계\n리포트 시각화(PDF/Excel) 및 프론트엔드 개발\n사용자 경험 개선 및 디자인 지원",
+          "distance_emu": 165222
+        },
+        {
+          "name": "Picture 17",
+          "context": "임민욱",
+          "distance_emu": 1574812
+        },
+        {
+          "name": "Picture 18",
+          "context": "임민욱",
+          "distance_emu": 1327393
+        },
+        {
+          "name": "Picture 22",
+          "context": "이지민",
+          "distance_emu": 1606662
+        },
+        {
+          "name": "Picture 23",
+          "context": "이지민",
+          "distance_emu": 1302508
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 29,
+      "title": "",
+      "summary_points": [
+        "향후 발전 방향",
+        "06 향후 발전 방향",
+        "30"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "6. 향후 발전 방향",
+          "distance_emu": 918733
+        },
+        {
+          "name": "Picture 4",
+          "context": "6. 향후 발전 방향",
+          "distance_emu": 4505699
+        },
+        {
+          "name": "Picture 5",
+          "context": "6. 향후 발전 방향",
+          "distance_emu": 3370079
+        }
+      ],
+      "visual_balance_score": 0.477,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 30,
+      "title": "",
+      "summary_points": [
+        "06 향후 발전 방향",
+        "달성도",
+        "06 향후 발전 방향"
+      ],
+      "images": [
+        {
+          "name": "Picture 4",
+          "context": "달성도",
+          "distance_emu": 8464550
+        },
+        {
+          "name": "Picture 5",
+          "context": "달성도",
+          "distance_emu": 794993
+        }
+      ],
+      "visual_balance_score": 0.551,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 31,
+      "title": "",
+      "summary_points": [
+        "딥러닝 학습 기반 모델 확장\u000b(발표 데이터셋 자체 구축 및 정제)",
+        "외부 API 의존도 감소 \u000b→ 비용 절감 + 운영 효율성 증가",
+        "세밀한 발표 습관 분석\u000b(시선 분포, 표정 안정성, 발성과 억양 품질 향상)"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "백엔드",
+          "distance_emu": 2820429
+        },
+        {
+          "name": "Picture 4",
+          "context": "UI 안정화 및 기능 고도화\n영상 플레이어 연동 및 결과 조회 UX 개선\nScript 챗봇 기능의 실제 분석 서버 연동",
+          "distance_emu": 5469725
+        },
+        {
+          "name": "Picture 5",
+          "context": "추후  계획",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 7",
+          "context": "백엔드",
+          "distance_emu": 3242320
+        },
+        {
+          "name": "Picture 8",
+          "context": "UI 안정화 및 기능 고도화\n영상 플레이어 연동 및 결과 조회 UX 개선\nScript 챗봇 기능의 실제 분석 서버 연동",
+          "distance_emu": 56373
+        },
+        {
+          "name": "Picture 9",
+          "context": "딥러닝 학습 기반 모델 확장\u000b(발표 데이터셋 자체 구축 및 정제)\n외부 API 의존도 감소 \u000b→ 비용 절감 + 운영 효율성 증가\n세밀한 발표 습관 분석\u000b(시선 분포, 표정 안정성, 발성과 억양 품질 향상)",
+          "distance_emu": 89408
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 32,
+      "title": "",
+      "summary_points": [
+        "구체적인 개선 방향 제시로 자신감과 학습 효과를 높일 수 있음",
+        "일관된 기준을 적용해 공정하고 신뢰성 있는 평가가 가능함",
+        "데이터 기반 결과를 활용해 체계적이고 근거 있는 평가가 가능함"
+      ],
+      "images": [
+        {
+          "name": "Picture 3",
+          "context": "심사자",
+          "distance_emu": 2901053
+        },
+        {
+          "name": "Picture 4",
+          "context": "객관적 피드백을 통해 발표 습관과 개선점을 확인할 수 있음\n반복 연습으로 발표 역량을 꾸준히 향상시킬 수 있음\n구체적인 개선 방향 제시로 자신감과 학습 효과를 높일 수 있음",
+          "distance_emu": 5457892
+        },
+        {
+          "name": "Picture 5",
+          "context": "기대효과",
+          "distance_emu": 794993
+        },
+        {
+          "name": "Picture 7",
+          "context": "심사자",
+          "distance_emu": 3314395
+        },
+        {
+          "name": "Picture 8",
+          "context": "객관적 피드백을 통해 발표 습관과 개선점을 확인할 수 있음\n반복 연습으로 발표 역량을 꾸준히 향상시킬 수 있음\n구체적인 개선 방향 제시로 자신감과 학습 효과를 높일 수 있음",
+          "distance_emu": 82427
+        },
+        {
+          "name": "Picture 9",
+          "context": "일관된 기준을 적용해 공정하고 신뢰성 있는 평가가 가능함\n자동화된 채점으로 평가 효율성을 높이고 피로도를 줄일 수 있음\n데이터 기반 결과를 활용해 체계적이고 근거 있는 평가가 가능함",
+          "distance_emu": 292169
+        }
+      ],
+      "visual_balance_score": 0.5,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    },
+    {
+      "index": 33,
+      "title": "",
+      "summary_points": [
+        "자유롭게 질문해주세요",
+        "Q&A",
+        "34"
+      ],
+      "images": [
+        {
+          "name": "Picture 2",
+          "context": "자유롭게 질문해주세요!",
+          "distance_emu": 7670487
+        },
+        {
+          "name": "Picture 3",
+          "context": "Q&A",
+          "distance_emu": 6798480
+        }
+      ],
+      "visual_balance_score": 0.624,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched"
+      ]
+    }
+  ]
+}

@@ -49,6 +49,31 @@
   color: #fff;
 }
 
+.chatbot-sidebar__delete {
+  width: 100%;
+  margin-top: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  background: #fff1f2;
+  color: #b91c1c;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.chatbot-sidebar__delete:hover:not(:disabled) {
+  background: #ef4444;
+  color: #fff;
+}
+
+.chatbot-sidebar__delete:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .chatbot-sidebar__list {
   list-style: none;
   margin: 0;

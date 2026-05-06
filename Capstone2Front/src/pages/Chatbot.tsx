@@ -4,12 +4,15 @@ import ReactMarkdown from "react-markdown";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
+  writeBatch,
   type Timestamp,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -128,6 +131,7 @@ export function Chatbot() {
 
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeletingChat, setIsDeletingChat] = useState(false);
   const [bodyDropActive, setBodyDropActive] = useState(false);
   const [footerDropActive, setFooterDropActive] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -419,6 +423,63 @@ export function Chatbot() {
     setActiveThreadId(newRef.id);
   }
 
+  async function deleteAllMessagesInThread(threadId: string): Promise<void> {
+    if (!db || !uid) return;
+    const messagesCol = collection(db, "users", uid, "chatThreads", threadId, "messages");
+    const snap = await getDocs(messagesCol);
+    if (snap.empty) return;
+
+    let batch = writeBatch(db);
+    let count = 0;
+    for (const m of snap.docs) {
+      batch.delete(m.ref);
+      count += 1;
+      if (count >= 400) {
+        await batch.commit();
+        batch = writeBatch(db);
+        count = 0;
+      }
+    }
+    if (count > 0) {
+      await batch.commit();
+    }
+  }
+
+  async function handleDeleteActiveChat() {
+    if (!db || !uid || !activeThreadId || isDeletingChat) return;
+    const ok = window.confirm("현재 대화 기록을 삭제할까요? 삭제 후 복구할 수 없습니다.");
+    if (!ok) return;
+
+    setPersistHint(null);
+    setIsDeletingChat(true);
+    try {
+      await deleteAllMessagesInThread(activeThreadId);
+      await deleteDoc(doc(db, "users", uid, "chatThreads", activeThreadId));
+      const colRef = collection(db, "users", uid, "chatThreads");
+      const newRef = doc(colRef);
+      await setDoc(newRef, {
+        title: "새 대화",
+        preview: "",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      setActiveThreadId(newRef.id);
+      setMessages([WELCOME_MSG]);
+      setPersistHint("대화를 삭제하고 새 채팅방으로 이동했습니다.");
+    } catch (e: unknown) {
+      console.error(e);
+      const code =
+        e && typeof e === "object" && "code" in e ? String((e as { code: string }).code) : "";
+      setPersistHint(
+        code === "permission-denied"
+          ? "대화 삭제 권한이 없습니다. Firestore 규칙을 확인해 주세요."
+          : "대화 삭제에 실패했습니다. 네트워크 상태를 확인해 주세요."
+      );
+    } finally {
+      setIsDeletingChat(false);
+    }
+  }
+
   function warnBadFile(name: string) {
     setMessages((prev) => [
       ...prev,
@@ -702,6 +763,14 @@ export function Chatbot() {
               <button type="button" className="chatbot-sidebar__new" onClick={() => void handleNewChat()}>
                 새 대화
               </button>
+              <button
+                type="button"
+                className="chatbot-sidebar__delete"
+                onClick={() => void handleDeleteActiveChat()}
+                disabled={!activeThreadId || isDeletingChat}
+              >
+                {isDeletingChat ? "삭제 중..." : "현재 대화 삭제"}
+              </button>
             </div>
             <ul className="chatbot-sidebar__list">
               {threads.map((t) => (
@@ -732,10 +801,9 @@ export function Chatbot() {
           <header className="chatbot-page__head">
             <h1 className="chatbot-page__title">챗봇</h1>
             <p className="chatbot-page__sub">
-              문서·이미지·동영상 등 파일을 끌어다 놓거나 첨부할 수 있어요. 채팅 영역에 포커스를 둔 뒤{" "}
-              <strong>Ctrl+V</strong>(Mac: <strong>⌘V</strong>)로 클립보드의 파일을 붙여 넣을 수도 있습니다. (첨부당 최대{" "}
-              {maxAttachmentLabelMb()}
-              MB)
+              현재 챗봇에서는 발표 자료를 <strong>PDF 형식으로 첨부한 경우에만</strong> 분석이 가능합니다.
+              <br />
+              PPT 파일은 직접 분석되지 않을 수 있으니, 발표 자료를 먼저 PDF로 변환한 뒤 업로드해 주세요.
             </p>
             {!uid ? (
               <p className="chatbot-page__hint">
