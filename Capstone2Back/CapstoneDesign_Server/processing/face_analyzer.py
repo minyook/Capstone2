@@ -141,3 +141,36 @@ def analyze_image(image_path: str) -> dict:
             
     except Exception as e:
         return {"error": str(e)}
+
+def save_face_data(all_vision_results: list, frame_rate: int):
+    """MediaPipe 얼굴 데이터를 시계열 JSON으로 저장합니다."""
+    time_series_face = {}
+    
+    for i, res in enumerate(all_vision_results):
+        seconds = i / frame_rate
+        mins, secs = divmod(seconds, 60)
+        hours, mins = divmod(mins, 60)
+        timestamp_key = f"{int(hours):02d}:{int(mins):02d}:{int(secs):02d}.{int((seconds % 1) * 100):02d}"
+        
+        face = res.face
+        main_state = "정면 응시 / 진지함"
+        if face.has_face:
+            if face.smile > 0.5: main_state = "미소 감지"
+            elif face.squint > 0.5: main_state = "집중 / 찌푸림"
+            elif abs(face.gaze_h) > 0.3: main_state = "시선 분산 (좌우)"
+            elif face.brow_up > 0.5: main_state = "눈썹 치켜뜸 (강조)"
+        else:
+            main_state = "얼굴 미검출"
+        
+        face_data = face.to_dict()
+        time_series_face[timestamp_key] = {
+            "info": {"frame_index": i, "main_state": main_state},
+            "blendshapes": face_data.get("all_blendshapes", {})
+        }
+
+    face_out_dir = Path("processing/MediaPipe_json")
+    face_out_dir.mkdir(parents=True, exist_ok=True)
+    with open(face_out_dir / "final_time_series.json", 'w', encoding='utf-8') as f:
+        json.dump(time_series_face, f, indent=4, ensure_ascii=False)
+    
+    print(f"   > MediaPipe JSON 저장 완료: {face_out_dir / 'final_time_series.json'}")
