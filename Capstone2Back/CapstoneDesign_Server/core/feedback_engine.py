@@ -34,11 +34,12 @@ class FeedbackEngine:
 
     def _load_json_data(self, paths: Dict[str, Path]) -> Dict[str, Any]:
         """
-        MediaPipe, YOLO, PPT 결과 파일에서 상세 데이터를 로드합니다.
+        MediaPipe, YOLO, Voice, PPT 결과 파일에서 상세 데이터를 로드합니다.
+        사용자 요청에 따라 analysis_json 하위 폴더들을 참조합니다.
         """
         detailed = {}
         
-        # 1. PPT 데이터 로드
+        # 1. PPT 데이터 로드 (analysis_json/ppt_json)
         ppt_path = paths.get("ppt")
         if ppt_path and ppt_path.exists():
             try:
@@ -47,7 +48,7 @@ class FeedbackEngine:
                     detailed["ppt"] = {
                         "slide_count": ppt_data.get("metadata", {}).get("slide_count", 0),
                         "metrics": ppt_data.get("normalized_metrics", {}),
-                        "top_slides": ppt_data.get("slides", [])[:3] # 상위 3개 슬라이드 요약만 포함 (토큰 절약)
+                        "top_slides": ppt_data.get("slides", [])[:3]
                     }
             except Exception as e:
                 print(f"⚠️ PPT JSON 로드 실패: {e}")
@@ -80,6 +81,20 @@ class FeedbackEngine:
             except Exception as e:
                 print(f"⚠️ Gesture JSON 로드 실패: {e}")
 
+        # 4. 음성 데이터 로드 (analysis_json/voice_json)
+        voice_path = paths.get("voice")
+        if voice_path and voice_path.exists():
+            try:
+                with open(voice_path, 'r', encoding='utf-8') as f:
+                    voice_data = json.load(f)
+                    segments = voice_data.get("segments", {})
+                    detailed["voice_analysis"] = {
+                        "segment_count": voice_data.get("segment_count", 0),
+                        "sample_segments": list(segments.values())[:5]
+                    }
+            except Exception as e:
+                print(f"⚠️ Voice JSON 로드 실패: {e}")
+
         return detailed
 
     def _build_evaluation_prompt(self, data: Dict[str, Any], rubric: str, detailed: Dict[str, Any] = None) -> str:
@@ -105,10 +120,9 @@ class FeedbackEngine:
 {detailed_str}
 
 [출력 요구사항]
-1. **데이터 통합 진단**: [핵심 지표]와 [상세 분석 데이터]를 결합하여, 특정 시간대나 특정 슬라이드에서 발생한 문제점을 짚어내십시오. (예: "15번 슬라이드 설명 시 시선이 불안정했습니다.")
+1. **데이터 통합 진단**: [핵심 지표]와 [상세 분석 데이터]를 결합하여, 특정 시간대나 특정 슬라이드에서 발생한 문제점을 짚어내십시오.
 2. **Action Plan**: 개선을 위해 바로 실천할 수 있는 구체적인 팁을 3가지 이상 제시하십시오.
-3. **PPT와 발표의 조화**: PPT의 가독성/균형 데이터와 실제 발표(음성/태도)가 얼마나 조화로웠는지 평가하십시오.
-4. **형식**: 마크다운(Markdown)을 사용하되, 가독성을 위해 섹션을 명확히 나누십시오.
+3. **형식**: 마크다운(Markdown)을 사용하되, 가독성을 위해 섹션을 명확히 나누십시오.
 
 ### [1] 종합 평가 및 점수 (100점 만점)
 ### [2] 시각 및 태도 분석 (Visual & Gesture)
@@ -120,11 +134,7 @@ class FeedbackEngine:
         return prompt
 
     def _get_gemini_feedback(self, prompt: str) -> str:
-        """
-        Gemini를 사용한 고품질 피드백 생성
-        """
         try:
-            # 코치 전용 시스템 인스트럭션 적용 (필요시 별도 모델 인스턴스 생성 가능)
             response = gemini_model.generate_content(prompt)
             return response.text
         except Exception as e:

@@ -152,15 +152,17 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         json_paths = {
             "face": Path(f"analysis_json/MediaPipe_json/face_results_{job_id}.json"),
             "gesture": Path(f"analysis_json/Yolo_json/gesture_results_{job_id}.json"),
+            "voice": Path(f"analysis_json/voice_json/voice_results_{job_id}.json"),
             "ppt": None
         }
         
-        # PPT 결과 파일 경로 탐색 (가장 최근 파일 또는 특정 패턴)
-        ppt_results_dir = Path("ppt-analysis-engine/data/results")
+        # PPT 결과 파일 경로 탐색
+        ppt_results_dir = Path("analysis_json/ppt_json")
         if ppt_results_dir.exists():
-            ppt_files = list(ppt_results_dir.glob("*_example.json"))
+            ppt_files = list(ppt_results_dir.glob("*.json"))
             if ppt_files:
-                json_paths["ppt"] = ppt_files[0] # 첫 번째 매칭 파일 사용
+                ppt_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                json_paths["ppt"] = ppt_files[0]
 
         analysis_summary = {
             "video_type": video_type.value,
@@ -180,7 +182,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 {'='*20}")
         print(llama_feedback)
 
-        # 🌟 분리된 JSON 저장 함수 호출
+        # 🌟 기존 저장 방식 유지 (건드리지 않음)
         save_face_data(all_vision_results, FRAME_RATE, job_id)
         save_gesture_data(all_vision_results, FRAME_RATE, job_id)
 
@@ -194,15 +196,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "aligned_transcript_data": aligned_data
         }
         
-        # [추가] 통합 결과 JSON 파일로 영구 저장
-        report_dir = Path("processing/Results_json")
-        report_dir.mkdir(parents=True, exist_ok=True)
-        report_path = report_dir / f"report_{job_id}.json"
-        with open(report_path, 'w', encoding='utf-8') as f:
-            json.dump(final_result, f, indent=4, ensure_ascii=False)
-        
-        job_status[job_id] = {"status": "Complete", "result": final_result, "report_path": str(report_path)}
-        print(f"✅ 모든 분석 작업 완료! (보고서 저장: {report_path})")
+        job_status[job_id] = {"status": "Complete", "result": final_result}
+        print(f"✅ 모든 분석 작업 완료! (Job: {job_id})")
 
     except Exception as e:
         print(f"\n❌ 작업 실패 (Job: {job_id}) | 오류: {e}")
