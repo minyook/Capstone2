@@ -274,36 +274,69 @@ export function Chatbot() {
     setIsLoading(true);
 
     try {
-      const res = file
-        ? await fetch("http://127.0.0.1:8000/api/chat/with-file", {
-            method: "POST",
-            body: (() => {
-              const fd = new FormData();
-              fd.append("message", apiMessage);
-              fd.append("chat_history", JSON.stringify(historyForBackend));
-              fd.append("file", file);
-              return fd;
-            })(),
-          })
-        : await fetch("http://127.0.0.1:8000/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              message: apiMessage,
-              chat_history: historyForBackend,
-            }),
-          });
+      // 3. 파일이 있으면 일반 API, 없으면 스트리밍 API 사용
+      if (file) {
+        const res = await fetch("http://127.0.0.1:8000/api/chat/with-file", {
+          method: "POST",
+          body: (() => {
+            const fd = new FormData();
+            fd.append("message", apiMessage);
+            fd.append("chat_history", JSON.stringify(historyForBackend));
+            fd.append("file", file);
+            return fd;
+          })(),
+        });
 
-      if (!res.ok) throw new Error("서버 응답 오류");
+        if (!res.ok) throw new Error("서버 응답 오류");
 
-      const data = await res.json();
-      const updatedHistory = data.chat_history;
-      const lastAiMessage = updatedHistory[updatedHistory.length - 1];
+        const data = await res.json();
+        const updatedHistory = data.chat_history;
+        const lastAiMessage = updatedHistory[updatedHistory.length - 1];
 
-      setMessages((prev) => [
-        ...prev,
-        { id: newId(), role: "bot", text: lastAiMessage.content },
-      ]);
+        setMessages((prev) => [
+          ...prev,
+          { id: newId(), role: "bot", text: lastAiMessage.content },
+        ]);
+      } else {
+        // 스트리밍 API 호출
+        const res = await fetch("http://127.0.0.1:8000/api/chat/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: apiMessage,
+            chat_history: historyForBackend,
+          }),
+        });
+
+        if (!res.ok) throw new Error("서버 응답 오류");
+
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error("스트림을 읽을 수 없습니다.");
+
+        const decoder = new TextDecoder();
+        let botMessageId = newId();
+
+        setMessages((prev) => [
+          ...prev,
+          { id: botMessageId, role: "bot", text: "" },
+        ]);
+        setIsLoading(false);
+
+        let accumulatedText = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          accumulatedText += chunk;
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === botMessageId ? { ...msg, text: accumulatedText } : msg
+            )
+          );
+        }
+      }
     } catch (error) {
       console.error(error);
       setMessages((prev) => [

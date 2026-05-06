@@ -45,6 +45,30 @@ model = genai.GenerativeModel(
 """
 )
 
+def stream_chat_with_gemini(user_message: str, chat_history: List[Dict[str, str]] = None):
+    """
+    Gemini API를 사용하여 스트리밍 답변을 생성하는 제너레이터입니다.
+    """
+    if chat_history is None:
+        chat_history = []
+
+    gemini_history = []
+    for msg in chat_history:
+        role = "user" if msg["role"] == "user" else "model"
+        gemini_history.append({"role": role, "parts": [msg["content"]]})
+
+    try:
+        chat_session = model.start_chat(history=gemini_history)
+        response = chat_session.send_message(user_message, stream=True)
+        
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
+
+    except Exception as e:
+        print(f"❌ Gemini Streaming API 오류: {e}")
+        yield f"죄송합니다. 답변을 생성하는 중 오류가 발생했습니다: {str(e)}"
+
 def chat_with_gemini(user_message: str, chat_history: List[Dict[str, str]] = None) -> List[Dict[str, str]]:
     """
     Gemini 1.5 Flash API를 사용하여 챗봇 답변을 생성합니다.
