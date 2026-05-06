@@ -36,7 +36,7 @@ const WELCOME_ID = "welcome-msg";
 const WELCOME_MSG: ChatMessage = {
   id: WELCOME_ID,
   role: "bot",
-  text: "발표 준비를 돕는 AI 코치입니다. **이미지** 또는 **PPT**를 끌어다 놓고 메시지와 함께 보내면 내용을 분석해 드립니다.",
+  text: "발표 준비를 돕는 AI 코치입니다. **파일을 끌어다 놓거나 첨부**하고 메시지와 함께 보내면 도와 드립니다.",
 };
 
 function newId(): string {
@@ -75,25 +75,41 @@ function formatThreadTime(ts?: Timestamp): string {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
-const IMAGE_EXT = /\.(png|jpe?g|webp|gif|bmp)$/i;
-const PPT_EXT = /\.(pptx|ppt)$/i;
+/** 업로드 상한 (브라우저·서버 부하 완화). 더 크게 필요하면 조정하세요. */
+const MAX_ATTACHMENT_BYTES = 100 * 1024 * 1024;
+
+const IMAGE_EXT = /\.(png|jpe?g|webp|gif|bmp|svg|tif|tiff|avif|heic)$/i;
+const PPT_EXT = /\.(pptx|ppt|key)$/i;
+const PDF_EXT = /\.pdf$/i;
+const DOC_EXT = /\.(docx?|xlsx?|csv|txt|md|rtf|od[tsp]|hwp|hwpx)$/i;
+const VIDEO_EXT = /\.(mp4|webm|mov|mkv|avi|m4v|wmv|mpeg|mpg)$/i;
+const AUDIO_EXT = /\.(mp3|wav|m4a|aac|ogg|flac|wma)$/i;
+const ARCH_EXT = /\.(zip|rar|7z|tar|gz|bz2)$/i;
 
 function attachmentBadgeLabel(fileName: string): string {
   const n = fileName.toLowerCase();
   if (IMAGE_EXT.test(n)) return "이미지";
   if (PPT_EXT.test(n)) return "PPT";
+  if (PDF_EXT.test(n)) return "PDF";
+  if (DOC_EXT.test(n)) return "문서";
+  if (VIDEO_EXT.test(n)) return "동영상";
+  if (AUDIO_EXT.test(n)) return "음성";
+  if (ARCH_EXT.test(n)) return "압축";
   return "파일";
 }
 
+function attachmentRejectReason(file: File): "oversize" | "invalid" | null {
+  if (!file.name?.trim()) return "invalid";
+  if (file.size > MAX_ATTACHMENT_BYTES) return "oversize";
+  return null;
+}
+
 function isAllowedAttachment(file: File): boolean {
-  const n = file.name.toLowerCase();
-  if (IMAGE_EXT.test(n) || PPT_EXT.test(n)) return true;
-  if (file.type.startsWith("image/")) return true;
-  return (
-    file.type === "application/vnd.ms-powerpoint" ||
-    file.type ===
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-  );
+  return attachmentRejectReason(file) === null;
+}
+
+function maxAttachmentLabelMb(): number {
+  return Math.round(MAX_ATTACHMENT_BYTES / (1024 * 1024));
 }
 
 export function Chatbot() {
@@ -245,7 +261,7 @@ export function Chatbot() {
     });
   }, [messages, isLoading]);
 
-  /** 채팅 화면 안에서 스크린샷·복사 이미지 Ctrl+V / ⌘V 붙여넣기 */
+  /** 채팅 화면 안에서 파일 붙여넣기 (Ctrl+V / ⌘V) */
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {
       const root = pageRef.current;
@@ -253,17 +269,29 @@ export function Chatbot() {
       const cd = e.clipboardData;
       if (!cd) return;
 
-      const attachImage = (file: File) => {
+      const attachFromClipboard = (file: File) => {
         e.preventDefault();
-        if (!isAllowedAttachment(file)) {
+        const why = attachmentRejectReason(file);
+        if (why === "oversize") {
           setMessages((prev) => [
             ...prev,
             { id: newId(), role: "user", text: `${file.name} 붙여넣기` },
             {
               id: newId(),
               role: "bot",
-              text:
-                "이미지(png, jpg, webp 등) 또는 발표 파일(ppt, pptx)만 첨부할 수 있습니다.",
+              text: `첨부 용량은 **${maxAttachmentLabelMb()}MB** 이하만 가능합니다.`,
+            },
+          ]);
+          return;
+        }
+        if (why === "invalid") {
+          setMessages((prev) => [
+            ...prev,
+            { id: newId(), role: "user", text: "파일 붙여넣기" },
+            {
+              id: newId(),
+              role: "bot",
+              text: "파일 이름을 확인할 수 없어 첨부하지 못했습니다.",
             },
           ]);
           return;
@@ -273,13 +301,21 @@ export function Chatbot() {
 
       for (let i = 0; i < cd.items.length; i++) {
         const item = cd.items[i];
-        if (item.kind !== "file" || !item.type.startsWith("image/")) continue;
+        if (item.kind !== "file") continue;
         const blob = item.getAsFile();
         if (!blob) continue;
-        let ext = blob.type.split("/")[1] || "png";
-        ext = ext.replace("+xml", "").replace("jpeg", "jpg");
-        if (ext.includes(";")) ext = ext.split(";")[0];
-        attachImage(new File([blob], `붙여넣기-${Date.now()}.${ext}`, { type: blob.type }));
+        const named =
+          blob.name?.trim().length > 0
+            ? blob
+            : (() => {
+                let ext = blob.type.split("/")[1] || "bin";
+                ext = ext.replace("+xml", "").replace("jpeg", "jpg");
+                if (ext.includes(";")) ext = ext.split(";")[0];
+                return new File([blob], `붙여넣기-${Date.now()}.${ext}`, {
+                  type: blob.type || "application/octet-stream",
+                });
+              })();
+        attachFromClipboard(named);
         return;
       }
 
@@ -287,11 +323,13 @@ export function Chatbot() {
       if (files?.length) {
         for (let i = 0; i < files.length; i++) {
           const f = files[i];
-          if (f.type.startsWith("image/")) {
-            attachImage(f);
+          if (isAllowedAttachment(f)) {
+            attachFromClipboard(f);
             return;
           }
         }
+        const first = files[0];
+        attachFromClipboard(first);
       }
     };
 
@@ -388,16 +426,32 @@ export function Chatbot() {
       {
         id: newId(),
         role: "bot",
-        text:
-          "이미지(png, jpg, webp 등) 또는 발표 파일(ppt, pptx)만 첨부할 수 있습니다.",
+        text: "이 파일은 첨부할 수 없습니다. 이름이 비어 있는지 확인해 주세요.",
+      },
+    ]);
+  }
+
+  function warnOversize(name: string) {
+    setMessages((prev) => [
+      ...prev,
+      { id: newId(), role: "user", text: `${name} 첨부 시도` },
+      {
+        id: newId(),
+        role: "bot",
+        text: `첨부 용량은 **${maxAttachmentLabelMb()}MB** 이하만 가능합니다.`,
       },
     ]);
   }
 
   function stageFile(file: File | undefined | null) {
     if (!file) return;
-    if (!isAllowedAttachment(file)) {
-      warnBadFile(file.name);
+    const why = attachmentRejectReason(file);
+    if (why === "oversize") {
+      warnOversize(file.name || "파일");
+      return;
+    }
+    if (why === "invalid") {
+      warnBadFile(file.name || "(이름 없음)");
       return;
     }
     setPendingFile(file);
@@ -415,7 +469,11 @@ export function Chatbot() {
       stageFile(file);
       return;
     }
-    if (dt?.files?.length) warnBadFile(dt.files[0].name);
+    if (dt?.files?.length) {
+      const first = dt.files[0];
+      if (attachmentRejectReason(first) === "oversize") warnOversize(first.name || "파일");
+      else warnBadFile(first.name || "(이름 없음)");
+    }
   }
 
   function handleBodyDragEnter(e: React.DragEvent) {
@@ -674,8 +732,10 @@ export function Chatbot() {
           <header className="chatbot-page__head">
             <h1 className="chatbot-page__title">챗봇</h1>
             <p className="chatbot-page__sub">
-              이미지·PPT를 끌어다 놓거나, 채팅 화면에서 포커스를 둔 뒤{" "}
-              <strong>Ctrl+V</strong>(Mac: <strong>⌘V</strong>)로 캡처·복사 이미지를 붙여 넣을 수 있어요.
+              문서·이미지·동영상 등 파일을 끌어다 놓거나 첨부할 수 있어요. 채팅 영역에 포커스를 둔 뒤{" "}
+              <strong>Ctrl+V</strong>(Mac: <strong>⌘V</strong>)로 클립보드의 파일을 붙여 넣을 수도 있습니다. (첨부당 최대{" "}
+              {maxAttachmentLabelMb()}
+              MB)
             </p>
             {!uid ? (
               <p className="chatbot-page__hint">
@@ -790,7 +850,7 @@ export function Chatbot() {
               id={attachInputId}
               type="file"
               className="chatbot-composer__file-input"
-              accept=".ppt,.pptx,.png,.jpg,.jpeg,.webp,.gif,.bmp,image/*,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              accept="*/*"
               onChange={(e) => {
                 stageFile(e.target.files?.[0] ?? null);
                 e.target.value = "";
