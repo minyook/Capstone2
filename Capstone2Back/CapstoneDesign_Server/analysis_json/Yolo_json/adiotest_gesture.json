@@ -1,0 +1,431 @@
+{
+    "0.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "0.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "0.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "0.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "0.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "1.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "1.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "1.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "1.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "1.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "2.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "2.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "2.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "2.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "2.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "3.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "3.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "3.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "3.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "3.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "4.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "4.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "4.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "4.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "4.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "5.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "5.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "5.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "5.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "5.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "6.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "6.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "6.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "6.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "6.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "7.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "7.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "7.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "7.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "7.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "8.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "8.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "8.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "8.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "8.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "9.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "9.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "9.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "9.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "9.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "10.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "10.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "10.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "10.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "10.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "11.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "11.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "11.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "11.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "11.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "12.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "12.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "12.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "12.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "12.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "13.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "13.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "13.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "13.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "13.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "14.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "확인 불가",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "__AI_SUMMARY__": {
+        "events": []
+    }
+}

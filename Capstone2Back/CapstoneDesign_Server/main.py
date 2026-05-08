@@ -101,13 +101,14 @@ import json
 app = FastAPI(lifespan=lifespan)
 
 # 🌟 필수 디렉토리 확인 및 생성 (RuntimeError 방지)
-for d in ["uploads", "analysis_json/MediaPipe_json", "analysis_json/Yolo_json"]:
+for d in ["uploads", "analysis_json/MediaPipe_json", "analysis_json/Yolo_json", "analysis_json/total_json", "analysis_json/Voice_json"]:
     Path(d).mkdir(parents=True, exist_ok=True)
 
 # 🌟 정적 파일 서버 설정
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.mount("/results/face", StaticFiles(directory="analysis_json/MediaPipe_json"), name="face_results")
 app.mount("/results/gesture", StaticFiles(directory="analysis_json/Yolo_json"), name="gesture_results")
+app.mount("/results/total", StaticFiles(directory="analysis_json/total_json"), name="total_results")
 
 @app.get("/")
 async def read_index():
@@ -130,6 +131,7 @@ app.add_middleware(
 @app.post("/api/upload")
 async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     job_id = str(uuid.uuid4())[:8]
+    original_filename = Path(file.filename).stem # 확장자 제외 파일명 추출
     
     # 작업 전용 폴더 생성
     job_upload_dir = Path("uploads") / job_id
@@ -148,24 +150,17 @@ async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = Fil
     frame_dir = Path("frames") / job_id
     frame_dir.mkdir(parents=True, exist_ok=True)
     
-    # 분석 작업 백그라운드 실행
-    # video_dir로 job_upload_dir를 넘겨서 해당 폴더만 정리되게 함
-    # 단, 결과 확인을 위해 비디오는 남겨두고 싶다면 cleanup_dirs 호출 방식을 조정해야 함
-    # 현재 task_manager.py의 cleanup_dirs는 video_dir 전체를 지우므로, 
-    # 비디오를 남기려면 task_manager.py를 수정하거나 빈 경로를 넘겨야 함.
-    # 일단은 task_manager.py가 지우는 것을 방지하기 위해 빈 Path()를 넘기거나 
-    # 비디오 재생용으로 복사본을 유지하는 방법이 있음.
-    # 여기서는 비디오를 보존하기 위해 task_manager에 video_dir 대신 None을 넘기도록 수정하는게 안전함.
-    
     background_tasks.add_task(
         run_analysis_task, 
         job_id, 
         upload_path, 
         frame_dir, 
-        None # video_dir를 None으로 주어 비디오 삭제 방지 (task_manager 수정 필요)
+        None, # video_dir를 None으로 주어 비디오 삭제 방지
+        None, # custom_criteria
+        original_filename # 원본 파일명 추가 전달
     )
     
-    return {"job_id": job_id, "video_url": f"/uploads/{job_id}/{save_filename}"}
+    return {"job_id": job_id, "video_url": f"/uploads/{job_id}/{save_filename}", "video_name": original_filename}
 
 @app.get("/api/status/{job_id}")
 async def get_status(job_id: str):

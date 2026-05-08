@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "file_name": "36a3c414ec5c4e158057b252e9f157a0_동의대학교 2025학년도 캡스톤 경진대회_판넬가이드폼_무박2일.pptx",
+    "slide_count": 1,
+    "generated_at": "2026-05-08T09:56:28"
+  },
+  "normalized_metrics": {
+    "readability": 1.0,
+    "visual_balance": 0.666,
+    "consistency": 0.0
+  },
+  "quantitative_stats": {
+    "slide_count": 1,
+    "image_count_total": 8,
+    "text_box_count_total": 25,
+    "text_overload": [
+      0
+    ],
+    "readability_flags": {
+      "text_overload": [
+        0
+      ]
+    }
+  },
+  "slides": [
+    {
+      "index": 0,
+      "title": "",
+      "summary_points": [
+        "본 시스템은 FastAPI 서버와 Kotlin 클라이언트로 구성된 자동 평가 플랫폼으로, 발표 데이터를 효율적으로 처리하고 핵심 기능을 제공한다",
+        "서버는 Whisper AI를 통해 음성을 텍스트로 변환하고, 발화의 Roughness와 Jitter와 같은 음성 품질 정보를 추가로 분석한다",
+        "(서버·AI) 음성·표정·시선 정보를 정밀하게 분석하기 \u000b위해 FastAPI·Whisper·MediaPipe 기반의 경량 AI \u000b처리 구조 적용"
+      ],
+      "images": [
+        {
+          "name": "그래픽 78",
+          "context": "Presentation Analysis, Multimodal AI, \nAutomated Scoring",
+          "distance_emu": 1392484
+        },
+        {
+          "name": "그림 77",
+          "context": "4. 기대효과 및 활용 방안",
+          "distance_emu": 1270035
+        },
+        {
+          "name": "그림 74",
+          "context": "2. 개념 및 상세설계",
+          "distance_emu": 2099543
+        },
+        {
+          "name": "그림 75",
+          "context": "1. 과제의 목적 및 필요성",
+          "distance_emu": 1420686
+        },
+        {
+          "name": "그림 76",
+          "context": "임진호, 이규찬, 이지민, 임민욱",
+          "distance_emu": 1134358
+        },
+        {
+          "name": "그래픽 52",
+          "context": "임진호, 이규찬, 이지민, 임민욱",
+          "distance_emu": 980807
+        },
+        {
+          "name": "Picture 1",
+          "context": "2. 개념 및 상세설계",
+          "distance_emu": 3285555
+        },
+        {
+          "name": "그림 42",
+          "context": "그림 2 Graphical User Interface",
+          "distance_emu": 4400762
+        }
+      ],
+      "visual_balance_score": 0.666,
+      "readability_score": 1.0,
+      "flags": [
+        "font_size_ok",
+        "image_text_matched",
+        "text_overload"
+      ]
+    }
+  ]
+}

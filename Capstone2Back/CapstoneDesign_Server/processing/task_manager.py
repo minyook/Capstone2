@@ -20,10 +20,13 @@ from core.exceptions import QualityException
 FRAME_RATE = 5
 job_status = {} 
 
-def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None):
+def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None):
     all_vision_results = []
     audio_path = frame_dir / "audio.wav" 
     
+    # 파일명 결정 (전달받은게 없으면 job_id 사용)
+    file_id = video_filename if video_filename else job_id
+
     # 채점 기준 통합 텍스트
     unified_rubric = ""
     if custom_criteria:
@@ -37,7 +40,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
     max_visibility = {"face": False, "pelvis": False, "ankles": False}
     
     try:
-        print(f"\n{'='*60}\n🚀 분석 시작 (Job ID: {job_id})\n{'='*60}")
+        print(f"\n{'='*60}\n🚀 분석 시작 (Job ID: {job_id}, File: {file_id})\n{'='*60}")
 
         # 0. 품질 검증
         job_status[job_id] = {"status": "Checking", "message": "0/6: 품질 검사 중..."}
@@ -83,14 +86,17 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
 
         # 4 & 5. Whisper 및 Praat 음성 분석
         job_status[job_id] = {"status": "Analyzing", "message": "4/6: 로컬 음성 인식 실행 중..."}
-        audio_segments, whisper_error = transcribe_audio_with_timestamps(str(audio_path))
+        # audio_analyzer.py 내부에서 파일 저장을 위해 file_id(video_filename)를 넘겨야 함
+        from processing.audio_analyzer import transcribe_audio_with_timestamps
+        audio_segments, whisper_error = transcribe_audio_with_timestamps(str(audio_path), video_filename=file_id)
         
         if not audio_segments: 
             print(f"\n[4/6] ⚠️ 목소리 텍스트가 추출되지 않았습니다. (음성 분석 스킵)")
             aligned_data = [] 
         else:
             print(f"\n[4/6] ✅ 로컬 음성 인식 완료.")
-            audio_segments = analyze_prosody_for_segments(audio_path, audio_segments)
+            from processing.audio_analyzer import analyze_prosody_for_segments
+            audio_segments = analyze_prosody_for_segments(audio_path, audio_segments, video_filename=file_id)
             print(f"\n[5/6] ✅ 운율 분석 완료.")
             
             job_status[job_id] = {"status": "Analyzing", "message": "6/6: 데이터 정렬 중..."}
@@ -150,9 +156,9 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         
         # 관련 JSON 파일 경로 수집 (새로운 analysis_json 경로 적용)
         json_paths = {
-            "face": Path(f"analysis_json/MediaPipe_json/face_results_{job_id}.json"),
-            "gesture": Path(f"analysis_json/Yolo_json/gesture_results_{job_id}.json"),
-            "voice": Path(f"analysis_json/voice_json/voice_results_{job_id}.json"),
+            "face": Path(f"analysis_json/MediaPipe_json/{file_id}_face.json"),
+            "gesture": Path(f"analysis_json/Yolo_json/{file_id}_gesture.json"),
+            "voice": Path(f"analysis_json/Voice_json/{file_id}_voice.json"),
             "ppt": None
         }
         
@@ -182,22 +188,54 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 {'='*20}")
         print(llama_feedback)
 
-        # 🌟 기존 저장 방식 유지 (건드리지 않음)
-        save_face_data(all_vision_results, FRAME_RATE, job_id)
-        save_gesture_data(all_vision_results, FRAME_RATE, job_id)
+        # 🌟 타임라인 피드백 생성 (실시간 자막용)
+        timeline_feedback = feedback_engine.generate_timeline_feedback(aligned_data, file_id)
+
+        # 🌟 기존 저장 방식 유지
+        save_face_data(all_vision_results, FRAME_RATE, file_id)
+        save_gesture_data(all_vision_results, FRAME_RATE, file_id)
+
+        # 🌟 [신규] 통합 Total JSON 생성 및 저장
+        total_out_dir = Path("analysis_json/total_json")
+        total_out_dir.mkdir(parents=True, exist_ok=True)
+        
+        raw_data_json = [f.to_dict() for f in all_vision_results]
+        
+        total_result = {
+            "metadata": {
+                "job_id": job_id,
+                "video_filename": file_id,
+                "video_type": video_type.value,
+                "total_time": total_frames / FRAME_RATE,
+                "analysis_date": timer.strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "summary": analysis_summary,
+            "overall_feedback": llama_feedback,
+            "timeline_feedback": timeline_feedback, # LLM이 생성한 시간별 팁
+            "timeline_data": aligned_data, # 정렬된 시각+음성 데이터
+            "raw_data": raw_data_json # 🌟 프론트엔드에서 사용하는 원본 시각 데이터
+        }
+        
+        total_json_path = total_out_dir / f"{file_id}_total.json"
+        with open(total_json_path, 'w', encoding='utf-8') as f:
+            json.dump(total_result, f, indent=4, ensure_ascii=False)
+        print(f"✅ 통합 분석 결과 저장 완료: {total_json_path}")
 
         raw_data_json = [f.to_dict() for f in all_vision_results]
         final_result = {
             "job_id": job_id,
+            "video_filename": file_id,
             "video_type": video_type.value,
             "analysis_summary": analysis_summary,
             "llama_feedback": llama_feedback,
+            "timeline_feedback": timeline_feedback,
             "raw_data": raw_data_json,
-            "aligned_transcript_data": aligned_data
+            "aligned_transcript_data": aligned_data,
+            "total_json_url": f"/results/total/{file_id}_total.json"
         }
         
         job_status[job_id] = {"status": "Complete", "result": final_result}
-        print(f"✅ 모든 분석 작업 완료! (Job: {job_id})")
+        print(f"✅ 모든 분석 작업 완료! (Job: {job_id}, File: {file_id})")
 
     except Exception as e:
         print(f"\n❌ 작업 실패 (Job: {job_id}) | 오류: {e}")

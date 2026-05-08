@@ -1,0 +1,852 @@
+{
+    "0.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03343891352415085,
+            "eyeLookInRight": 0.11194504052400589,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "0.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.017891837283968925,
+            "eyeLookInRight": 0.1614253669977188,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "0.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.04870421066880226,
+            "eyeLookInRight": 0.06911762803792953,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "0.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02545773796737194,
+            "eyeLookInRight": 0.12239761650562286,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "0.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01688261330127716,
+            "eyeLookInRight": 0.1817985475063324,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "1.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.012930771335959435,
+            "eyeLookInRight": 0.22637726366519928,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "1.20": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.024232761934399605,
+            "eyeLookInRight": 0.14019843935966492,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "1.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.016609657555818558,
+            "eyeLookInRight": 0.19478832185268402,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "1.60": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.013651235029101372,
+            "eyeLookInRight": 0.18695168197155,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "1.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.011849384754896164,
+            "eyeLookInRight": 0.21887661516666412,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "2.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.009274201467633247,
+            "eyeLookInRight": 0.24540413916110992,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "2.20": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.016492197290062904,
+            "eyeLookInRight": 0.16873738169670105,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "2.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01735711842775345,
+            "eyeLookInRight": 0.17228682339191437,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "2.60": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.012789380736649036,
+            "eyeLookInRight": 0.19584250450134277,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "2.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.012063301168382168,
+            "eyeLookInRight": 0.21337281167507172,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "3.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.028415488079190254,
+            "eyeLookInRight": 0.11293622851371765,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "3.20": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.011842290870845318,
+            "eyeLookInRight": 0.21091480553150177,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "3.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.014529815874993801,
+            "eyeLookInRight": 0.18178440630435944,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "3.60": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02002357877790928,
+            "eyeLookInRight": 0.17506608366966248,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "3.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.014330623671412468,
+            "eyeLookInRight": 0.19510824978351593,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "4.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.018527932465076447,
+            "eyeLookInRight": 0.16862305998802185,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "4.20": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.011441281996667385,
+            "eyeLookInRight": 0.22561748325824738,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "4.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.020459771156311035,
+            "eyeLookInRight": 0.16906289756298065,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "4.60": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03490407019853592,
+            "eyeLookInRight": 0.10985594987869263,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "4.80": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.027060171589255333,
+            "eyeLookInRight": 0.11288096755743027,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "5.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02008247561752796,
+            "eyeLookInRight": 0.14817386865615845,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "5.20": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.018381673842668533,
+            "eyeLookInRight": 0.17741268873214722,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "5.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.020085802301764488,
+            "eyeLookInRight": 0.14210538566112518,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "5.60": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.018724877387285233,
+            "eyeLookInRight": 0.16057132184505463,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "5.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01913379319012165,
+            "eyeLookInRight": 0.1652332842350006,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "6.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01804233528673649,
+            "eyeLookInRight": 0.1654408574104309,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "6.20": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.015127908438444138,
+            "eyeLookInRight": 0.16832056641578674,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "6.40": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.019827749580144882,
+            "eyeLookInRight": 0.1682586818933487,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "6.60": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.002427132334560156,
+            "eyeLookInRight": 0.5391017198562622,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "6.80": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.002176345093175769,
+            "eyeLookInRight": 0.5801916122436523,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "7.00": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0021000136621296406,
+            "eyeLookInRight": 0.5989011526107788,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "7.20": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0019300138810649514,
+            "eyeLookInRight": 0.576495885848999,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "7.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.025874147191643715,
+            "eyeLookInRight": 0.12426643818616867,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "7.60": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.022303903475403786,
+            "eyeLookInRight": 0.11475026607513428,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "7.80": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03047391027212143,
+            "eyeLookInRight": 0.10062221437692642,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "8.00": {
+        "info": {
+            "main_state": "눈썹 강조 (열정적)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.018276048824191093,
+            "eyeLookInRight": 0.1528301239013672,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "8.20": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01807316392660141,
+            "eyeLookInRight": 0.15720513463020325,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "8.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.023892046883702278,
+            "eyeLookInRight": 0.12864360213279724,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "8.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.026665715500712395,
+            "eyeLookInRight": 0.1203235611319542,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "8.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.023687051609158516,
+            "eyeLookInRight": 0.11561518907546997,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "9.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02314138039946556,
+            "eyeLookInRight": 0.11800938099622726,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "9.20": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.029125560075044632,
+            "eyeLookInRight": 0.0981924831867218,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "9.40": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.028473960235714912,
+            "eyeLookInRight": 0.09679623693227768,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "9.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02372889593243599,
+            "eyeLookInRight": 0.12703850865364075,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "9.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.029716841876506805,
+            "eyeLookInRight": 0.10459078103303909,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "10.00": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.6052899360656738,
+            "eyeLookInRight": 0.0022962295915931463,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "10.20": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.768578052520752,
+            "eyeLookInRight": 0.0010028549004346132,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "10.40": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.7962134480476379,
+            "eyeLookInRight": 0.0007794370176270604,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "10.60": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.7649136781692505,
+            "eyeLookInRight": 0.0010251484345644712,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "10.80": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.7429133653640747,
+            "eyeLookInRight": 0.0011334404116496444,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "11.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.038368165493011475,
+            "eyeLookInRight": 0.09585244208574295,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "11.20": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.5922144651412964,
+            "eyeLookInRight": 0.0025085052475333214,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "11.40": {
+        "info": {
+            "main_state": "시선 분산 (좌우)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.704785943031311,
+            "eyeLookInRight": 0.001299980329349637,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "11.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.3635060489177704,
+            "eyeLookInRight": 0.0073665231466293335,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "11.80": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02453320100903511,
+            "eyeLookInRight": 0.11913872510194778,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "12.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.029154730960726738,
+            "eyeLookInRight": 0.10953792929649353,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "12.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03284760192036629,
+            "eyeLookInRight": 0.09906744211912155,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "12.40": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02746233344078064,
+            "eyeLookInRight": 0.11964770406484604,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "12.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01879073679447174,
+            "eyeLookInRight": 0.16200414299964905,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "12.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.015147598460316658,
+            "eyeLookInRight": 0.1973930448293686,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "13.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.021308433264493942,
+            "eyeLookInRight": 0.15559640526771545,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "13.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.021158352494239807,
+            "eyeLookInRight": 0.1565912514925003,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "13.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03936402127146721,
+            "eyeLookInRight": 0.10948023945093155,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "13.60": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02647387608885765,
+            "eyeLookInRight": 0.120575912296772,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "13.80": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03766169399023056,
+            "eyeLookInRight": 0.09299936145544052,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "14.00": {
+        "info": {
+            "main_state": "말하는 중"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.04342763125896454,
+            "eyeLookInRight": 0.09656797349452972,
+            "mouthSmileLeft": 0.0
+        }
+    },
+    "__AI_SUMMARY__": {
+        "events": [
+            {
+                "start": 0.0,
+                "end": 0.2,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 0.2,
+                "end": 0.8,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 0.8,
+                "end": 2.0,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 2.0,
+                "end": 2.2,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 2.2,
+                "end": 4.2,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 4.2,
+                "end": 4.4,
+                "state": "말하는 중"
+            },
+            {
+                "start": 4.4,
+                "end": 4.8,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 4.8,
+                "end": 5.0,
+                "state": "말하는 중"
+            },
+            {
+                "start": 5.0,
+                "end": 5.6,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 5.6,
+                "end": 5.8,
+                "state": "말하는 중"
+            },
+            {
+                "start": 5.8,
+                "end": 6.6,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 6.6,
+                "end": 7.4,
+                "state": "시선 분산 (좌우)"
+            },
+            {
+                "start": 7.4,
+                "end": 7.6,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 7.6,
+                "end": 7.8,
+                "state": "말하는 중"
+            },
+            {
+                "start": 7.8,
+                "end": 8.2,
+                "state": "눈썹 강조 (열정적)"
+            },
+            {
+                "start": 8.2,
+                "end": 8.4,
+                "state": "말하는 중"
+            },
+            {
+                "start": 8.4,
+                "end": 9.2,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 9.2,
+                "end": 9.6,
+                "state": "말하는 중"
+            },
+            {
+                "start": 9.6,
+                "end": 10.0,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 10.0,
+                "end": 11.0,
+                "state": "시선 분산 (좌우)"
+            },
+            {
+                "start": 11.0,
+                "end": 11.2,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 11.2,
+                "end": 11.6,
+                "state": "시선 분산 (좌우)"
+            },
+            {
+                "start": 11.6,
+                "end": 11.8,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 11.8,
+                "end": 12.0,
+                "state": "말하는 중"
+            },
+            {
+                "start": 12.0,
+                "end": 12.4,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 12.4,
+                "end": 12.6,
+                "state": "말하는 중"
+            },
+            {
+                "start": 12.6,
+                "end": 13.6,
+                "state": "정면 응시함"
+            }
+        ],
+        "detection_ratio": 100.0
+    }
+}

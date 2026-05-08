@@ -88,6 +88,31 @@
         video { width: 100%; display: block; }
         
         .info-box { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        
+        /* 🌟 실시간 AI 피드백 스타일 */
+        .ai-feedback-container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            display: none;
+        }
+        .ai-tip-card {
+            background: #2c3e50;
+            border-left: 8px solid #f1c40f;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #ecf0f1;
+            font-size: 1.2em;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.5s ease-out;
+        }
+        .ai-tip-card span.icon { font-size: 1.5em; }
+        @keyframes slideIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
+
         .card { 
             background: var(--card-bg); 
             padding: 20px; 
@@ -186,6 +211,14 @@
         </div>
     </div>
 
+    <!-- 🌟 실시간 AI 피드백 자막 영역 -->
+    <div class="ai-feedback-container" id="aiFeedbackContainer">
+        <div class="ai-tip-card">
+            <span class="icon">💡</span>
+            <span id="aiTipText">발표를 시작하세요! AI 코치가 실시간 조언을 드립니다.</span>
+        </div>
+    </div>
+
     <script>
         const videoInput = document.getElementById('videoInput');
         const uploadBtn = document.getElementById('uploadBtn');
@@ -194,11 +227,15 @@
         const statusMessage = document.getElementById('statusMessage');
         const progressFill = document.getElementById('progressFill');
         const mainContent = document.getElementById('mainContent');
+        const aiFeedbackContainer = document.getElementById('aiFeedbackContainer');
+        const aiTipText = document.getElementById('aiTipText');
         const videoPlayer = document.getElementById('videoPlayer');
         
         let faceData = {};
         let gestureData = {};
+        let timelineFeedback = {}; // 🌟 시간대별 LLM 피드백 저장
         let currentJobId = '';
+        let currentVideoName = '';
 
         videoInput.addEventListener('change', () => {
             if (videoInput.files.length > 0) {
@@ -225,10 +262,9 @@
                 });
                 const data = await response.json();
                 currentJobId = data.job_id;
+                currentVideoName = data.video_name;
                 
-                // 영상 미리 로드 (업로드된 경로 사용)
                 videoPlayer.src = data.video_url;
-                
                 startPolling(currentJobId);
             } catch (err) {
                 statusMessage.innerText = '업로드 실패: ' + err.message;
@@ -246,12 +282,12 @@
                     
                     if (data.status === 'Complete') {
                         clearInterval(interval);
-                        await loadAnalysisResults(jobId);
+                        const fileName = data.result.video_filename || currentVideoName;
+                        await loadAnalysisResults(fileName);
                     } else if (data.status === 'Error') {
                         clearInterval(interval);
                         statusMessage.innerText = '분석 중 오류 발생: ' + data.message;
                     } else {
-                        // 간단한 진행률 표시 (메시지 기반)
                         if (data.message && data.message.includes('/6')) {
                             const step = parseInt(data.message.split('/')[0]);
                             progressFill.style.width = (step / 6 * 100) + '%';
@@ -263,55 +299,88 @@
             }, 2000);
         }
 
-        async function loadAnalysisResults(jobId) {
-            statusMessage.innerText = '분석 완료! 데이터를 불러오는 중...';
+        async function loadAnalysisResults(fileName) {
+            statusMessage.innerText = '분석 완료! 통합 데이터를 불러오는 중...';
             try {
-                const faceRes = await fetch(`/results/face/face_results_${jobId}.json`);
-                const gestureRes = await fetch(`/results/gesture/gesture_results_${jobId}.json`);
+                const totalRes = await fetch(`/results/total/${fileName}_total.json`);
+                const totalData = await totalRes.json();
                 
-                faceData = await faceRes.json();
-                gestureData = await gestureRes.json();
+                timelineFeedback = totalData.timeline_feedback || {};
+                
+                // 🌟 raw_data에서 초단위 시각 데이터 매핑
+                totalData.raw_data.forEach(d => {
+                    const t = d.time.toFixed(2);
+                    faceData[t] = d.face;
+                    gestureData[t] = d.yolo; // 백그라운드에서는 yolo라는 키로 넘어옴
+                });
                 
                 statusContainer.style.display = 'none';
                 uploadSection.style.display = 'none';
                 mainContent.style.display = 'flex';
+                aiFeedbackContainer.style.display = 'block';
                 
-                alert('모든 분석이 완료되었습니다. 영상을 재생해 결과를 확인하세요!');
+                alert('모든 분석이 완료되었습니다. AI 실시간 코칭이 준비되었습니다!');
             } catch (err) {
-                statusMessage.innerText = '결과 데이터 로드 실패';
+                console.error("Data Load Error:", err);
+                statusMessage.innerText = '결과 데이터 로드 실패: ' + err.message;
             }
         }
 
+        let lastTipTime = -1;
+
         videoPlayer.addEventListener('timeupdate', () => {
-            const time = videoPlayer.currentTime.toFixed(2);
-            document.getElementById('currentTimeDisplay').innerText = `${time}s`;
+            const time = videoPlayer.currentTime;
+            const timeStr = time.toFixed(2);
+            document.getElementById('currentTimeDisplay').innerText = `${timeStr}s`;
 
             const keys = Object.keys(faceData);
             if (keys.length === 0) return;
 
-            // 현재 시간과 가장 가까운 데이터 찾기
-            const currentKey = keys.find(k => Math.abs(parseFloat(k) - time) < 0.2);
+            // 현재 시간과 가장 가까운 키 찾기
+            const currentKey = keys.find(k => Math.abs(parseFloat(k) - time) < 0.15);
 
             if (currentKey) {
                 const f = faceData[currentKey];
                 const g = gestureData[currentKey];
 
-                if (f) {
-                    document.getElementById('faceStatus').innerText = f.info.main_state;
-                    document.getElementById('smileStatus').innerText = (f.blendshapes.mouthSmileLeft * 100 || 0).toFixed(1) + '%';
+                if (f && f.has_face) {
+                    document.getElementById('faceStatus').innerText = f.info?.main_state || "정면";
+                    document.getElementById('smileStatus').innerText = (f.smile * 100 || 0).toFixed(1) + '%';
                     
                     let gazeText = "정면";
-                    if (f.blendshapes.eyeLookInLeft > 0.3) gazeText = "좌측";
-                    else if (f.blendshapes.eyeLookInRight > 0.3) gazeText = "우측";
+                    if (f.gaze_h > 0.3) gazeText = "우측";
+                    else if (f.gaze_h < -0.3) gazeText = "좌측";
                     document.getElementById('gazeStatus').innerText = gazeText;
+                } else {
+                    document.getElementById('faceStatus').innerText = "검출 불가";
                 }
 
                 if (g) {
-                    document.getElementById('gestureStatus').innerText = g.gesture_name;
-                    document.getElementById('lHandStatus').innerText = g.left_hand;
-                    document.getElementById('rHandStatus').innerText = g.right_hand;
+                    document.getElementById('gestureStatus').innerText = g.gesture_name || "기본 자세";
+                    document.getElementById('lHandStatus').innerText = g.left_hand_state || "낮음";
+                    document.getElementById('rHandStatus').innerText = g.right_hand_state || "낮음";
                     document.getElementById('armCrossedStatus').innerText = g.is_arm_crossed ? "⚠️ 감지됨" : "정상";
                 }
+            }
+
+            // 2. 🌟 LLM 실시간 피드백 업데이트 (1초 단위로 체크)
+            const currentSec = Math.floor(time);
+            if (currentSec !== lastTipTime) {
+                // 가장 가까운 피드백 키 찾기
+                const tipKeys = Object.keys(timelineFeedback).map(Number);
+                const activeTipKey = tipKeys.find(tk => Math.abs(tk - time) < 1.5);
+                
+                if (activeTipKey !== undefined) {
+                    const newTip = timelineFeedback[activeTipKey];
+                    if (aiTipText.innerText !== newTip) {
+                        aiTipText.innerText = newTip;
+                        // 애니메이션 리셋
+                        aiTipText.parentElement.style.animation = 'none';
+                        aiTipText.parentElement.offsetHeight; // reflow
+                        aiTipText.parentElement.style.animation = null;
+                    }
+                }
+                lastTipTime = currentSec;
             }
         });
     </script>

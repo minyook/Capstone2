@@ -206,8 +206,8 @@ def save_face_data(all_vision_results: list, frame_rate: int, job_id: str = "def
 
     face_out_dir = Path("analysis_json/MediaPipe_json")
     face_out_dir.mkdir(parents=True, exist_ok=True)
-    file_name = f"face_results_{job_id}.json"
+    file_name = f"{job_id}_face.json"
     with open(face_out_dir / file_name, 'w', encoding='utf-8') as f:
         json.dump(time_series_face, f, indent=4, ensure_ascii=False)
-    
+
     print(f"   > [UI/AI 통합] 시선/표정 리포트 저장 완료: {face_out_dir / file_name}")

@@ -173,7 +173,7 @@ def save_gesture_data(all_vision_results: list, frame_rate: int, job_id: str = "
 
     yolo_out_dir = Path("analysis_json/Yolo_json")
     yolo_out_dir.mkdir(parents=True, exist_ok=True)
-    file_name = f"gesture_results_{job_id}.json"
+    file_name = f"{job_id}_gesture.json"
     with open(yolo_out_dir / file_name, 'w', encoding='utf-8') as f:
         json.dump(time_series_gesture, f, indent=4, ensure_ascii=False)
     

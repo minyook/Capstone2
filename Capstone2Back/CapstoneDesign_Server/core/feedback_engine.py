@@ -32,6 +32,55 @@ class FeedbackEngine:
                 return self._get_gemini_feedback(prompt)
             return feedback
 
+    def generate_timeline_feedback(self, aligned_data: list, video_filename: str = "default") -> Dict[float, str]:
+        """
+        시간대별로 구체적인 피드백 팁을 생성합니다.
+        aligned_data: [ {start: 0.0, vision_avg: {...}, text: "..."}, ... ]
+        """
+        if not aligned_data:
+            return {5.0: "발표가 시작되었습니다! 적극적인 제스처를 사용해보세요."}
+
+        # 데이터 샘플링
+        sampled_data = aligned_data[::2] # 문장 단위 데이터이므로 적절히 조절
+        data_str = json.dumps([{
+            "t": d['start'],
+            "v": d.get('vision_avg', {}),
+            "text": d.get('text', "")
+        } for d in sampled_data], ensure_ascii=False)
+
+        prompt = f"""
+당신은 발표 코칭 전문가입니다. 제공된 문장별 분석 데이터를 바탕으로, 발표 영상 아래에 실시간으로 띄워줄 '한 줄 피드백'들을 작성하세요.
+
+[데이터 요약]
+{data_str}
+
+[요구사항]
+1. 특정 시간대(초)에 맞춰 발표자에게 도움이 되는 짧고 명확한 조언을 작성하십시오.
+2. 모든 시간에 다 넣을 필요는 없으며, 중요한 변화가 있는 지점 위주로 5~8개 정도의 핵심 팁을 추출하십시오.
+3. JSON 형식으로만 답변하십시오. (키: 시간(float), 값: 피드백 문자열)
+"""
+        
+        try:
+            raw_response = ""
+            if self.provider == "gemini" and os.getenv("GEMINI_API_KEY") and "YOUR_GEMINI" not in os.getenv("GEMINI_API_KEY"):
+                raw_response = self._get_gemini_feedback(prompt)
+            else:
+                # LLM을 사용할 수 없는 경우 (API 키 없음 등) 더미 데이터 생성
+                print("⚠️ API 키가 없거나 유효하지 않아 샘플 피드백을 생성합니다.")
+                return {
+                    3.0: "발표를 시작했습니다. 시선을 정면으로 유지하세요!",
+                    10.0: "목소리 톤이 일정합니다. 강조할 부분에서 변화를 주세요.",
+                    20.0: "제스처가 아주 자연스럽습니다. 계속 유지하세요!",
+                    30.0: "마무리까지 자신감 있는 목소리를 유지하세요."
+                }
+            
+            # JSON 파싱
+            clean_json = raw_response.strip().replace("```json", "").replace("```", "")
+            return json.loads(clean_json)
+        except Exception as e:
+            print(f"⚠️ 타임라인 피드백 생성 실패: {e}")
+            return {5.0: "자신감 있게 발표를 이어가세요!"}
+
     def _load_json_data(self, paths: Dict[str, Path]) -> Dict[str, Any]:
         """
         MediaPipe, YOLO, Voice, PPT 결과 파일에서 상세 데이터를 로드합니다.

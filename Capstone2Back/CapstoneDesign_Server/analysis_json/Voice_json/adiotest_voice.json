@@ -1,0 +1,66 @@
+{
+    "source": "audio_analyzer",
+    "segment_count": 5,
+    "segments": {
+        "00:00:00.00": {
+            "segment_index": 0,
+            "start": 0.0,
+            "end": 4.76,
+            "duration": 4.76,
+            "text": "안녕하십니까? 발표를 맡은 임진호 입니다",
+            "speech_rate_cps": 4.622,
+            "prosody": {
+                "jitter": 1.4,
+                "shimmer": 15.049
+            }
+        },
+        "00:00:04.75": {
+            "segment_index": 1,
+            "start": 4.76,
+            "end": 7.8,
+            "duration": 3.04,
+            "text": "지금 테스트를 하기 위해서 영상을 찍고 있습니다",
+            "speech_rate_cps": 8.553,
+            "prosody": {
+                "jitter": 1.844,
+                "shimmer": 14.708
+            }
+        },
+        "00:00:07.79": {
+            "segment_index": 2,
+            "start": 7.8,
+            "end": 10.76,
+            "duration": 2.96,
+            "text": "이유찬 쳐다보지 말고 니 할 것 같아요",
+            "speech_rate_cps": 7.095,
+            "prosody": {
+                "jitter": 2.342,
+                "shimmer": 19.096
+            }
+        },
+        "00:00:10.75": {
+            "segment_index": 3,
+            "start": 10.76,
+            "end": 12.56,
+            "duration": 1.8,
+            "text": "임윤욱 왜 웃고 계시죠?",
+            "speech_rate_cps": 7.222,
+            "prosody": {
+                "jitter": 2.373,
+                "shimmer": 15.831
+            }
+        },
+        "00:00:12.56": {
+            "segment_index": 4,
+            "start": 12.56,
+            "end": 14.28,
+            "duration": 1.72,
+            "text": "하고 미소 한번 지어주고",
+            "speech_rate_cps": 7.558,
+            "prosody": {
+                "jitter": 2.51,
+                "shimmer": 19.347
+            }
+        }
+    }
+}
