@@ -328,51 +328,79 @@
 
         let lastTipTime = -1;
 
+        let lastFaceState = { info: { main_state: "얼굴 미검출" }, smile: 0, gaze_h: 0, has_face: false };
+        let lastGestureState = { gesture_name: "기본 자세", left_hand_state: "낮음", right_hand_state: "낮음", is_arm_crossed: false };
+
         videoPlayer.addEventListener('timeupdate', () => {
             const time = videoPlayer.currentTime;
-            const timeStr = time.toFixed(2);
-            document.getElementById('currentTimeDisplay').innerText = `${timeStr}s`;
+            document.getElementById('currentTimeDisplay').innerText = `${time.toFixed(2)}s`;
 
+            const expectedIdx = Math.round(time * 5);
             const keys = Object.keys(faceData);
             if (keys.length === 0) return;
 
-            // 현재 시간과 가장 가까운 키 찾기
-            const currentKey = keys.find(k => Math.abs(parseFloat(k) - time) < 0.15);
+            // 🌟 검색 로직 강화: 현재 시간 기준 앞뒤로 5프레임(1초 범위) 탐색
+            let bestKey = null;
+            let minDiff = 0.5; 
 
-            if (currentKey) {
-                const f = faceData[currentKey];
-                const g = gestureData[currentKey];
+            for (let i = expectedIdx - 3; i <= expectedIdx + 3; i++) {
+                if (i < 0 || i >= keys.length) continue;
+                const k = keys[i];
+                const diff = Math.abs(parseFloat(k) - time);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    bestKey = k;
+                }
+            }
 
-                if (f && f.has_face) {
-                    document.getElementById('faceStatus').innerText = f.info?.main_state || "정면";
-                    document.getElementById('smileStatus').innerText = (f.smile * 100 || 0).toFixed(1) + '%';
-                    
-                    let gazeText = "정면";
-                    if (f.gaze_h > 0.3) gazeText = "우측";
-                    else if (f.gaze_h < -0.3) gazeText = "좌측";
-                    document.getElementById('gazeStatus').innerText = gazeText;
-                } else {
-                    document.getElementById('faceStatus').innerText = "검출 불가";
+            // 🌟 렌더링 로직 최강화: 모든 항목에 삼항 연산자 및 Fallback 적용
+            if (bestKey) {
+                const f = faceData[bestKey] || {};
+                const g = gestureData[bestKey] || {};
+
+                // 얼굴 데이터 처리
+                const faceVal = (f.has_face) ? (f.info?.main_state || "정면 응시") : "얼굴 미검출";
+                const smileVal = (f.has_face) ? (((f.smile || 0) * 100).toFixed(1) + '%') : "0.0%";
+                let gazeText = "-";
+                if (f.has_face) {
+                    gazeText = "정면";
+                    if ((f.gaze_h || 0) > 0.35) gazeText = "우측";
+                    else if ((f.gaze_h || 0) < -0.35) gazeText = "좌측";
                 }
 
-                if (g) {
-                    document.getElementById('gestureStatus').innerText = g.gesture_name || "기본 자세";
-                    document.getElementById('lHandStatus').innerText = g.left_hand_state || "낮음";
-                    document.getElementById('rHandStatus').innerText = g.right_hand_state || "낮음";
-                    document.getElementById('armCrossedStatus').innerText = g.is_arm_crossed ? "⚠️ 감지됨" : "정상";
-                }
+                document.getElementById('faceStatus').innerText = faceVal;
+                document.getElementById('smileStatus').innerText = smileVal;
+                document.getElementById('gazeStatus').innerText = gazeText;
+
+                // 제스처 데이터 처리
+                document.getElementById('gestureStatus').innerText = g.gesture_name || "기본 자세";
+                document.getElementById('lHandStatus').innerText = g.left_hand_state || "낮음";
+                document.getElementById('rHandStatus').innerText = g.right_hand_state || "낮음";
+                document.getElementById('armCrossedStatus').innerText = g.is_arm_crossed ? "⚠️ 감지됨" : "정상";
+
+                if (f.has_face) lastFaceState = f;
+                if (g && g.gesture_name) lastGestureState = g;
+            } else {
+                // 데이터를 일시적으로 못 찾은 경우 마지막 정상 상태 유지
+                document.getElementById('faceStatus').innerText = lastFaceState.info?.main_state || "얼굴 미검출";
+                document.getElementById('smileStatus').innerText = ((lastFaceState.smile || 0) * 100).toFixed(1) + '%';
+                document.getElementById('gestureStatus').innerText = lastGestureState.gesture_name || "기본 자세";
+                document.getElementById('lHandStatus').innerText = lastGestureState.left_hand_state || "낮음";
+                document.getElementById('rHandStatus').innerText = lastGestureState.right_hand_state || "낮음";
             }
 
             // 2. 🌟 LLM 실시간 피드백 업데이트 (1초 단위로 체크)
             const currentSec = Math.floor(time);
             if (currentSec !== lastTipTime) {
                 // 가장 가까운 피드백 키 찾기
-                const tipKeys = Object.keys(timelineFeedback).map(Number);
-                const activeTipKey = tipKeys.find(tk => Math.abs(tk - time) < 1.5);
+                const tipKeysStr = Object.keys(timelineFeedback);
+                const tipKeys = tipKeysStr.map(Number);
+                const activeTipIdx = tipKeys.findIndex(tk => Math.abs(tk - time) < 1.5);
                 
-                if (activeTipKey !== undefined) {
-                    const newTip = timelineFeedback[activeTipKey];
-                    if (aiTipText.innerText !== newTip) {
+                if (activeTipIdx !== -1) {
+                    const originalKey = tipKeysStr[activeTipIdx];
+                    const newTip = timelineFeedback[originalKey];
+                    if (newTip && aiTipText.innerText !== newTip) {
                         aiTipText.innerText = newTip;
                         // 애니메이션 리셋
                         aiTipText.parentElement.style.animation = 'none';

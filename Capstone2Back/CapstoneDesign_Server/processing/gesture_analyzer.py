@@ -61,19 +61,20 @@ def analyze_frame_gesture_yolo(frame_path: str) -> dict:
         data["has_pelvis"] = bool(np.any(kp_conf[11:13] > 0.5))
         data["has_ankles"] = bool(np.any(kp_conf[15:17] > 0.5))
 
-        # --- 제스처 분석 로직 ---
-        l_sh, r_sh = kp_xy[5], kp_xy[6]   # 어깨
+        # --- 제스처 분석 로직 개선 ---
+        l_sh, r_sh = kp_xy[5], kp_xy[6]   # 어깨 (5:L, 6:R)
         l_hip, r_hip = kp_xy[11], kp_xy[12] # 골반
         l_wr, r_wr = kp_xy[9], kp_xy[10]  # 손목
         l_el, r_el = kp_xy[7], kp_xy[8]   # 팔꿈치
 
         # 신뢰도 추출
         l_wr_conf, r_wr_conf = kp_conf[9], kp_conf[10]
+        
+        # 어깨 너비 계산 (기준점으로 활용)
+        shoulder_width = np.linalg.norm(l_sh - r_sh)
 
         def get_hand_state_kr(wrist, shoulder, hip, confidence):
-            if confidence < 0.5: 
-                return "확인 불가"
-            
+            if confidence < 0.5: return "확인 불가"
             if wrist[1] < shoulder[1]: return "높음"
             if wrist[1] < hip[1]: return "중간"
             return "낮음"
@@ -81,35 +82,33 @@ def analyze_frame_gesture_yolo(frame_path: str) -> dict:
         data["left_hand_state"] = get_hand_state_kr(l_wr, l_sh, l_hip, l_wr_conf)
         data["right_hand_state"] = get_hand_state_kr(r_wr, r_sh, r_hip, r_wr_conf)
 
-        # 1. 상세 제스처 판별
         gesture_name = "기본 자세"
 
-        # 팔짱 끼기
+        # 1. 팔짱 끼기 (가장 명확한 동작이므로 우선 순위)
         if l_wr_conf > 0.5 and r_wr_conf > 0.5:
-            dist_l_to_r_el = np.linalg.norm(l_wr - r_el)
-            dist_r_to_l_el = np.linalg.norm(r_wr - l_el)
-            if dist_l_to_r_el < 60 and dist_r_to_l_el < 60:
+            if np.linalg.norm(l_wr - r_el) < 50 and np.linalg.norm(r_wr - l_el) < 50:
                 data["is_arm_crossed"] = True
                 gesture_name = "팔짱 끼기"
 
-        # 양손 모으기 (경청/대기 자세)
-        if not data["is_arm_crossed"] and l_wr_conf > 0.5 and r_wr_conf > 0.5:
-            hand_dist = np.linalg.norm(l_wr - r_wr)
-            if hand_dist < 50:
+        # 2. 양손 모으기 (발표자의 대기 자세 - 가만히 있는 경우)
+        if gesture_name == "기본 자세" and l_wr_conf > 0.5 and r_wr_conf > 0.5:
+            if np.linalg.norm(l_wr - r_wr) < 60: # 양 손목 사이 거리가 가까우면
                 gesture_name = "양손 모으기"
 
-        # 가리키기 (Pointing)
+        # 3. 가리키기 및 강조 동작 (확실히 팔을 뻗었을 때만)
         if gesture_name == "기본 자세":
-            # 오른손으로 왼쪽 가리키기 (발표 스크린 방향)
-            if r_wr_conf > 0.5 and r_wr[0] < l_sh[0] and r_wr[1] < r_hip[1]:
+            # 오른손으로 왼쪽 가리키기 (팔을 몸 안쪽으로 가로질러 뻗음)
+            if r_wr_conf > 0.5 and r_wr[0] < (r_sh[0] - shoulder_width * 0.4) and r_wr[1] < r_hip[1]:
                 gesture_name = "오른손으로 왼쪽 가리키기"
             # 왼손으로 오른쪽 가리키기
-            elif l_wr_conf > 0.5 and l_wr[0] > r_sh[0] and l_wr[1] < l_hip[1]:
+            elif l_wr_conf > 0.5 and l_wr[0] > (l_sh[0] + shoulder_width * 0.4) and l_wr[1] < l_hip[1]:
                 gesture_name = "왼손으로 오른쪽 가리키기"
-            # 강조 제스처 (손이 높을 때)
+            # 강조 (손을 아주 높이 올렸을 때)
             elif data["left_hand_state"] == "높음" or data["right_hand_state"] == "높음":
                 gesture_name = "손을 높여 강조"
-            elif data["left_hand_state"] == "중간" or data["right_hand_state"] == "중간":
+            # 활발한 손동작 (손이 몸통 바깥쪽으로 어느 정도 나갔을 때만)
+            elif (l_wr_conf > 0.5 and abs(l_wr[0] - l_sh[0]) > shoulder_width * 0.3) or \
+                 (r_wr_conf > 0.5 and abs(r_wr[0] - r_sh[0]) > shoulder_width * 0.3):
                 gesture_name = "활발한 손동작"
 
         data["gesture_name"] = gesture_name

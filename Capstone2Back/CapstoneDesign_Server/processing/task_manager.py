@@ -195,11 +195,44 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         save_face_data(all_vision_results, FRAME_RATE, file_id)
         save_gesture_data(all_vision_results, FRAME_RATE, file_id)
 
-        # 🌟 [신규] 통합 Total JSON 생성 및 저장
+        # 🌟 [신규] 통합 Total JSON 생성 및 저장 (용량 최적화 버전)
         total_out_dir = Path("analysis_json/total_json")
         total_out_dir.mkdir(parents=True, exist_ok=True)
         
-        raw_data_json = [f.to_dict() for f in all_vision_results]
+        # UI에 필요한 핵심 데이터만 필터링하여 용량 축소
+        optimized_raw_data = []
+        for f in all_vision_results:
+            # 실시간 상태 판별 (face_analyzer 로직과 동일하게 유지)
+            face = f.face
+            state = "정면 응시함"
+            if not face.has_face:
+                state = "얼굴 미검출"
+            elif abs(face.gaze_h) > 0.35:
+                state = "시선 분산 (좌우)"
+            elif face.gaze_v < -0.2:
+                state = "시선 분산 (바닥)"
+            elif face.gaze_v > 0.3:
+                state = "시선 분산 (천장)"
+            elif face.brow_up > 0.45:
+                state = "눈썹 강조 (열정적)"
+            elif face.jaw_open > 0.3 or face.mouth_open > 0.3:
+                state = "말하는 중"
+
+            optimized_raw_data.append({
+                "time": f.time,
+                "face": {
+                    "has_face": face.has_face,
+                    "smile": face.smile,
+                    "gaze_h": face.gaze_h,
+                    "info": {"main_state": state}
+                },
+                "yolo": {
+                    "gesture_name": f.yolo.gesture_name,
+                    "left_hand_state": f.yolo.left_hand_state,
+                    "right_hand_state": f.yolo.right_hand_state,
+                    "is_arm_crossed": f.yolo.is_arm_crossed
+                }
+            })
         
         total_result = {
             "metadata": {
@@ -211,9 +244,9 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             },
             "summary": analysis_summary,
             "overall_feedback": llama_feedback,
-            "timeline_feedback": timeline_feedback, # LLM이 생성한 시간별 팁
-            "timeline_data": aligned_data, # 정렬된 시각+음성 데이터
-            "raw_data": raw_data_json # 🌟 프론트엔드에서 사용하는 원본 시각 데이터
+            "timeline_feedback": timeline_feedback,
+            "timeline_data": aligned_data,
+            "raw_data": optimized_raw_data # 최적화된 데이터만 저장
         }
         
         total_json_path = total_out_dir / f"{file_id}_total.json"
