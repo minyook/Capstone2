@@ -129,7 +129,11 @@ app.add_middleware(
 # 🌟 3. 영상 업로드 및 분석 시작 API
 # ==========================================
 @app.post("/api/upload")
-async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+async def upload_video(
+    background_tasks: BackgroundTasks, 
+    file: UploadFile = File(...),
+    persona: str = Form("soft")
+):
     job_id = str(uuid.uuid4())[:8]
     original_filename = Path(file.filename).stem # 확장자 제외 파일명 추출
     
@@ -157,15 +161,41 @@ async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = Fil
         frame_dir, 
         None, # video_dir를 None으로 주어 비디오 삭제 방지
         None, # custom_criteria
-        original_filename # 원본 파일명 추가 전달
+        original_filename, # 원본 파일명 추가 전달
+        persona # 페르소나 전달
     )
     
     return {"job_id": job_id, "video_url": f"/uploads/{job_id}/{save_filename}", "video_name": original_filename}
 
 @app.get("/api/status/{job_id}")
 async def get_status(job_id: str):
-    status = job_status.get(job_id, {"status": "Waiting", "message": "대기 중..."})
-    return status
+    # 1. 메모리에서 현재 작업 상태 확인
+    status = job_status.get(job_id)
+    if status:
+        return status
+    
+    # 2. 메모리에 없으면(서버 재시작 등) 저장된 파일 확인
+    total_json_dir = Path("analysis_json/total_json")
+    # 파일명에 job_id가 포함된 total.json 찾기
+    files = list(total_json_dir.glob(f"*{job_id}*_total.json"))
+    
+    if files:
+        try:
+            with open(files[0], 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return {
+                    "status": "Complete",
+                    "result": {
+                        "llama_feedback": data.get("overall_feedback"),
+                        "timeline_feedback": data.get("timeline_feedback"),
+                        "analysis_summary": data.get("summary"),
+                        "raw_data": data.get("raw_data")
+                    }
+                }
+        except:
+            pass
+
+    return {"status": "Waiting", "message": "대기 중이거나 만료된 작업입니다."}
 
 # ==========================================
 # 🌟 2. 챗봇 API 엔드포인트 및 데이터 모델 세팅
@@ -289,3 +319,22 @@ if __name__ == "__main__":
 
 
     # python main.py --test_video "adiotest.mp4" 미디어파이프 테스트 명령어
+    #2. 노트북으로 옮겨야 할 필수 파일/폴더
+
+    # 💻 [노트북 시연 가이드] - 모델 실행 및 환경 설정
+    # 1. 필수 파일/폴더 이동 (데스크탑 -> 노트북)
+     #    - LoRA 어댑터: training/exaone_presenter_lora (전체 폴더)
+     #    - 데이터셋: training/dataset.json
+     #    - 프론트엔드 설정: .env (Firebase Key)
+     #    - 백엔드 소스: core/, processing/, utils/, schemas/, main.py
+     #
+     # 2. 노트북 설치 및 실행 과정 (터미널)
+     #    (1) 가상환경 생성 및 활성화
+    #        python -m venv venv
+    #        .\venv\Scripts\activate
+    #    (2) 라이브러리 설치
+    #        pip install -r requirements.txt
+    #    (3) 허깅페이스 로그인 (최초 1회 필수)
+    #        pip install huggingface_hub
+    #        huggingface-cli login
+    #        # 생성하신 토큰(Hugging Face Token) 입력

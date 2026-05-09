@@ -1,10 +1,11 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useFirestoreSyncRevision } from "../context/FirestoreSyncContext";
 import { useFolders } from "../context/FoldersContext";
 import { findSubmissionById, submissionPrimaryFileName } from "../data/folderFilesStorage";
 import { loadScoresForView, totalFromScores, type StoredRubricScores } from "../data/analysisResultStorage";
 import { RUBRIC } from "../data/rubric";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import "./Analysis.css";
 
 export function Analysis() {
@@ -13,6 +14,11 @@ export function Analysis() {
   const [searchParams] = useSearchParams();
   const submissionId = searchParams.get("submissionId");
   const previewVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  const [overallFeedback, setOverallFeedback] = useState<string | null>(null);
+  const [timelineFeedback, setTimelineFeedback] = useState<Record<string, string>>({});
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
 
   const scores = useMemo<StoredRubricScores | null>(
     () => loadScoresForView(scopeId, submissionId),
@@ -23,7 +29,7 @@ export function Analysis() {
     [scopeId, submissionId, fsRevision]
   );
 
-  const hasData = scores !== null;
+  const hasData = scores !== null || overallFeedback !== null;
   const total = useMemo(() => (scores ? totalFromScores(scores) : null), [scores]);
   const previewVideoUrl = useMemo(() => {
     if (!submissionId) return null;
@@ -37,9 +43,103 @@ export function Analysis() {
     }
   }, [submissionId]);
 
+  // 서버 분석 결과 폴링 및 데이터 로드
+  useEffect(() => {
+    if (!submissionId) return;
+
+    let jobId: string | null = null;
+    try {
+      const raw = sessionStorage.getItem("overnight-analysis-job-ids-v1");
+      if (raw) {
+        const map = JSON.parse(raw) as Record<string, string>;
+        jobId = map[submissionId] ?? null;
+      }
+    } catch {}
+
+    if (!jobId) {
+      setAnalysisStatus("no_job");
+      return;
+    }
+
+    let timerId: ReturnType<typeof setInterval>;
+
+    const checkStatus = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/api/status/${jobId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        setAnalysisStatus(data.status);
+        
+        if (data.status === "Complete" && data.result) {
+          const resData = data.result;
+          setOverallFeedback(resData.llama_feedback);
+          setTimelineFeedback(resData.timeline_feedback || {});
+          
+          // 차트 데이터 변환 (가독성을 위해 10개마다 샘플링)
+          if (resData.raw_data) {
+            const formatted = resData.raw_data
+              .filter((_: any, i: number) => i % 5 === 0)
+              .map((d: any) => ({
+                time: Math.round(d.time),
+                gaze: Math.round((1 - Math.abs(d.face?.gaze_h || 0)) * 100),
+                smile: Math.round((d.face?.smile || 0) * 100)
+              }));
+            setChartData(formatted);
+          }
+
+          // 분석 결과(점수)를 로컬 스토리지에 저장 (다른 페이지 연동용)
+          if (resData.analysis_summary) {
+            const summary = resData.analysis_summary;
+            import("../data/analysisResultStorage").then(({ saveAnalysisResultForSubmission }) => {
+              // 실제 분석 데이터를 기반으로 점수 계산
+              const attitudeScore = Math.round((summary.gaze_score * 0.4 + summary.smile_score * 0.3 + (summary.face_detection_rate / 100) * 0.3) * 100);
+              const voiceScore = summary.avg_speed > 0.5 && summary.avg_speed < 2.0 ? 90 : 70;
+              const contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
+
+              const calculatedScores: any = {
+                "attitude": { 
+                  category: attitudeScore, 
+                  items: [
+                    Math.round(summary.gaze_score * 100), 
+                    Math.round(summary.smile_score * 100), 
+                    summary.gesture_status === "활발함" ? 90 : 70
+                  ] 
+                },
+                "content": { 
+                  category: contentScore, 
+                  items: [contentScore, contentScore - 5, contentScore + 5] 
+                },
+                "voice": { 
+                  category: voiceScore, 
+                  items: [voiceScore, 85, 80, 85] 
+                }
+              };
+              saveAnalysisResultForSubmission(scopeId, submissionId, calculatedScores);
+            });
+          }
+          
+          clearInterval(timerId);
+        }
+ else if (data.status === "Error") {
+          clearInterval(timerId);
+        }
+      } catch (e) {
+        console.error("Status check failed", e);
+      }
+    };
+
+    timerId = setInterval(checkStatus, 3000);
+    checkStatus();
+
+    return () => clearInterval(timerId);
+  }, [submissionId]);
+
   const emptyDesc =
     submissionId && !hasData
-      ? "이 제출에 대한 채점 결과가 아직 없습니다. 서버 분석이 끝나면 같은 화면에서 점수를 불러올 수 있습니다."
+      ? analysisStatus === "Analyzing" || analysisStatus === "Waiting" || analysisStatus === "Checking"
+        ? "서버에서 AI가 당신의 발표를 분석하고 있습니다... (약 1~2분 소요)"
+        : "이 제출에 대한 채점 결과가 아직 없습니다. 분석을 시작해 보세요."
       : "저장된 채점 결과가 없습니다. 발표 평가에서 제출한 영상의 분석이 완료되면 항목별 점수가 여기에 표시됩니다.";
 
   return (
@@ -99,6 +199,55 @@ export function Analysis() {
             {previewVideoUrl ? "발표 영상 다시보기" : "영상 미리보기가 없습니다"}
           </span>
         </div>
+
+        {chartData.length > 0 && (
+          <section className="analysis-section">
+            <h2>발표 흐름 분석 (시선 및 표정 변화)</h2>
+            <div className="analysis-chart-container">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="time" label={{ value: '시간 (초)', position: 'insideBottomRight', offset: -5 }} />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="gaze" name="시선 집중도" stroke="#7b61ff" strokeWidth={3} dot={false} />
+                  <Line type="monotone" dataKey="smile" name="미소 점수" stroke="#10b981" strokeWidth={3} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+              <p className="analysis-chart-hint">※ 그래프가 높을수록 정면을 잘 응시하거나 밝은 표정을 지었음을 의미합니다.</p>
+            </div>
+          </section>
+        )}
+
+        {Object.keys(timelineFeedback).length > 0 && (
+          <section className="analysis-section">
+            <h2>구간별 AI 코칭 팁</h2>
+            <div className="analysis-timeline-tips">
+              {Object.entries(timelineFeedback)
+                .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+                .map(([time, tip]) => (
+                <div key={time} className="analysis-tip-item">
+                  <span className="analysis-tip-time">{parseFloat(time).toFixed(1)}s</span>
+                  <p className="analysis-tip-text">{tip}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {overallFeedback && (
+          <section className="analysis-section">
+            <h2>AI 전문가 심층 피드백 (EXAONE 3.5 LoRA)</h2>
+            <div className="analysis-feedback-card">
+              <div className="analysis-feedback-content">
+                {overallFeedback.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="analysis-section">
           <h2>종합</h2>

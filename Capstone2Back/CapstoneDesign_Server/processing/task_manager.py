@@ -20,7 +20,7 @@ from core.exceptions import QualityException
 FRAME_RATE = 5
 job_status = {} 
 
-def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None):
+def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None, persona: str = "soft"):
     all_vision_results = []
     audio_path = frame_dir / "audio.wav" 
     
@@ -151,45 +151,17 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             except Exception:
                 ppt_summary = "PPT 결과 파일 읽기 실패"
 
-        # 7. AI 피드백 생성 (FeedbackEngine 사용)
+        # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
         from core.feedback_engine import feedback_engine
         
-        # 관련 JSON 파일 경로 수집 (새로운 analysis_json 경로 적용)
-        json_paths = {
-            "face": Path(f"analysis_json/MediaPipe_json/{file_id}_face.json"),
-            "gesture": Path(f"analysis_json/Yolo_json/{file_id}_gesture.json"),
-            "voice": Path(f"analysis_json/Voice_json/{file_id}_voice.json"),
-            "ppt": None
-        }
+        # 프로젝트 이름(file_id)을 기반으로 모든 데이터를 취합하여 피드백 생성
+        llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona)
         
-        # PPT 결과 파일 경로 탐색
-        ppt_results_dir = Path("analysis_json/ppt_json")
-        if ppt_results_dir.exists():
-            ppt_files = list(ppt_results_dir.glob("*.json"))
-            if ppt_files:
-                ppt_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
-                json_paths["ppt"] = ppt_files[0]
-
-        analysis_summary = {
-            "video_type": video_type.value,
-            "total_time": total_frames / FRAME_RATE,
-            "face_detection_rate": (face_stats['detected_count'] / total_frames) * 100,
-            "gaze_score": 1 - face_stats['gaze_h'],
-            "smile_score": face_stats['smile'],
-            "gesture_status": "활발함" if pose_stats['detected_count'] > 0 else "제한적임",
-            "avg_pitch": avg_pitch if audio_segments else 0,
-            "avg_db": avg_db if audio_segments else 0,
-            "avg_speed": avg_speed if audio_segments else 1.0,
-            "ppt_summary": ppt_summary
-        }
-
-        llama_feedback = feedback_engine.generate_feedback(analysis_summary, unified_rubric, json_paths)
-        
-        print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 {'='*20}")
+        print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 (LoRA/RTX 5060 Ti) {'='*20}")
         print(llama_feedback)
 
         # 🌟 타임라인 피드백 생성 (실시간 자막용)
-        timeline_feedback = feedback_engine.generate_timeline_feedback(aligned_data, file_id)
+        timeline_feedback = feedback_engine.generate_timeline_feedback(aligned_data, file_id, persona)
 
         # 🌟 기존 저장 방식 유지
         save_face_data(all_vision_results, FRAME_RATE, file_id)

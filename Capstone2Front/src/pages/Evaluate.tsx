@@ -27,6 +27,8 @@ export function Evaluate() {
   const [pptFile, setPptFile] = useState<File | null>(null);
 
   const [videoName, setVideoName] = useState<string | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [persona, setPersona] = useState<string>("soft");
 
   const [isRecording, setIsRecording] = useState(false);
 
@@ -123,6 +125,10 @@ export function Evaluate() {
         const ext = blob.type.includes("mp4") ? "mp4" : "webm";
         const stampedName = `recorded-${new Date().toISOString().replace(/[:.]/g, "-")}.${ext}`;
         setRecordedVideoName(stampedName);
+        
+        // Blob을 File 객체로 변환하여 저장
+        const file = new File([blob], stampedName, { type: blob.type });
+        setVideoFile(file);
 
         if (recordedVideoUrl) {
           URL.revokeObjectURL(recordedVideoUrl);
@@ -142,7 +148,7 @@ export function Evaluate() {
   };
 
   const handleSelectRecordedVideo = () => {
-    if (!recordedVideoName || !recordedVideoUrl) return;
+    if (!recordedVideoName || !recordedVideoUrl || !videoFile) return;
     setVideoName(recordedVideoName);
     setSelectedVideoPreviewUrl(recordedVideoUrl);
     setStep((s) => (s < 3 ? 3 : s));
@@ -155,6 +161,7 @@ export function Evaluate() {
     }
     setRecordedVideoUrl(null);
     setRecordedVideoName(null);
+    setVideoFile(null);
     setCameraError("");
   };
 
@@ -162,39 +169,64 @@ export function Evaluate() {
 
   const hasFolders = folders.length > 0;
 
-  const canAnalyze = Boolean(folderId && pptName && pptFile && videoName && hasFolders);
+  const canAnalyze = Boolean(folderId && pptName && pptFile && videoName && videoFile && hasFolders);
 
   const handleAnalyzeClick = async () => {
-    if (!pptFile) {
-      setSubmitError("PPT 파일을 먼저 선택해 주세요.");
+    if (!pptFile || !videoFile) {
+      setSubmitError("PPT와 영상 파일을 모두 선택해 주세요.");
       return;
     }
 
     setSubmitError("");
     setIsSubmitting(true);
     try {
-      const formData = new FormData();
-      formData.append("file", pptFile);
+      // 1. PPT 분석 요청
+      const pptFormData = new FormData();
+      pptFormData.append("file", pptFile);
 
-      const res = await fetch("http://127.0.0.1:8000/api/ppt/analyze", {
+      const pptRes = await fetch("http://127.0.0.1:8000/api/ppt/analyze", {
         method: "POST",
-        body: formData,
+        body: pptFormData,
       });
-      if (!res.ok) {
-        const err = (await res.json().catch(() => null)) as { detail?: string } | null;
+      if (!pptRes.ok) {
+        const err = (await pptRes.json().catch(() => null)) as { detail?: string } | null;
         throw new Error(err?.detail ?? "PPT 분석 요청에 실패했습니다.");
       }
 
+      // 2. 영상 업로드 및 분석 시작 요청
+      const videoFormData = new FormData();
+      videoFormData.append("file", videoFile);
+      videoFormData.append("persona", persona);
+
+      const videoRes = await fetch("http://127.0.0.1:8000/api/upload", {
+        method: "POST",
+        body: videoFormData,
+      });
+      if (!videoRes.ok) {
+        throw new Error("영상 업로드 및 분석 요청에 실패했습니다.");
+      }
+      const videoData = await videoRes.json();
+      const jobId = videoData.job_id;
+
+      // 3. 로컬 저장소에 제출 정보 등록
       const submission = await registerFolderFiles(scopeId, folderId, { pptName, videoName });
-      if (submission && selectedVideoPreviewUrl) {
-        try {
-          const raw = sessionStorage.getItem("overnight-video-preview-by-submission-v1");
-          const map = raw ? (JSON.parse(raw) as Record<string, string>) : {};
-          map[submission.id] = selectedVideoPreviewUrl;
-          sessionStorage.setItem("overnight-video-preview-by-submission-v1", JSON.stringify(map));
-        } catch {
-          /* ignore */
+      if (submission) {
+        if (selectedVideoPreviewUrl) {
+          try {
+            const raw = sessionStorage.getItem("overnight-video-preview-by-submission-v1");
+            const map = raw ? (JSON.parse(raw) as Record<string, string>) : {};
+            map[submission.id] = selectedVideoPreviewUrl;
+            sessionStorage.setItem("overnight-video-preview-by-submission-v1", JSON.stringify(map));
+          } catch {}
         }
+        
+        // Job ID 저장 (Analysis 페이지에서 결과 조회를 위해)
+        try {
+          const raw = sessionStorage.getItem("overnight-analysis-job-ids-v1");
+          const map = raw ? (JSON.parse(raw) as Record<string, string>) : {};
+          map[submission.id] = jobId;
+          sessionStorage.setItem("overnight-analysis-job-ids-v1", JSON.stringify(map));
+        } catch {}
       }
       navigate(
         submission
@@ -310,6 +342,29 @@ export function Evaluate() {
         </section>
 
 
+
+        <section className="evaluate-panel" aria-labelledby="persona-title">
+          <h2 id="persona-title" className="evaluate-panel__title">
+            AI 코칭 스타일
+          </h2>
+          <p className="evaluate-panel__desc">원하는 AI 전문가의 피드백 스타일을 선택해 주세요.</p>
+          <div className="evaluate-persona-row">
+            <button
+              type="button"
+              className={`evaluate-persona-btn ${persona === "soft" ? "active" : ""}`}
+              onClick={() => setPersona("soft")}
+            >
+              🌸 부드러운 조언자
+            </button>
+            <button
+              type="button"
+              className={`evaluate-persona-btn ${persona === "sharp" ? "active" : ""}`}
+              onClick={() => setPersona("sharp")}
+            >
+              🔥 냉철한 전문가
+            </button>
+          </div>
+        </section>
 
         <ol className="evaluate-steps" aria-label="진행 단계">
 
@@ -473,6 +528,7 @@ export function Evaluate() {
                   const f = e.target.files?.[0];
 
                   setVideoName(f?.name ?? null);
+                  setVideoFile(f ?? null);
                   if (f) {
                     setSelectedVideoPreviewUrl(URL.createObjectURL(f));
                   }
