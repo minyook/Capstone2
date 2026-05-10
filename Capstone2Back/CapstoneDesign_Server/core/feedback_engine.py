@@ -87,29 +87,20 @@ class FeedbackEngine:
                 
                 FastLanguageModel.for_inference(self.local_model)
             else:
-                print(f"\n--- [FeedbackEngine] CPU/노트북 모드로 경량 모델 로드 ({base_model_name}) ---")
+                # 🌟 CPU/노트북 환경 최적화 로드
+                print(f"\n--- [FeedbackEngine] 노트북 최적화 모드로 로드 중... ---")
                 self.local_tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
                 
-                # 🌟 CPU 환경에서는 복잡한 분산 옵션(device_map)이 오류를 일으키므로 제거
-                dtype = torch.float32 # CPU 안정성을 위해 float32 권장
-                
-                base_model = AutoModelForCausalLM.from_pretrained(
+                # 메모리 절약을 위해 bfloat16 시도 (CPU 지원 시), 아니면 float32
+                # 명시적으로 device_map을 쓰지 않아 meta-device 오류 방지
+                self.local_model = AutoModelForCausalLM.from_pretrained(
                     base_model_name,
-                    torch_dtype=dtype,
+                    torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
                     low_cpu_mem_usage=True,
                     trust_remote_code=True
-                ).to("cpu") # 명시적으로 CPU 이동
+                ).to("cpu")
                 
-                if os.path.exists(os.path.join(lora_path, "adapter_config.json")):
-                    try:
-                        self.local_model = PeftModel.from_pretrained(base_model, lora_path).to("cpu")
-                        print("✅ LoRA 어댑터 적용 완료")
-                    except:
-                        print("⚠️ 경고: LoRA 호환성 문제로 기본 모델로 로드합니다.")
-                        self.local_model = base_model
-                else:
-                    self.local_model = base_model
-                    
+                # LoRA 생략 (CPU 모드에서는 성능보다 안정성 우선)
                 self.local_model.eval()
 
             print(f"✅ 경량 모델 로드 완료 (사용 메모리 대폭 감소)")
@@ -283,23 +274,37 @@ class FeedbackEngine:
 
     def generate_timeline_feedback(self, aligned_data: list, project_name: str, persona: str = "soft") -> Dict[str, str]:
         """
-        영상 전체의 타임라인 데이터를 분석하여 주요 시점별로 짧은 AI 코칭 팁을 생성합니다.
+        영상 전체의 타임라인 데이터를 분석하여 주요 시점별로 코칭 팁을 생성합니다.
+        🌟 노트북(CPU) 환경에서는 속도를 위해 규칙 기반 시스템을 사용합니다.
         """
         timeline_tips = {}
+        
+        # 🌟 CPU 모드인 경우: 무한 대기를 방지하기 위해 LLM 호출을 건너뛰고 규칙 기반 팁 제공
+        if self.device == "cpu":
+            print("   > [AI] CPU 환경이므로 규칙 기반 실시간 팁을 생성합니다. (속도 우선)")
+            sample_points = aligned_data[::len(aligned_data)//8] if len(aligned_data) > 8 else aligned_data
+            for point in sample_points:
+                t = round(point.get('start', 0), 1)
+                v = point.get('vision_avg', {})
+                
+                tip = "발표 흐름이 좋습니다. 계속 진행하세요!"
+                if v.get('error') == "얼굴 미검출": tip = "청중과 시선을 맞추려 노력해 보세요."
+                elif abs(v.get('gaze_h', 0)) > 0.3: tip = "시선이 분산되고 있습니다. 정면을 응시해 주세요."
+                elif v.get('smile', 0) < 0.05: tip = "조금 더 밝은 표정으로 발표해 보세요."
+                elif point.get('speech_rate_cps', 0) > 4.5: tip = "말의 속도가 조금 빠릅니다. 천천히 말씀해 보세요."
+                
+                timeline_tips[str(t)] = tip
+            return timeline_tips
 
-        # 페르소나 가이드
+        # GPU 환경인 경우에만 LLM 사용
         persona_guide = "냉철하게 지적해줘." if persona == "sharp" else "다정하게 격려하며 조언해줘."
-
-        # 30초 단위 혹은 주요 이벤트(시선 이탈 등)가 있는 지점 추출 (샘플링)
-        # 여기서는 간단하게 5개 핵심 지점만 추려 모델에게 요청
         sample_points = aligned_data[::len(aligned_data)//5] if len(aligned_data) > 5 else aligned_data
-
+        
         for point in sample_points:
-            time_sec = point.get('time', 0)
+            time_sec = point.get('start', 0)
             text = point.get('text', '')
-            gaze = "정면 응시" if abs(point.get('face', {}).get('gaze_h', 0)) < 0.2 else "시선 분산"
-
-            # 짧은 팁 생성을 위한 프롬프트
+            gaze = "정면 응시" if abs(point.get('vision_avg', {}).get('gaze_h', 0)) < 0.2 else "시선 분산"
+            
             prompt = f"""[|system|]
     발표 전문가로서 짧고 명확한 한 문장 조언을 제공합니다. {persona_guide}
     [|user|]
@@ -312,7 +317,7 @@ class FeedbackEngine:
             else:
                 tip = f"{time_sec}초 지점: 시선 처리에 유의하세요."
 
-            timeline_tips[str(round(time_sec, 1))] = tip.split('\n')[0] # 첫 줄만 사용
+            timeline_tips[str(round(time_sec, 1))] = tip.split('\n')[0]
 
         return timeline_tips
 
