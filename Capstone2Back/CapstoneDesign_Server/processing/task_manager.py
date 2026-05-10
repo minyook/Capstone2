@@ -170,6 +170,12 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
         from core.feedback_engine import feedback_engine
         
+        # [신규] 생성 중임을 알림 (CPU 모드 대응)
+        job_status[job_id] = {
+            "status": "Analyzing", 
+            "message": "7/7: AI 피드백 생성 중... (CPU 모드이므로 1~2분 정도 소요될 수 있습니다)"
+        }
+        
         # 프로젝트 이름(file_id)을 기반으로 모든 데이터를 취합하여 피드백 생성
         llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona)
         
