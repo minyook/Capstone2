@@ -90,20 +90,19 @@ class FeedbackEngine:
                 print(f"\n--- [FeedbackEngine] CPU/노트북 모드로 경량 모델 로드 ({base_model_name}) ---")
                 self.local_tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
                 
-                # 🌟 메모리 절약을 위해 float16/bfloat16 사용
-                dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
+                # 🌟 CPU 환경에서는 복잡한 분산 옵션(device_map)이 오류를 일으키므로 제거
+                dtype = torch.float32 # CPU 안정성을 위해 float32 권장
                 
                 base_model = AutoModelForCausalLM.from_pretrained(
                     base_model_name,
                     torch_dtype=dtype,
-                    device_map="auto", # 자동으로 램에 분산
                     low_cpu_mem_usage=True,
                     trust_remote_code=True
-                )
+                ).to("cpu") # 명시적으로 CPU 이동
                 
                 if os.path.exists(os.path.join(lora_path, "adapter_config.json")):
                     try:
-                        self.local_model = PeftModel.from_pretrained(base_model, lora_path)
+                        self.local_model = PeftModel.from_pretrained(base_model, lora_path).to("cpu")
                         print("✅ LoRA 어댑터 적용 완료")
                     except:
                         print("⚠️ 경고: LoRA 호환성 문제로 기본 모델로 로드합니다.")
