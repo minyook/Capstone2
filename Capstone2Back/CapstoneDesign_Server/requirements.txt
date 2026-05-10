@@ -27,4 +27,3 @@ praat-parselmouth
 # --- Document & Data Analysis ---
 python-pptx
 scikit-learn
-recharts-dependency-placeholder
