@@ -137,6 +137,12 @@ def analyze_prosody_for_segments(audio_path: Path, segments: list, video_filenam
 
         print(f"   > [5/6] ✅ 음성 운율 분석 완료.")
         save_voice_data(segments, video_filename=video_filename)
+        
+        # 🌟 명시적으로 메모리 해제 (Windows 파일 잠금 방지)
+        del snd
+        import gc
+        gc.collect()
+        
         return segments 
 
     except Exception as e:

@@ -17,6 +17,7 @@ export function Analysis() {
 
   const [overallFeedback, setOverallFeedback] = useState<string | null>(null);
   const [timelineFeedback, setTimelineFeedback] = useState<Record<string, string>>({});
+  const [activeTip, setActiveTip] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
 
@@ -24,6 +25,28 @@ export function Analysis() {
     () => loadScoresForView(scopeId, submissionId),
     [scopeId, submissionId, fsRevision]
   );
+
+  // 비디오 재생 시간에 맞춰 실시간 피드백 업데이트
+  const handleTimeUpdate = () => {
+    if (!previewVideoRef.current || !timelineFeedback) return;
+    const time = previewVideoRef.current.currentTime;
+    
+    const tipKeysStr = Object.keys(timelineFeedback);
+    if (tipKeysStr.length === 0) return;
+
+    const tipKeys = tipKeysStr.map(Number);
+    // 현재 시간 기준 1.5초 이내의 피드백 탐색
+    const nearestKeyIdx = tipKeys.findIndex(tk => Math.abs(tk - time) < 1.5);
+    
+    if (nearestKeyIdx !== -1) {
+      const originalKey = tipKeysStr[nearestKeyIdx];
+      const tip = timelineFeedback[originalKey];
+      if (tip && tip !== activeTip) {
+        setActiveTip(tip);
+      }
+    }
+  };
+
   const submissionMeta = useMemo(
     () => (submissionId ? findSubmissionById(scopeId, submissionId) : null),
     [scopeId, submissionId, fsRevision]
@@ -93,18 +116,20 @@ export function Analysis() {
             const summary = resData.analysis_summary;
             import("../data/analysisResultStorage").then(({ saveAnalysisResultForSubmission }) => {
               // 실제 분석 데이터를 기반으로 점수 계산
-              const attitudeScore = Math.round((summary.gaze_score * 0.4 + summary.smile_score * 0.3 + (summary.face_detection_rate / 100) * 0.3) * 100);
+              const gazeScoreVal = Math.round(summary.gaze_score * 100);
+              const smileScoreVal = Math.round(summary.smile_score * 100);
+              const gestureScoreVal = summary.gesture_status === "활발함" ? 90 : 70;
+              
+              // 발표 태도 점수: 시선(40%) + 표정(30%) + 제스처(30%)
+              const attitudeScore = Math.round(gazeScoreVal * 0.4 + smileScoreVal * 0.3 + gestureScoreVal * 0.3);
+              
               const voiceScore = summary.avg_speed > 0.5 && summary.avg_speed < 2.0 ? 90 : 70;
               const contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
 
               const calculatedScores: any = {
                 "attitude": { 
                   category: attitudeScore, 
-                  items: [
-                    Math.round(summary.gaze_score * 100), 
-                    Math.round(summary.smile_score * 100), 
-                    summary.gesture_status === "활발함" ? 90 : 70
-                  ] 
+                  items: [gazeScoreVal, smileScoreVal, gestureScoreVal] 
                 },
                 "content": { 
                   category: contentScore, 
@@ -193,12 +218,20 @@ export function Analysis() {
               src={previewVideoUrl}
               controls
               playsInline
+              onTimeUpdate={handleTimeUpdate}
             />
           ) : null}
           <span className="analysis-player__cap">
             {previewVideoUrl ? "발표 영상 다시보기" : "영상 미리보기가 없습니다"}
           </span>
         </div>
+
+        {activeTip && (
+          <div className="analysis-live-tip">
+            <span className="analysis-live-tip__icon">💡</span>
+            <span className="analysis-live-tip__text">{activeTip}</span>
+          </div>
+        )}
 
         {chartData.length > 0 && (
           <section className="analysis-section">

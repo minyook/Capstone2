@@ -132,6 +132,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
 
         # 음성 데이터 집계
         voice_summary = "음성 데이터 없음"
+        avg_speed = 0 # 초기화
         if audio_segments:
             avg_pitch = sum(s.get('pitch', 0) for s in audio_segments) / len(audio_segments)
             avg_db = sum(s.get('db', 0) for s in audio_segments) / len(audio_segments)
@@ -150,6 +151,21 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                                    f"주요 키워드: {', '.join(ppt_data.get('keywords', []))}")
             except Exception:
                 ppt_summary = "PPT 결과 파일 읽기 실패"
+
+        # [신규] 분석 요약 데이터 생성 (Feedback Engine 및 UI용)
+        active_gestures = ["오른손으로 왼쪽 가리키기", "왼손으로 오른쪽 가리키기", "손을 높여 강조", "활발한 손동작"]
+        active_count = sum(1 for res in all_vision_results if res.yolo.gesture_name in active_gestures)
+        
+        analysis_summary = {
+            "face_detection_rate": (face_stats["detected_count"] / total_frames * 100) if total_frames > 0 else 0,
+            "gaze_score": max(0, 1.0 - (face_stats["gaze_h"] + face_stats["gaze_v"])) if face_stats["detected_count"] > 0 else 0,
+            "smile_score": face_stats["smile"],
+            "gesture_status": "활발함" if (active_count / total_frames) > 0.1 else "정적임",
+            "avg_speed": avg_speed,
+            "ppt_summary": ppt_summary,
+            "voice_summary": voice_summary,
+            "video_type": video_type.value
+        }
 
         # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
         from core.feedback_engine import feedback_engine

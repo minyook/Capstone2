@@ -42,10 +42,30 @@ def save_upload_file(upload_file: UploadFile, destination: Path) -> Path:
 
 def cleanup_dirs(*dirs: Path):
     """분석 완료 후 사용된 임시 폴더들을 재귀적으로 삭제합니다."""
+    import time
+    import gc
+    import shutil
+
+    # 가비지 컬렉션을 강제로 실행하여 열려있는 파일 핸들을 해제 시도
+    gc.collect()
+
     for d in dirs:
         if d and os.path.exists(d):
-            try:
-                shutil.rmtree(d)
-                print(f"   > 임시 폴더 삭제: {d}")
-            except Exception as e:
-                print(f"   > 임시 폴더 삭제 실패: {d}, 오류: {e}")
+            # Windows에서 가끔 파일 잠금으로 인해 삭제 실패하는 경우 대응
+            for i in range(5): # 재시도 횟수 증가
+                try:
+                    # 읽기 전용 속성이 있으면 삭제가 안 될 수 있으므로 처리하는 내부 함수
+                    def remove_readonly(func, path, excinfo):
+                        import stat
+                        os.chmod(path, stat.S_IWRITE)
+                        func(path)
+
+                    shutil.rmtree(d, onerror=remove_readonly)
+                    print(f"   > 임시 폴더 삭제 성공: {d}")
+                    break
+                except Exception as e:
+                    if i == 4:
+                        print(f"   > 임시 폴더 삭제 최종 실패: {d}, 오류: {e}")
+                    else:
+                        print(f"   > 임시 폴더 삭제 대기 중... ({i+1}/5) - 사유: {e}")
+                        time.sleep(2) # 대기 시간 증가
