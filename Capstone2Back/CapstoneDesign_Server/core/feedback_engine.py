@@ -239,21 +239,41 @@ class FeedbackEngine:
         return prompt
 
     def _get_local_exaone_feedback(self, prompt: str) -> str:
-        """로컬 RTX 5060 Ti에서 추론 실행"""
-        inputs = self.local_tokenizer([prompt], return_tensors = "pt").to("cuda")
-        outputs = self.local_model.generate(
-            **inputs, 
-            max_new_tokens = 1024, 
-            use_cache = True,
-            temperature = 0.7,
-            top_p = 0.9
-        )
-        response = self.local_tokenizer.batch_decode(outputs)
-        # assistant 답변만 추출
+        """로컬 환경(GPU/CPU)에 맞춰 피드백 생성"""
         try:
-            return response[0].split("[|assistant|]")[1].replace(self.local_tokenizer.eos_token, "").strip()
-        except:
-            return response[0]
+            # 🌟 장치(cuda/cpu) 자동 대응
+            inputs = self.local_tokenizer([prompt], return_tensors = "pt").to(self.device)
+            
+            # 생성 옵션 최적화
+            generate_kwargs = {
+                "input_ids": inputs.input_ids,
+                "attention_mask": inputs.attention_mask,
+                "max_new_tokens": 1024,
+                "do_sample": True,
+                "temperature": 0.7,
+                "top_p": 0.9,
+                "use_cache": True,
+            }
+            
+            # Unsloth 모델이 아닐 경우(일반 CPU 모드)에는 eos_token_id 명시
+            if not UNSLOTH_AVAILABLE:
+                generate_kwargs["eos_token_id"] = self.local_tokenizer.eos_token_id
+
+            with torch.no_grad():
+                outputs = self.local_model.generate(**generate_kwargs)
+            
+            response = self.local_tokenizer.batch_decode(outputs)
+            
+            # assistant 답변만 추출
+            try:
+                if "[|assistant|]" in response[0]:
+                    return response[0].split("[|assistant|]")[1].replace(self.local_tokenizer.eos_token, "").strip()
+                return response[0].strip()
+            except:
+                return response[0]
+        except Exception as e:
+            print(f"⚠️ 로컬 추론 중 오류 발생: {e}")
+            return "로컬 AI 모델 응답 실패. 서버 로그를 확인하세요."
 
     def _get_gemini_feedback(self, prompt: str) -> str:
         try:
