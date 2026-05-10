@@ -381,6 +381,37 @@
   line-height: 1.45;
 }
 
+/* 🌟 타임라인 슬라이드(캐러셀) 스타일 */
+.analysis-timeline-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.analysis-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.analysis-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.analysis-carousel-dot--active {
+  background: var(--primary);
+  width: 20px;
+  border-radius: 4px;
+}
+
 .analysis-chart-container {
   background: #fff;
   border: 1px solid var(--border);
@@ -395,6 +426,32 @@
   font-size: 0.75rem;
   color: var(--text-muted);
   text-align: center;
+}
+
+/* 🌟 마크다운 스타일 보정 */
+.analysis-feedback-content h1, 
+.analysis-feedback-content h2, 
+.analysis-feedback-content h3 {
+  margin: 1.25rem 0 0.75rem;
+  color: var(--primary);
+}
+
+.analysis-feedback-content h3 {
+  font-size: 1.1rem;
+}
+
+.analysis-feedback-content strong {
+  color: var(--primary);
+}
+
+.analysis-feedback-content ul, 
+.analysis-feedback-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.analysis-feedback-content li {
+  margin-bottom: 0.5rem;
 }
 
 @media (min-width: 900px) {

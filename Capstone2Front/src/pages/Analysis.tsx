@@ -6,6 +6,7 @@ import { findSubmissionById, submissionPrimaryFileName } from "../data/folderFil
 import { loadScoresForView, totalFromScores, type StoredRubricScores } from "../data/analysisResultStorage";
 import { RUBRIC } from "../data/rubric";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import ReactMarkdown from "react-markdown";
 import "./Analysis.css";
 
 export function Analysis() {
@@ -20,11 +21,33 @@ export function Analysis() {
   const [activeTip, setActiveTip] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
+  
+  // 🌟 슬라이드 관련 상태
+  const [tipPageIndex, setTipPageIndex] = useState(0);
 
   const scores = useMemo<StoredRubricScores | null>(
     () => loadScoresForView(scopeId, submissionId),
     [scopeId, submissionId, fsRevision]
   );
+
+  // 🌟 타임라인 팁을 3개씩 묶기
+  const tipChunks = useMemo(() => {
+    const entries = Object.entries(timelineFeedback).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
+    const chunks = [];
+    for (let i = 0; i < entries.length; i += 3) {
+      chunks.push(entries.slice(i, i + 3));
+    }
+    return chunks;
+  }, [timelineFeedback]);
+
+  // 🌟 슬라이드 자동 전환 (5초마다)
+  useEffect(() => {
+    if (tipChunks.length <= 1) return;
+    const interval = setInterval(() => {
+      setTipPageIndex((prev) => (prev + 1) % tipChunks.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [tipChunks]);
 
   // 비디오 재생 시간에 맞춰 실시간 피드백 업데이트
   const handleTimeUpdate = () => {
@@ -253,30 +276,40 @@ export function Analysis() {
           </section>
         )}
 
-        {Object.keys(timelineFeedback).length > 0 && (
+        {tipChunks.length > 0 && (
           <section className="analysis-section">
             <h2>구간별 AI 코칭 팁</h2>
-            <div className="analysis-timeline-tips">
-              {Object.entries(timelineFeedback)
-                .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
-                .map(([time, tip]) => (
-                <div key={time} className="analysis-tip-item">
-                  <span className="analysis-tip-time">{parseFloat(time).toFixed(1)}s</span>
-                  <p className="analysis-tip-text">{tip}</p>
+            <div className="analysis-timeline-carousel">
+              <div className="analysis-timeline-tips">
+                {tipChunks[tipPageIndex].map(([time, tip]) => (
+                  <div key={time} className="analysis-tip-item">
+                    <span className="analysis-tip-time">{parseFloat(time).toFixed(1)}s</span>
+                    <p className="analysis-tip-text">{tip}</p>
+                  </div>
+                ))}
+              </div>
+              {tipChunks.length > 1 && (
+                <div className="analysis-carousel-dots">
+                  {tipChunks.map((_, i) => (
+                    <button
+                      key={i}
+                      className={"analysis-carousel-dot" + (i === tipPageIndex ? " analysis-carousel-dot--active" : "")}
+                      onClick={() => setTipPageIndex(i)}
+                      aria-label={`${i + 1}번 슬라이드`}
+                    />
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </section>
         )}
 
         {overallFeedback && (
           <section className="analysis-section">
-            <h2>AI 전문가 심층 피드백 (EXAONE 3.5 LoRA)</h2>
+            <h2>AI 전문가 심층 피드백 (EXAONE 3.5 2.4B)</h2>
             <div className="analysis-feedback-card">
               <div className="analysis-feedback-content">
-                {overallFeedback.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+                <ReactMarkdown>{overallFeedback}</ReactMarkdown>
               </div>
             </div>
           </section>

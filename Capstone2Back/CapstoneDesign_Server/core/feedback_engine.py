@@ -231,14 +231,19 @@ class FeedbackEngine:
     def _get_local_exaone_feedback(self, prompt: str) -> str:
         """로컬 환경(GPU/CPU)에 맞춰 피드백 생성"""
         try:
-            # 🌟 장치(cuda/cpu) 자동 대응
+            # 🌟 진행 상태 알림
+            if self.device == "cpu":
+                print("\n   > [AI] 종합 피드백 생성 시작... (CPU 연산 중, 약 1~2분 소요)")
+            
             inputs = self.local_tokenizer([prompt], return_tensors = "pt").to(self.device)
             
-            # 생성 옵션 최적화
+            # 생성 옵션 최적화 (CPU는 길이를 512로 줄여 속도 대폭 향상)
+            max_tokens = 1024 if self.device == "cuda" else 512
+            
             generate_kwargs = {
                 "input_ids": inputs.input_ids,
                 "attention_mask": inputs.attention_mask,
-                "max_new_tokens": 1024,
+                "max_new_tokens": max_tokens,
                 "do_sample": True,
                 "temperature": 0.7,
                 "top_p": 0.9,
