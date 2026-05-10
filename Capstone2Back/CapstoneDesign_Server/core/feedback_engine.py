@@ -56,47 +56,67 @@ class FeedbackEngine:
 
     def _init_local_model(self):
         """
-        RTX 5060 Ti GPU(Unsloth) 또는 노트북 CPU(Transformers) 환경에 맞춰 모델을 로드합니다.
+        노트북 환경(16GB RAM)에 최적화하여 2.4B 경량 모델을 로드합니다.
         """
         curr_dir = os.path.dirname(os.path.abspath(__file__))
+        # 🌟 2.4B 모델로 변경 (약 5GB 내외로 16GB RAM에서 안정적)
+        base_model_name = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct"
         lora_path = os.path.join(os.path.dirname(curr_dir), "training", "exaone_presenter_lora")
-        base_model_name = "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct"
 
         try:
             if HAS_CUDA and UNSLOTH_AVAILABLE:
-                print("\n--- [FeedbackEngine] GPU 모드로 모델 로드 (RTX 5060 Ti) ---")
+                print(f"\n--- [FeedbackEngine] GPU 모드로 경량 모델 로드 ({base_model_name}) ---")
                 model, tokenizer = FastLanguageModel.from_pretrained(
                     model_name = base_model_name,
                     max_seq_length = 2048,
                     load_in_4bit = True,
                     trust_remote_code = True,
                 )
-                model.get_input_embeddings = lambda: model.transformer.wte
-                model.transformer.get_input_embeddings = lambda: model.transformer.wte
-                self.local_model = PeftModel.from_pretrained(model, lora_path)
                 self.local_tokenizer = tokenizer
+                
+                # LoRA 가중치가 있는 경우에만 로드 (7.8B용 LoRA는 2.4B와 호환 안됨)
+                if os.path.exists(os.path.join(lora_path, "adapter_config.json")):
+                    try:
+                        self.local_model = PeftModel.from_pretrained(model, lora_path)
+                        print("✅ LoRA 어댑터 적용 완료")
+                    except:
+                        print("⚠️ 경고: 기존 LoRA가 2.4B 모델과 호환되지 않아 기본 모델로만 실행합니다.")
+                        self.local_model = model
+                else:
+                    self.local_model = model
+                
                 FastLanguageModel.for_inference(self.local_model)
             else:
-                print("\n--- [FeedbackEngine] CPU 모드로 모델 로드 (노트북) ---")
-                print("※ 주의: CPU 모드는 속도가 느리며 많은 램(16GB+)이 필요합니다.")
+                print(f"\n--- [FeedbackEngine] CPU/노트북 모드로 경량 모델 로드 ({base_model_name}) ---")
                 self.local_tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
+                
+                # 🌟 메모리 절약을 위해 float16/bfloat16 사용
+                dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
+                
                 base_model = AutoModelForCausalLM.from_pretrained(
                     base_model_name,
-                    torch_dtype=torch.float32, # CPU 호환성을 위해 float32 사용
-                    device_map="cpu",
+                    torch_dtype=dtype,
+                    device_map="auto", # 자동으로 램에 분산
+                    low_cpu_mem_usage=True,
                     trust_remote_code=True
                 )
-                # EXAONE 임베딩 패치
-                if not hasattr(base_model, "get_input_embeddings"):
-                    base_model.get_input_embeddings = lambda: base_model.transformer.wte
                 
-                self.local_model = PeftModel.from_pretrained(base_model, lora_path)
+                if os.path.exists(os.path.join(lora_path, "adapter_config.json")):
+                    try:
+                        self.local_model = PeftModel.from_pretrained(base_model, lora_path)
+                        print("✅ LoRA 어댑터 적용 완료")
+                    except:
+                        print("⚠️ 경고: LoRA 호환성 문제로 기본 모델로 로드합니다.")
+                        self.local_model = base_model
+                else:
+                    self.local_model = base_model
+                    
                 self.local_model.eval()
 
-            print(f"✅ 로컬 모델 로드 완료 ({self.device} 모드)")
+            print(f"✅ 경량 모델 로드 완료 (사용 메모리 대폭 감소)")
         except Exception as e:
-            print(f"❌ 로컬 모델 로드 실패: {e}")
-            self.provider = "gemini" # 실패 시 폴백
+            print(f"❌ 모델 로드 실패: {e}")
+            self.provider = "gemini"
 
     def generate_feedback(self, project_name: str, rubric: str = "", persona: str = "soft") -> str:
         """
