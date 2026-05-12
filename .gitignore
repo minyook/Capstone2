@@ -4,3 +4,14 @@ unsloth_compiled_cache/
 .env
 node_modules/
 dist/
+
+*.gguf
+*.pt
+*.task
+.env
+Capstone2Back/CapstoneDesign_Server/uploads/
+Capstone2Back/CapstoneDesign_Server/frames/
+Capstone2Back/CapstoneDesign_Server/analysis_json/
+Capstone2Back/CapstoneDesign_Server/out/
+outputs/
+unsloth_compiled_cache/

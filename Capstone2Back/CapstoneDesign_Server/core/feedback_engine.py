@@ -47,8 +47,8 @@ class FeedbackEngine:
             if LLAMA_CPP_AVAILABLE:
                 self._init_gguf_model()
             else:
-                print("⚠️ llama-cpp-python이 없어 Gemini로 전환합니다.")
-                self.provider = "gemini"
+                print("ℹ️ llama-cpp-python 라이브러리가 없어 Ollama 모드로 작동합니다.")
+                # self.provider = "gemini"  <-- 이 부분을 주석 처리하거나 제거
 
     def _init_gguf_model(self):
         """
@@ -101,12 +101,17 @@ class FeedbackEngine:
             detailed_data = self._load_json_data(json_paths)
             analysis_summary = detailed_data.get("summary", {})
         
-        # 3. 프롬프트 구성
+        # 3. 프롬프트 구성 (Ollama/Modelfile의 SYSTEM 프롬프트를 활용하기 위해 핵심 데이터만 전달)
+        # 하지만 더 자세한 답변을 위해 프롬프트 구조를 개선합니다.
         prompt = self._build_evaluation_prompt(analysis_summary, rubric, detailed_data, persona)
         
         # 4. 모델 공급자에 따른 피드백 생성
-        if self.provider == "exaone" and self.local_model:
-            return self._get_gguf_feedback(prompt)
+        if self.provider == "exaone":
+            if self.local_model:
+                return self._get_gguf_feedback(prompt)
+            else:
+                # Ollama 모드: Modelfile의 페르소나를 활용하면서 상세 데이터를 넘김
+                return get_feedback_from_coach(prompt)
         elif self.provider == "gemini":
             return self._get_gemini_feedback(prompt)
         else:
