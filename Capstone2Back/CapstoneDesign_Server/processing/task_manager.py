@@ -167,19 +167,35 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "video_type": video_type.value
         }
 
-        # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
+        # 7. AI 피드백 생성 (Fine-tuned EXAONE GGUF 모델 사용)
         from core.feedback_engine import feedback_engine
         
-        # [신규] 생성 중임을 알림 (CPU 모드 대응)
         job_status[job_id] = {
             "status": "Analyzing", 
-            "message": "7/7: AI 피드백 생성 중... (CPU 모드이므로 1~2분 정도 소요될 수 있습니다)"
+            "message": "7/7: AI 피드백 생성 중... (GGUF 최적화 모드)"
         }
         
-        # 프로젝트 이름(file_id)을 기반으로 모든 데이터를 취합하여 피드백 생성
-        llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona)
+        # [신규] 피드백 엔진을 위한 상세 컨텍스트 데이터 구성
+        detailed_context = {
+            "summary": analysis_summary,
+            "ppt": {
+                "slides": ppt_data.get("total_slides", 0) if 'ppt_data' in locals() else 0,
+                "keywords": ppt_data.get("keywords", []) if 'ppt_data' in locals() else [],
+                "warnings": ppt_data.get("warnings", []) if 'ppt_data' in locals() else []
+            },
+            "timeline_samples": aligned_data[:10] if audio_segments else []
+        }
         
-        print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 (LoRA/RTX 5060 Ti) {'='*20}")
+        # 프로젝트 이름(file_id)과 수집된 데이터를 직접 전달하여 피드백 생성
+        llama_feedback = feedback_engine.generate_feedback(
+            file_id, 
+            unified_rubric, 
+            persona,
+            existing_summary=analysis_summary,
+            existing_detailed=detailed_context
+        )
+        
+        print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 (GGUF/Optimized) {'='*20}")
         print(llama_feedback)
 
         # 🌟 타임라인 피드백 생성 (실시간 자막용)

@@ -16,115 +16,97 @@ os.environ["TRITON_CACHE_DIR"] = "C:/temp/triton_cache"
 from core.llama_client import get_feedback_from_coach
 from core.gemini_client import model as gemini_model
 
-# Unsloth 및 PyTorch (로컬 모델용)
+# llama-cpp-python (GGUF 모델 로드용)
+try:
+    from llama_cpp import Llama
+    LLAMA_CPP_AVAILABLE = True
+except ImportError:
+    LLAMA_CPP_AVAILABLE = False
+    print("ℹ️ llama-cpp-python 라이브러리가 없습니다. CPU 추론이 제한될 수 있습니다.")
+
+# 기존 PyTorch 환경 확인 (HAS_CUDA 판별용)
 try:
     import torch
-    from peft import PeftModel
-    from transformers import AutoModelForCausalLM, AutoTokenizer
     HAS_CUDA = torch.cuda.is_available()
-    
-    if HAS_CUDA:
-        try:
-            from unsloth import FastLanguageModel
-            UNSLOTH_AVAILABLE = True
-        except ImportError:
-            UNSLOTH_AVAILABLE = False
-            print("ℹ️ Unsloth 라이브러리가 없습니다. 일반 Transformers 모드로 실행합니다.")
-    else:
-        UNSLOTH_AVAILABLE = False
-        print("ℹ️ GPU가 감지되지 않았습니다. CPU 모드로 전환합니다.")
-    LOCAL_MODEL_SUPPORT = True
 except ImportError:
-    LOCAL_MODEL_SUPPORT = False
-    print("⚠️ 필수 라이브러리(transformers, peft, torch)를 불러올 수 없습니다.")
+    HAS_CUDA = False
 
 class FeedbackEngine:
     """
     발표 분석 데이터를 기반으로 전문적인 피드백을 생성하는 엔진입니다.
-    로컬 모델(Fine-tuned EXAONE 3.5)과 클라우드 모델(Gemini)을 지원합니다.
+    GGUF 모델(llama-cpp-python)을 사용하여 노트북 환경에서 최적의 성능을 냅니다.
     """
     
     def __init__(self, provider: str = "exaone"):
         self.provider = provider.lower()
         self.local_model = None
-        self.local_tokenizer = None
         self.device = "cuda" if HAS_CUDA else "cpu"
         
-        # 로컬 모델(EXAONE LoRA) 초기화
-        if self.provider == "exaone" and LOCAL_MODEL_SUPPORT:
-            self._init_local_model()
+        # 로컬 모델(EXAONE GGUF) 초기화
+        if self.provider == "exaone":
+            if LLAMA_CPP_AVAILABLE:
+                self._init_gguf_model()
+            else:
+                print("⚠️ llama-cpp-python이 없어 Gemini로 전환합니다.")
+                self.provider = "gemini"
 
-    def _init_local_model(self):
+    def _init_gguf_model(self):
         """
-        노트북 환경(16GB RAM)에 최적화하여 2.4B 경량 모델을 로드합니다.
+        GGUF 파일을 찾아 llama-cpp-python으로 로드합니다.
         """
         curr_dir = os.path.dirname(os.path.abspath(__file__))
-        # 🌟 2.4B 모델로 변경 (약 5GB 내외로 16GB RAM에서 안정적)
-        base_model_name = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct"
-        lora_path = os.path.join(os.path.dirname(curr_dir), "training", "exaone_presenter_lora")
+        # 학습 스크립트에서 저장한 GGUF 경로
+        gguf_dir = os.path.join(os.path.dirname(curr_dir), "training", "exaone_presenter_gguf")
+        
+        # .gguf 확장자를 가진 파일 찾기
+        gguf_files = glob.glob(os.path.join(gguf_dir, "*.gguf"))
+        
+        if not gguf_files:
+            print(f"⚠️ GGUF 파일을 찾을 수 없습니다: {gguf_dir}")
+            # 기본 모델 폴더에서도 확인
+            gguf_files = glob.glob(os.path.join(os.path.dirname(curr_dir), "*.gguf"))
 
-        try:
-            if HAS_CUDA and UNSLOTH_AVAILABLE:
-                print(f"\n--- [FeedbackEngine] GPU 모드로 경량 모델 로드 ({base_model_name}) ---")
-                model, tokenizer = FastLanguageModel.from_pretrained(
-                    model_name = base_model_name,
-                    max_seq_length = 2048,
-                    load_in_4bit = True,
-                    trust_remote_code = True,
+        if gguf_files:
+            model_path = gguf_files[0]
+            print(f"\n--- [FeedbackEngine] GGUF 모델 로드 중 ({os.path.basename(model_path)}) ---")
+            try:
+                # n_gpu_layers: -1이면 모든 레이어를 GPU로 (GPU가 있는 경우), 0이면 CPU로
+                self.local_model = Llama(
+                    model_path=model_path,
+                    n_ctx=2048,
+                    n_gpu_layers=-1 if HAS_CUDA else 0,
+                    verbose=False
                 )
-                self.local_tokenizer = tokenizer
-                
-                # LoRA 가중치가 있는 경우에만 로드 (7.8B용 LoRA는 2.4B와 호환 안됨)
-                if os.path.exists(os.path.join(lora_path, "adapter_config.json")):
-                    try:
-                        self.local_model = PeftModel.from_pretrained(model, lora_path)
-                        print("✅ LoRA 어댑터 적용 완료")
-                    except:
-                        print("⚠️ 경고: 기존 LoRA가 2.4B 모델과 호환되지 않아 기본 모델로만 실행합니다.")
-                        self.local_model = model
-                else:
-                    self.local_model = model
-                
-                FastLanguageModel.for_inference(self.local_model)
-            else:
-                # 🌟 CPU/노트북 환경 최적화 로드
-                print(f"\n--- [FeedbackEngine] 노트북 최적화 모드로 로드 중... ---")
-                self.local_tokenizer = AutoTokenizer.from_pretrained(base_model_name, trust_remote_code=True)
-                
-                # 메모리 절약을 위해 bfloat16 시도 (CPU 지원 시), 아니면 float32
-                # 명시적으로 device_map을 쓰지 않아 meta-device 오류 방지
-                self.local_model = AutoModelForCausalLM.from_pretrained(
-                    base_model_name,
-                    torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
-                    low_cpu_mem_usage=True,
-                    trust_remote_code=True
-                ).to("cpu")
-                
-                # LoRA 생략 (CPU 모드에서는 성능보다 안정성 우선)
-                self.local_model.eval()
-
-            print(f"✅ 경량 모델 로드 완료 (사용 메모리 대폭 감소)")
-        except Exception as e:
-            print(f"❌ 모델 로드 실패: {e}")
+                print(f"✅ GGUF 모델 로드 완료 ({self.device} 모드)")
+            except Exception as e:
+                print(f"❌ GGUF 모델 로드 실패: {e}")
+                self.provider = "gemini"
+        else:
+            print("⚠️ 학습된 GGUF 모델이 없습니다. Gemini를 사용합니다.")
             self.provider = "gemini"
 
-    def generate_feedback(self, project_name: str, rubric: str = "", persona: str = "soft") -> str:
+    def generate_feedback(self, project_name: str, rubric: str = "", persona: str = "soft", 
+                          existing_summary: Optional[Dict] = None, 
+                          existing_detailed: Optional[Dict] = None) -> str:
         """
-        프로젝트 이름을 기반으로 모든 JSON 데이터를 취합하여 최종 피드백을 생성합니다.
+        발표 분석 데이터를 기반으로 최종 피드백을 생성합니다.
+        데이터가 직접 전달되면 파일 읽기를 건너뜁니다.
         """
-        # 1. 자동 데이터 취합 (analysis_json 하위 폴더 검색)
-        json_paths = self._find_project_json_files(project_name)
-        detailed_data = self._load_json_data(json_paths)
-        
-        # 2. 핵심 지표 요약 (total_json 기준)
-        analysis_summary = detailed_data.get("summary", {})
+        # 1. 데이터 취합
+        if existing_summary and existing_detailed:
+            analysis_summary = existing_summary
+            detailed_data = existing_detailed
+        else:
+            json_paths = self._find_project_json_files(project_name)
+            detailed_data = self._load_json_data(json_paths)
+            analysis_summary = detailed_data.get("summary", {})
         
         # 3. 프롬프트 구성
         prompt = self._build_evaluation_prompt(analysis_summary, rubric, detailed_data, persona)
         
         # 4. 모델 공급자에 따른 피드백 생성
         if self.provider == "exaone" and self.local_model:
-            return self._get_local_exaone_feedback(prompt)
+            return self._get_gguf_feedback(prompt)
         elif self.provider == "gemini":
             return self._get_gemini_feedback(prompt)
         else:
@@ -228,47 +210,29 @@ class FeedbackEngine:
 """
         return prompt
 
-    def _get_local_exaone_feedback(self, prompt: str) -> str:
-        """로컬 환경(GPU/CPU)에 맞춰 피드백 생성"""
+    def _get_gguf_feedback(self, prompt: str) -> str:
+        """llama-cpp-python을 이용한 GGUF 추론"""
         try:
-            # 🌟 진행 상태 알림
             if self.device == "cpu":
-                print("\n   > [AI] 종합 피드백 생성 시작... (CPU 연산 중, 약 1~2분 소요)")
+                print("\n   > [AI] 피드백 생성 중... (GGUF CPU 모드)")
             
-            inputs = self.local_tokenizer([prompt], return_tensors = "pt").to(self.device)
+            response = self.local_model(
+                prompt,
+                max_tokens=1024,
+                temperature=0.7,
+                top_p=0.9,
+                stop=["[|user|]", "[|system|]", "</s>"],
+                echo=False
+            )
             
-            # 생성 옵션 최적화 (CPU는 길이를 512로 줄여 속도 대폭 향상)
-            max_tokens = 1024 if self.device == "cuda" else 512
-            
-            generate_kwargs = {
-                "input_ids": inputs.input_ids,
-                "attention_mask": inputs.attention_mask,
-                "max_new_tokens": max_tokens,
-                "do_sample": True,
-                "temperature": 0.7,
-                "top_p": 0.9,
-                "use_cache": True,
-            }
-            
-            # Unsloth 모델이 아닐 경우(일반 CPU 모드)에는 eos_token_id 명시
-            if not UNSLOTH_AVAILABLE:
-                generate_kwargs["eos_token_id"] = self.local_tokenizer.eos_token_id
-
-            with torch.no_grad():
-                outputs = self.local_model.generate(**generate_kwargs)
-            
-            response = self.local_tokenizer.batch_decode(outputs)
-            
-            # assistant 답변만 추출
-            try:
-                if "[|assistant|]" in response[0]:
-                    return response[0].split("[|assistant|]")[1].replace(self.local_tokenizer.eos_token, "").strip()
-                return response[0].strip()
-            except:
-                return response[0]
+            text = response["choices"][0]["text"].strip()
+            # assistant 답변 부분만 추출
+            if "[|assistant|]" in text:
+                text = text.split("[|assistant|]")[1].strip()
+            return text
         except Exception as e:
-            print(f"⚠️ 로컬 추론 중 오류 발생: {e}")
-            return "로컬 AI 모델 응답 실패. 서버 로그를 확인하세요."
+            print(f"⚠️ GGUF 추론 중 오류 발생: {e}")
+            return "로컬 AI 모델(GGUF) 응답 실패."
 
     def _get_gemini_feedback(self, prompt: str) -> str:
         try:
@@ -280,52 +244,37 @@ class FeedbackEngine:
     def generate_timeline_feedback(self, aligned_data: list, project_name: str, persona: str = "soft") -> Dict[str, str]:
         """
         영상 전체의 타임라인 데이터를 분석하여 주요 시점별로 코칭 팁을 생성합니다.
-        🌟 노트북(CPU) 환경에서는 속도를 위해 규칙 기반 시스템을 사용합니다.
+        GGUF 모델을 사용하여 실시간에 가까운 속도로 생성합니다.
         """
         timeline_tips = {}
+        if not aligned_data: return {}
         
-        # 🌟 CPU 모드인 경우: 무한 대기를 방지하기 위해 LLM 호출을 건너뛰고 규칙 기반 팁 제공
-        if self.device == "cpu":
-            print("   > [AI] CPU 환경이므로 규칙 기반 실시간 팁을 생성합니다. (속도 우선)")
-            sample_points = aligned_data[::len(aligned_data)//8] if len(aligned_data) > 8 else aligned_data
-            for point in sample_points:
-                t = round(point.get('start', 0), 1)
-                v = point.get('vision_avg', {})
-                
-                tip = "발표 흐름이 좋습니다. 계속 진행하세요!"
-                if v.get('error') == "얼굴 미검출": tip = "청중과 시선을 맞추려 노력해 보세요."
-                elif abs(v.get('gaze_h', 0)) > 0.3: tip = "시선이 분산되고 있습니다. 정면을 응시해 주세요."
-                elif v.get('smile', 0) < 0.05: tip = "조금 더 밝은 표정으로 발표해 보세요."
-                elif point.get('speech_rate_cps', 0) > 4.5: tip = "말의 속도가 조금 빠릅니다. 천천히 말씀해 보세요."
-                
-                timeline_tips[str(t)] = tip
-            return timeline_tips
-
-        # GPU 환경인 경우에만 LLM 사용
+        # 시점 샘플링 (CPU 환경에서는 5개, GPU 환경에서는 8개 정도로 제한)
+        sample_count = 5 if self.device == "cpu" else 8
+        step = max(1, len(aligned_data) // sample_count)
+        sample_points = aligned_data[::step]
+        
         persona_guide = "냉철하게 지적해줘." if persona == "sharp" else "다정하게 격려하며 조언해줘."
-        sample_points = aligned_data[::len(aligned_data)//5] if len(aligned_data) > 5 else aligned_data
-        
+
         for point in sample_points:
-            time_sec = point.get('start', 0)
+            time_sec = round(point.get('start', 0), 1)
             text = point.get('text', '')
             gaze = "정면 응시" if abs(point.get('vision_avg', {}).get('gaze_h', 0)) < 0.2 else "시선 분산"
             
             prompt = f"""[|system|]
-    발표 전문가로서 짧고 명확한 한 문장 조언을 제공합니다. {persona_guide}
-    [|user|]
-    시간: {time_sec}초, 상황: {gaze}, 자막: "{text}"
-    이 시점에 필요한 짧은 피드백 한 문장을 생성해줘.
-    [|assistant|]
-    """
+발표 전문가로서 짧고 명확한 한 문장 조언을 제공합니다. {persona_guide}
+[|user|]
+시간: {time_sec}초, 상황: {gaze}, 자막: "{text}"
+이 시점에 필요한 짧은 피드백 한 문장을 생성해줘.
+[|assistant|]
+"""
             if self.provider == "exaone" and self.local_model:
-                tip = self._get_local_exaone_feedback(prompt)
+                tip = self._get_gguf_feedback(prompt)
+                timeline_tips[str(time_sec)] = tip.split('\n')[0]
             else:
-                tip = f"{time_sec}초 지점: 시선 처리에 유의하세요."
-
-            timeline_tips[str(round(time_sec, 1))] = tip.split('\n')[0]
+                timeline_tips[str(time_sec)] = f"{time_sec}초 지점: 시선 처리에 유의하세요."
 
         return timeline_tips
 
 # 싱글톤 인스턴스 생성 (서버 시작 시 모델 로드)
-# VRAM 절약을 위해 필요할 때만 생성하도록 설정할 수 있음
 feedback_engine = FeedbackEngine(provider="exaone")

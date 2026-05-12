@@ -20,6 +20,9 @@ export function Analysis() {
   const [timelineFeedback, setTimelineFeedback] = useState<Record<string, string>>({});
   const [activeTip, setActiveTip] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
+  const [rawData, setRawData] = useState<any[]>([]);
+  const [currentFace, setCurrentFace] = useState<any>(null);
+  const [currentGesture, setCurrentGesture] = useState<any>(null);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
   
   // 🌟 슬라이드 관련 상태
@@ -51,21 +54,45 @@ export function Analysis() {
 
   // 비디오 재생 시간에 맞춰 실시간 피드백 업데이트
   const handleTimeUpdate = () => {
-    if (!previewVideoRef.current || !timelineFeedback) return;
+    if (!previewVideoRef.current) return;
     const time = previewVideoRef.current.currentTime;
     
-    const tipKeysStr = Object.keys(timelineFeedback);
-    if (tipKeysStr.length === 0) return;
+    // 1. LLM 실시간 피드백
+    if (timelineFeedback) {
+      const tipKeysStr = Object.keys(timelineFeedback);
+      if (tipKeysStr.length > 0) {
+        const tipKeys = tipKeysStr.map(Number);
+        const nearestKeyIdx = tipKeys.findIndex(tk => Math.abs(tk - time) < 1.5);
+        
+        if (nearestKeyIdx !== -1) {
+          const originalKey = tipKeysStr[nearestKeyIdx];
+          const tip = timelineFeedback[originalKey];
+          if (tip && tip !== activeTip) {
+            setActiveTip(tip);
+          }
+        }
+      }
+    }
 
-    const tipKeys = tipKeysStr.map(Number);
-    // 현재 시간 기준 1.5초 이내의 피드백 탐색
-    const nearestKeyIdx = tipKeys.findIndex(tk => Math.abs(tk - time) < 1.5);
-    
-    if (nearestKeyIdx !== -1) {
-      const originalKey = tipKeysStr[nearestKeyIdx];
-      const tip = timelineFeedback[originalKey];
-      if (tip && tip !== activeTip) {
-        setActiveTip(tip);
+    // 2. 얼굴 및 제스처 실시간 데이터
+    if (rawData.length > 0) {
+      const expectedIdx = Math.round(time * 5); // 백엔드 5fps 가정
+      let bestIdx = -1;
+      let minDiff = 0.5;
+
+      for (let i = expectedIdx - 5; i <= expectedIdx + 5; i++) {
+        if (i < 0 || i >= rawData.length) continue;
+        const d = rawData[i];
+        const diff = Math.abs(d.time - time);
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestIdx = i;
+        }
+      }
+
+      if (bestIdx !== -1) {
+        setCurrentFace(rawData[bestIdx].face);
+        setCurrentGesture(rawData[bestIdx].yolo);
       }
     }
   };
@@ -121,8 +148,9 @@ export function Analysis() {
           const resData = data.result;
           setOverallFeedback(resData.llama_feedback);
           setTimelineFeedback(resData.timeline_feedback || {});
+          setRawData(resData.raw_data || []);
           
-          // 차트 데이터 변환 (가독성을 위해 10개마다 샘플링)
+          // 차트 데이터 변환 (가독성을 위해 5개마다 샘플링)
           if (resData.raw_data) {
             const formatted = resData.raw_data
               .filter((_: any, i: number) => i % 5 === 0)
@@ -253,6 +281,65 @@ export function Analysis() {
           <div className="analysis-live-tip">
             <span className="analysis-live-tip__icon">💡</span>
             <span className="analysis-live-tip__text">{activeTip}</span>
+          </div>
+        )}
+
+        {hasData && (
+          <div className="analysis-realtime-grid">
+            <div className="analysis-rt-card analysis-rt-card--face">
+              <div className="analysis-rt-card__head">
+                <h3>👤 얼굴 및 시선</h3>
+                <span className="analysis-rt-badge">REAL-TIME</span>
+              </div>
+              <div className="analysis-rt-data">
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">상태</span>
+                  <span className="analysis-rt-value">
+                    {currentFace ? (currentFace.has_face ? (currentFace.info?.main_state || "정면 응시") : "얼굴 미검출") : "-"}
+                  </span>
+                </div>
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">미소 수치</span>
+                  <span className="analysis-rt-value">
+                    {currentFace?.has_face ? `${((currentFace.smile || 0) * 100).toFixed(1)}%` : "0.0%"}
+                  </span>
+                </div>
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">시선 방향</span>
+                  <span className="analysis-rt-value">
+                    {currentFace?.has_face ? (
+                      (currentFace.gaze_h || 0) > 0.35 ? "우측" :
+                      (currentFace.gaze_h || 0) < -0.35 ? "좌측" : "정면"
+                    ) : "-"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="analysis-rt-card analysis-rt-card--gesture">
+              <div className="analysis-rt-card__head">
+                <h3>✋ 제스처 및 자세</h3>
+                <span className="analysis-rt-badge">REAL-TIME</span>
+              </div>
+              <div className="analysis-rt-data">
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">주요 제스처</span>
+                  <span className="analysis-rt-value">{currentGesture?.gesture_name || "기본 자세"}</span>
+                </div>
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">양손 위치</span>
+                  <span className="analysis-rt-value">
+                    L: {currentGesture?.left_hand_state || "낮음"} / R: {currentGesture?.right_hand_state || "낮음"}
+                  </span>
+                </div>
+                <div className="analysis-rt-row">
+                  <span className="analysis-rt-label">팔짱 감지</span>
+                  <span className="analysis-rt-value">
+                    {currentGesture?.is_arm_crossed ? "⚠️ 감지됨" : "정상"}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
