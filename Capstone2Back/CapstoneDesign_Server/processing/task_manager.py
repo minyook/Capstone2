@@ -202,21 +202,28 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         # UI에 필요한 핵심 데이터만 필터링하여 용량 축소
         optimized_raw_data = []
         for f in all_vision_results:
-            # 실시간 상태 판별 (face_analyzer 로직과 동일하게 유지)
+            # 실시간 상태 판별 (민감도 상향 및 PPT 연동)
             face = f.face
+            yolo = f.yolo
             state = "정면 응시함"
+            
             if not face.has_face:
                 state = "얼굴 미검출"
-            elif abs(face.gaze_h) > 0.35:
-                state = "시선 분산 (좌우)"
-            elif face.gaze_v < -0.2:
-                state = "시선 분산 (바닥)"
-            elif face.gaze_v > 0.3:
-                state = "시선 분산 (천장)"
-            elif face.brow_up > 0.45:
-                state = "눈썹 강조 (열정적)"
-            elif face.jaw_open > 0.3 or face.mouth_open > 0.3:
-                state = "말하는 중"
+            else:
+                # Nose-Eye Ratio 기반 초정밀 시선 분석 (임계값 0.05)
+                gh = face.gaze_h
+                if gh > 0.05: # 화면상 우측 응시
+                    state = "PPT 응시 중" if yolo.ppt_side == "Right" else "시선 분산 (우측)"
+                elif gh < -0.05: # 화면상 좌측 응시
+                    state = "PPT 응시 중" if yolo.ppt_side == "Left" else "시선 분산 (좌측)"
+                elif face.gaze_v < -0.2:
+                    state = "시선 분산 (바닥)"
+                elif face.gaze_v > 0.3:
+                    state = "시선 분산 (천장)"
+                elif face.brow_up > 0.45:
+                    state = "눈썹 강조 (열정적)"
+                elif face.jaw_open > 0.3 or face.mouth_open > 0.3:
+                    state = "말하는 중"
 
             optimized_raw_data.append({
                 "time": f.time,
@@ -224,13 +231,21 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                     "has_face": face.has_face,
                     "smile": face.smile,
                     "gaze_h": face.gaze_h,
+                    "gaze_v": face.gaze_v,
+                    "emotions": getattr(face, 'emotions', {}), # 신규 추가된 감정 데이터
                     "info": {"main_state": state}
                 },
                 "yolo": {
                     "gesture_name": f.yolo.gesture_name,
                     "left_hand_state": f.yolo.left_hand_state,
                     "right_hand_state": f.yolo.right_hand_state,
-                    "is_arm_crossed": f.yolo.is_arm_crossed
+                    "is_arm_crossed": f.yolo.is_arm_crossed,
+                    "left_hand_visible": f.yolo.left_hand_visible,
+                    "right_hand_visible": f.yolo.right_hand_visible,
+                    "l_hand_hip_dist": f.yolo.l_hand_hip_dist,
+                    "r_hand_hip_dist": f.yolo.r_hand_hip_dist,
+                    "person_bbox": f.yolo.person_bbox, # 시각화용
+                    "has_person": f.yolo.has_person
                 }
             })
         

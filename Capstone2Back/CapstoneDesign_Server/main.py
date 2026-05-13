@@ -114,6 +114,10 @@ app.mount("/results/total", StaticFiles(directory="analysis_json/total_json"), n
 async def read_index():
     return FileResponse('analysis_viewer.html')
 
+@app.get("/diagnostic")
+async def read_diagnostic():
+    return FileResponse('diagnostic_viewer.html')
+
 # ==========================================
 # 🌟 1. CORS 미들웨어 설정 (프론트엔드 연결 허용)
 # ==========================================

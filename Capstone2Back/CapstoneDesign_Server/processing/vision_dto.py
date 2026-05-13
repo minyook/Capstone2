@@ -22,6 +22,11 @@ class YoloPoseResult:
     body_tilt: float = 0.0          # 몸의 기울기 (정면 기준)
     keypoints: list[list[float]] = field(default_factory=list) # 시각화용 원본 좌표 (선택사항)
     person_bbox: list[float] = field(default_factory=list) # [x1, y1, x2, y2]
+    left_hand_visible: bool = True
+    right_hand_visible: bool = True
+    l_hand_hip_dist: float = 0.0
+    r_hand_hip_dist: float = 0.0
+    ppt_side: str = "Unknown" # Left or Right
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -46,6 +51,8 @@ class MediaPipeFaceResult:
     gaze_h: float = 0.0
     gaze_v: float = 0.0
     error: Optional[str] = None
+    # 🌟 추가: 계산된 감정 데이터 저장
+    emotions: dict[str, float] = field(default_factory=dict)
     # 🌟 추가: 52개 상세 좌표 수치를 저장할 필드 (기본값은 빈 딕셔너리)
     all_blendshapes: dict[str, float] = field(default_factory=dict)
 

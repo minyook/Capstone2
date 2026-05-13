@@ -1,0 +1,3820 @@
+{
+    "metadata": {
+        "job_id": "f6aac725",
+        "video_filename": "abcd2mp4",
+        "video_type": "FACE_ONLY",
+        "total_time": 23.0,
+        "analysis_date": "2026-05-13 17:02:23"
+    },
+    "summary": {
+        "video_type": "FACE_ONLY",
+        "total_time": 23.0,
+        "face_detection_rate": 24.347826086956523,
+        "gaze_score": 0.7542868307700795,
+        "smile_score": 0.05776096580895335,
+        "gesture_status": "제한적임",
+        "avg_pitch": 0.0,
+        "avg_db": 0.0,
+        "avg_speed": 1.0,
+        "ppt_summary": "PPT 분석 데이터 없음"
+    },
+    "overall_feedback": "Gemini 피드백 생성 중 오류 발생: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3-flash\nPlease retry in 34.2489876s. [links {\n  description: \"Learn more about Gemini API quotas\"\n  url: \"https://ai.google.dev/gemini-api/docs/rate-limits\"\n}\n, violations {\n  quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\"\n  quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\"\n  quota_dimensions {\n    key: \"model\"\n    value: \"gemini-3-flash\"\n  }\n  quota_dimensions {\n    key: \"location\"\n    value: \"global\"\n  }\n  quota_value: 20\n}\n, retry_delay {\n  seconds: 34\n}\n]",
+    "timeline_feedback": {
+        "5.0": "자신감 있게 발표를 이어가세요!"
+    },
+    "timeline_data": [
+        {
+            "start": 0.0,
+            "end": 2.0,
+            "text": " 시스템 프롬포트입니다",
+            "speech_rate_cps": 6.0,
+            "vision_avg": {
+                "smile": 0.026,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": 0.166,
+                "gaze_v": 0.016
+            },
+            "prosody": {
+                "jitter": 1.309,
+                "shimmer": 20.91
+            }
+        },
+        {
+            "start": 4.0,
+            "end": 6.0,
+            "text": " 시스템 프롬포트요",
+            "speech_rate_cps": 5.0,
+            "vision_avg": {
+                "smile": 0.178,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": -0.351,
+                "gaze_v": 0.001
+            },
+            "prosody": {
+                "jitter": 1.959,
+                "shimmer": 25.848
+            }
+        },
+        {
+            "start": 6.0,
+            "end": 8.0,
+            "text": " 다녀기가 아시죠?",
+            "speech_rate_cps": 5.0,
+            "vision_avg": {
+                "smile": 0.085,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": -0.111,
+                "gaze_v": 0.006
+            },
+            "prosody": {
+                "jitter": 1.588,
+                "shimmer": 20.105
+            }
+        },
+        {
+            "start": 12.0,
+            "end": 14.0,
+            "text": " 시스템 프롬포트는",
+            "speech_rate_cps": 5.0,
+            "vision_avg": {
+                "smile": 0.07,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": -0.098,
+                "gaze_v": -0.01
+            },
+            "prosody": {
+                "jitter": 1.219,
+                "shimmer": 17.784
+            }
+        },
+        {
+            "start": 14.0,
+            "end": 16.0,
+            "text": " 여기 보시면 어쩜 어쩜 하면서",
+            "speech_rate_cps": 8.5,
+            "vision_avg": {
+                "error": "얼굴 미검출"
+            },
+            "prosody": {
+                "jitter": 1.227,
+                "shimmer": 19.481
+            }
+        },
+        {
+            "start": 16.0,
+            "end": 18.0,
+            "text": " AI가 응답을 생성하는 게",
+            "speech_rate_cps": 7.5,
+            "vision_avg": {
+                "error": "얼굴 미검출"
+            },
+            "prosody": {
+                "jitter": 1.313,
+                "shimmer": 19.078
+            }
+        },
+        {
+            "start": 18.0,
+            "end": 20.0,
+            "text": " 눈맥과 지점을 필요하다고 합니다",
+            "speech_rate_cps": 9.0,
+            "vision_avg": {
+                "smile": 0.0,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": -0.184,
+                "gaze_v": -0.004
+            },
+            "prosody": {
+                "jitter": 1.154,
+                "shimmer": 19.153
+            }
+        },
+        {
+            "start": 20.0,
+            "end": 22.0,
+            "text": " 이상으로 발표를 마치도록 하겠습니다",
+            "speech_rate_cps": 10.0,
+            "vision_avg": {
+                "smile": 0.005,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": -0.115,
+                "gaze_v": 0.01
+            },
+            "prosody": {
+                "jitter": 1.549,
+                "shimmer": 22.037
+            }
+        },
+        {
+            "start": 22.0,
+            "end": 24.0,
+            "text": " 오케이",
+            "speech_rate_cps": 2.0,
+            "vision_avg": {
+                "smile": 0.0,
+                "frown": 0.0,
+                "brow_up": 0.0,
+                "brow_down": 0.0,
+                "jaw_open": 0.0,
+                "mouth_open": 0.0,
+                "squint": 0.0,
+                "gaze_h": 0.376,
+                "gaze_v": -0.0
+            },
+            "prosody": {
+                "jitter": 1.81,
+                "shimmer": 38.469
+            }
+        }
+    ],
+    "raw_data": [
+        {
+            "time": 0.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    160.18373107910156,
+                    237.09271240234375,
+                    378.974853515625,
+                    716.8826293945312
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 0.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    162.50460815429688,
+                    235.03662109375,
+                    440.7721252441406,
+                    717.0098876953125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 0.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "높음",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    169.9903564453125,
+                    231.23052978515625,
+                    366.672119140625,
+                    715.7630615234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 0.6,
+            "face": {
+                "has_face": true,
+                "smile": 0.0012065958289895207,
+                "gaze_h": -0.06148901195696975,
+                "gaze_v": -0.0027154461906775396,
+                "emotions": {
+                    "smile": 0.0012065958289895207,
+                    "angry": 0.0904113935888745,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0631466869264841,
+                    "anxious": 0.6022017505019903
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    163.8605194091797,
+                    233.5257568359375,
+                    423.31060791015625,
+                    716.80908203125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 0.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    147.51046752929688,
+                    237.5745849609375,
+                    348.10931396484375,
+                    717.510986328125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 1.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    145.84713745117188,
+                    239.4166259765625,
+                    345.0150451660156,
+                    717.9049072265625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 1.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.0005273449787637219,
+                "gaze_h": 0.21280924454311215,
+                "gaze_v": 0.0501447121205274,
+                "emotions": {
+                    "smile": 0.0005273449787637219,
+                    "angry": 0.3550080422137398,
+                    "blank": 0.365208956762217,
+                    "dissatisfied": 0.0004200540613965131,
+                    "anxious": 0.19218190992251039
+                },
+                "info": {
+                    "main_state": "PPT 응시 중"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    145.57894897460938,
+                    239.50579833984375,
+                    325.68951416015625,
+                    717.3721923828125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 1.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    148.73516845703125,
+                    240.6341552734375,
+                    319.5665588378906,
+                    716.29296875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 1.6,
+            "face": {
+                "has_face": true,
+                "smile": 0.0747964195907116,
+                "gaze_h": 0.34717366790214077,
+                "gaze_v": 4.836486004933249e-05,
+                "emotions": {
+                    "smile": 0.0747964195907116,
+                    "angry": 0.149919209984364,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0010559229107457214,
+                    "anxious": 0.27104281657375395
+                },
+                "info": {
+                    "main_state": "PPT 응시 중"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    156.30868530273438,
+                    239.42071533203125,
+                    323.279052734375,
+                    715.8231811523438
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 1.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    162.66091918945312,
+                    239.7518310546875,
+                    330.0904235839844,
+                    715.1385498046875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 2.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    166.76065063476562,
+                    240.898193359375,
+                    335.5375671386719,
+                    716.0631713867188
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 2.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    165.10931396484375,
+                    239.85235595703125,
+                    337.9493408203125,
+                    715.1971435546875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 2.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    161.4364013671875,
+                    239.97174072265625,
+                    339.3957824707031,
+                    716.0391235351562
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 2.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    156.13528442382812,
+                    240.5205078125,
+                    334.2946472167969,
+                    716.1514892578125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 2.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    153.32559204101562,
+                    241.4676513671875,
+                    329.12298583984375,
+                    716.2537231445312
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 3.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    149.65576171875,
+                    240.42144775390625,
+                    327.30902099609375,
+                    715.6759033203125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 3.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    145.3826904296875,
+                    241.657470703125,
+                    322.5986328125,
+                    715.881591796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 3.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    142.1375732421875,
+                    239.772216796875,
+                    318.07537841796875,
+                    715.982177734375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 3.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    142.4691162109375,
+                    241.031494140625,
+                    321.0994873046875,
+                    716.452392578125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 3.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    145.94503784179688,
+                    243.143310546875,
+                    330.5243225097656,
+                    715.45703125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 4.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    150.91693115234375,
+                    242.4210205078125,
+                    365.042236328125,
+                    715.6053466796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 4.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    156.323974609375,
+                    242.41461181640625,
+                    376.71240234375,
+                    714.9158935546875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 4.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    161.6258544921875,
+                    246.969482421875,
+                    366.72637939453125,
+                    715.8265380859375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 4.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "낮음",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    164.71804809570312,
+                    245.67462158203125,
+                    336.0788269042969,
+                    715.1573486328125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 4.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    165.6328125,
+                    244.646728515625,
+                    324.9876708984375,
+                    717.979736328125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 5.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    162.4638671875,
+                    242.4232177734375,
+                    336.5073547363281,
+                    715.253662109375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 5.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.046626223251223564,
+                "gaze_h": -0.6601543336144012,
+                "gaze_v": -0.043727708398364484,
+                "emotions": {
+                    "smile": 0.046626223251223564,
+                    "angry": 0.061309252528008076,
+                    "blank": 0.12748463163734414,
+                    "dissatisfied": 0.006156479721539654,
+                    "anxious": 0.20321375131607056
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    154.99322509765625,
+                    240.2943115234375,
+                    341.5382385253906,
+                    715.982421875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 5.4,
+            "face": {
+                "has_face": true,
+                "smile": 0.09045669808983803,
+                "gaze_h": -0.548608431308916,
+                "gaze_v": 0.02901059202849865,
+                "emotions": {
+                    "smile": 0.09045669808983803,
+                    "angry": 0.10488246828317642,
+                    "blank": 0.1567800405124824,
+                    "dissatisfied": 0.024816721864044666,
+                    "anxious": 0.14135448075830936
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    146.60858154296875,
+                    238.7384033203125,
+                    345.009765625,
+                    716.3006591796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 5.6,
+            "face": {
+                "has_face": true,
+                "smile": 0.3766482174396515,
+                "gaze_h": -0.3134108347146898,
+                "gaze_v": 0.008841421455144882,
+                "emotions": {
+                    "smile": 0.3766482174396515,
+                    "angry": 0.42364007309079166,
+                    "blank": 0.0,
+                    "dissatisfied": 0.03827085960656404,
+                    "anxious": 0.23806956850603456
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    138.46566772460938,
+                    236.0394287109375,
+                    343.3975830078125,
+                    716.2955322265625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 5.8,
+            "face": {
+                "has_face": true,
+                "smile": 0.25649453699588776,
+                "gaze_h": -0.15401110629001796,
+                "gaze_v": 0.01564348628744483,
+                "emotions": {
+                    "smile": 0.25649453699588776,
+                    "angry": 0.19841680601239206,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0043316310271620745,
+                    "anxious": 0.29389666579663754
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    128.32266235351562,
+                    233.7471923828125,
+                    339.0238037109375,
+                    715.6322631835938
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 6.0,
+            "face": {
+                "has_face": true,
+                "smile": 0.1213441714644432,
+                "gaze_h": -0.07632309906292851,
+                "gaze_v": -0.0035698586143553257,
+                "emotions": {
+                    "smile": 0.1213441714644432,
+                    "angry": 0.28662209510803227,
+                    "blank": 0.0,
+                    "dissatisfied": 0.08209123387932778,
+                    "anxious": 0.2955739041790366
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    114.0181884765625,
+                    228.20921325683594,
+                    360.27093505859375,
+                    717.6507568359375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 6.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.15942834317684174,
+                "gaze_h": -0.0695336017696829,
+                "gaze_v": 0.022933880798518658,
+                "emotions": {
+                    "smile": 0.15942834317684174,
+                    "angry": 0.2234185346402228,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0023177464725449683,
+                    "anxious": 0.2588042130228132
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    103.137939453125,
+                    224.1724395751953,
+                    460.9278564453125,
+                    716.6965942382812
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 6.4,
+            "face": {
+                "has_face": true,
+                "smile": 0.0001824385872168932,
+                "gaze_h": -0.08006290393675686,
+                "gaze_v": -0.0016230321489274502,
+                "emotions": {
+                    "smile": 0.0001824385872168932,
+                    "angry": 0.15683467588387429,
+                    "blank": 0.0,
+                    "dissatisfied": 0.002164475491736084,
+                    "anxious": 0.26549428328871727
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    97.6922607421875,
+                    222.17230224609375,
+                    436.24462890625,
+                    717.0704956054688
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 6.6,
+            "face": {
+                "has_face": true,
+                "smile": 0.0006055572157492861,
+                "gaze_h": -0.1428449471186414,
+                "gaze_v": 0.004581138025969267,
+                "emotions": {
+                    "smile": 0.0006055572157492861,
+                    "angry": 0.10460478784516454,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0065216533257626,
+                    "anxious": 0.2692098096013069
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    98.36154174804688,
+                    224.08201599121094,
+                    360.3832092285156,
+                    718.020263671875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 6.8,
+            "face": {
+                "has_face": true,
+                "smile": 0.3087184578180313,
+                "gaze_h": 0.058041366908850235,
+                "gaze_v": 0.012852054554969072,
+                "emotions": {
+                    "smile": 0.3087184578180313,
+                    "angry": 0.29698210675269365,
+                    "blank": 0.0,
+                    "dissatisfied": 0.006401241244748234,
+                    "anxious": 0.25943756324704736
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    91.48428344726562,
+                    220.50823974609375,
+                    347.7446594238281,
+                    717.98095703125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 7.0,
+            "face": {
+                "has_face": true,
+                "smile": 0.0005413981707533821,
+                "gaze_h": 0.006109258418008093,
+                "gaze_v": -0.0005512610077857971,
+                "emotions": {
+                    "smile": 0.0005413981707533821,
+                    "angry": 0.1997250892221928,
+                    "blank": 0.0,
+                    "dissatisfied": 0.012730786437168717,
+                    "anxious": 0.2905718698166311
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    63.097900390625,
+                    221.26463317871094,
+                    353.37738037109375,
+                    717.05615234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 7.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.0008505109290126711,
+                "gaze_h": -0.47057136072871447,
+                "gaze_v": 0.009682632517069578,
+                "emotions": {
+                    "smile": 0.0008505109290126711,
+                    "angry": 0.09824606830370612,
+                    "blank": 0.0685283163232574,
+                    "dissatisfied": 0.00037760099658044053,
+                    "anxious": 0.21252454165369272
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    43.395843505859375,
+                    225.2376708984375,
+                    354.2223205566406,
+                    717.619140625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 7.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    34.512725830078125,
+                    226.9794921875,
+                    347.4560546875,
+                    717.3250732421875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 7.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    37.78570556640625,
+                    230.56834411621094,
+                    342.087646484375,
+                    717.52294921875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 7.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    45.510223388671875,
+                    228.99517822265625,
+                    346.3576965332031,
+                    717.1979370117188
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 8.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    59.916229248046875,
+                    225.28932189941406,
+                    347.79119873046875,
+                    716.6988525390625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 8.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    79.14288330078125,
+                    220.75535583496094,
+                    358.224609375,
+                    716.8724365234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 8.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    103.18002319335938,
+                    223.05467224121094,
+                    369.4720764160156,
+                    716.68896484375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 8.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    117.94058227539062,
+                    223.9525909423828,
+                    378.25128173828125,
+                    717.3196411132812
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 8.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    129.04531860351562,
+                    227.6767120361328,
+                    388.4112243652344,
+                    717.3513793945312
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 9.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.38861083984375,
+                    226.5517578125,
+                    388.34716796875,
+                    717.9462280273438
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 9.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    136.2684326171875,
+                    226.81956481933594,
+                    387.26416015625,
+                    716.8585205078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 9.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    135.22021484375,
+                    227.51470947265625,
+                    386.0372314453125,
+                    716.677978515625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 9.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.68731689453125,
+                    227.29701232910156,
+                    386.4344482421875,
+                    716.2647705078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 9.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.87957763671875,
+                    226.22100830078125,
+                    386.9556884765625,
+                    716.6881103515625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 10.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.922119140625,
+                    226.03392028808594,
+                    387.894287109375,
+                    716.422119140625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 10.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.29202270507812,
+                    223.371337890625,
+                    389.3052062988281,
+                    716.5460205078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 10.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.27243041992188,
+                    220.69203186035156,
+                    388.1427917480469,
+                    716.615966796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 10.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.17959594726562,
+                    219.68878173828125,
+                    388.0376281738281,
+                    716.8116455078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 10.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.54574584960938,
+                    218.011474609375,
+                    387.6537170410156,
+                    716.5753173828125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 11.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    124.75665283203125,
+                    217.2833251953125,
+                    377.18646240234375,
+                    715.5830078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 11.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    131.44760131835938,
+                    219.0433349609375,
+                    371.08758544921875,
+                    715.073974609375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 11.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    148.77243041992188,
+                    217.97767639160156,
+                    369.7107238769531,
+                    715.3134765625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 11.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    158.67819213867188,
+                    216.4998779296875,
+                    356.7812805175781,
+                    718.4885864257812
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 11.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    142.0628662109375,
+                    214.61749267578125,
+                    344.70367431640625,
+                    719.46240234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 12.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    123.33120727539062,
+                    215.7424774169922,
+                    337.6536560058594,
+                    717.2296752929688
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 12.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.01919478690251708,
+                "gaze_h": -0.4589328686858657,
+                "gaze_v": -0.00837302953004837,
+                "emotions": {
+                    "smile": 0.01919478690251708,
+                    "angry": 0.12715560365468265,
+                    "blank": 0.0043654705320174125,
+                    "dissatisfied": 0.2070072431117296,
+                    "anxious": 0.15508641419000924
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    114.85824584960938,
+                    215.3470458984375,
+                    329.90667724609375,
+                    717.57080078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 12.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    116.61956024169922,
+                    211.97784423828125,
+                    330.45849609375,
+                    717.1524658203125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 12.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    123.97390747070312,
+                    211.98309326171875,
+                    327.86431884765625,
+                    715.4510498046875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 12.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    125.960205078125,
+                    210.3806610107422,
+                    331.6476135253906,
+                    716.4119262695312
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 13.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    132.2882080078125,
+                    209.55128479003906,
+                    334.023681640625,
+                    717.031005859375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 13.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    136.69940185546875,
+                    210.51377868652344,
+                    332.6141662597656,
+                    718.2647705078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 13.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    149.772216796875,
+                    210.27276611328125,
+                    468.875732421875,
+                    717.2838134765625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 13.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "높음",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    172.3934326171875,
+                    209.9661865234375,
+                    488.3665771484375,
+                    717.6157836914062
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 13.8,
+            "face": {
+                "has_face": true,
+                "smile": 0.12129229307174683,
+                "gaze_h": 0.26343568219601315,
+                "gaze_v": -0.010943886823952198,
+                "emotions": {
+                    "smile": 0.12129229307174683,
+                    "angry": 0.16913997347728582,
+                    "blank": 0.06204257641851041,
+                    "dissatisfied": 0.13545398056267002,
+                    "anxious": 0.11289902729913592
+                },
+                "info": {
+                    "main_state": "PPT 응시 중"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "높음",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    195.52748107910156,
+                    211.01971435546875,
+                    487.53466796875,
+                    717.7088623046875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 14.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    213.66281127929688,
+                    212.5159912109375,
+                    421.3542175292969,
+                    716.490234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 14.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    221.57760620117188,
+                    212.84161376953125,
+                    383.2263488769531,
+                    716.29052734375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 14.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    233.88421630859375,
+                    212.70550537109375,
+                    386.829833984375,
+                    716.5885009765625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 14.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    238.04653930664062,
+                    214.76353454589844,
+                    387.4635314941406,
+                    718.9661865234375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 14.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    234.38308715820312,
+                    214.992919921875,
+                    387.7070007324219,
+                    715.9749145507812
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 15.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "손 뻗기 (바깥쪽)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    227.15826416015625,
+                    214.90521240234375,
+                    385.95648193359375,
+                    717.9262084960938
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 15.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    221.9739990234375,
+                    213.52919006347656,
+                    383.48553466796875,
+                    719.056396484375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 15.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    220.69009399414062,
+                    212.37158203125,
+                    383.3128967285156,
+                    715.4530639648438
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 15.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    214.2110137939453,
+                    212.617919921875,
+                    382.24151611328125,
+                    716.9168701171875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 15.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    208.1258087158203,
+                    211.86224365234375,
+                    426.13104248046875,
+                    717.73876953125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 16.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    205.2522430419922,
+                    208.16021728515625,
+                    535.1021118164062,
+                    716.6033935546875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 16.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "높음",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    201.2753143310547,
+                    204.331787109375,
+                    548.3920288085938,
+                    715.3387451171875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 16.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    198.31056213378906,
+                    204.0302734375,
+                    526.0765380859375,
+                    715.54296875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 16.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    188.9230499267578,
+                    205.91424560546875,
+                    390.34307861328125,
+                    717.26904296875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 16.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "확인 불가",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    185.50860595703125,
+                    208.82061767578125,
+                    383.1580810546875,
+                    717.068603515625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 17.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    192.84783935546875,
+                    208.1640625,
+                    380.9825439453125,
+                    716.119873046875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 17.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    184.99478149414062,
+                    206.49249267578125,
+                    377.2294006347656,
+                    716.0518798828125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 17.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    168.5631103515625,
+                    204.26263427734375,
+                    369.2979736328125,
+                    717.7122192382812
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 17.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    155.57049560546875,
+                    196.21612548828125,
+                    356.29669189453125,
+                    717.2008056640625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 17.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    136.17373657226562,
+                    191.9998779296875,
+                    339.2539367675781,
+                    715.817626953125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 18.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    115.73788452148438,
+                    191.3294677734375,
+                    330.53594970703125,
+                    716.3865966796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 18.2,
+            "face": {
+                "has_face": true,
+                "smile": 0.0005996371619403362,
+                "gaze_h": -0.6573620956130876,
+                "gaze_v": 0.0127282285830006,
+                "emotions": {
+                    "smile": 0.0005996371619403362,
+                    "angry": 0.2182461795397103,
+                    "blank": 0.0,
+                    "dissatisfied": 0.2605226429179311,
+                    "anxious": 0.24179554730653763
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    100.23700714111328,
+                    192.5145263671875,
+                    321.623046875,
+                    717.9176635742188
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 18.4,
+            "face": {
+                "has_face": true,
+                "smile": 6.174573445605347e-05,
+                "gaze_h": 0.022627141894317557,
+                "gaze_v": -0.008599246386438608,
+                "emotions": {
+                    "smile": 6.174573445605347e-05,
+                    "angry": 0.08549415185116233,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0039867612649686635,
+                    "anxious": 0.35864022374153137
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    88.69315338134766,
+                    191.409912109375,
+                    317.9370422363281,
+                    717.0184326171875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 18.6,
+            "face": {
+                "has_face": true,
+                "smile": 2.8429658414097503e-06,
+                "gaze_h": 0.011883698701241632,
+                "gaze_v": -0.01096070371568203,
+                "emotions": {
+                    "smile": 2.8429658414097503e-06,
+                    "angry": 0.09419274055399002,
+                    "blank": 0.0,
+                    "dissatisfied": 0.000653496248560259,
+                    "anxious": 0.22146417014300823
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    83.05219268798828,
+                    194.0184326171875,
+                    314.63287353515625,
+                    716.3707885742188
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 18.8,
+            "face": {
+                "has_face": true,
+                "smile": 6.660260714852484e-05,
+                "gaze_h": 0.015724983898550742,
+                "gaze_v": -0.02347368700429797,
+                "emotions": {
+                    "smile": 6.660260714852484e-05,
+                    "angry": 0.17458292543888093,
+                    "blank": 0.0,
+                    "dissatisfied": 0.0323432620964013,
+                    "anxious": 0.21335675148293376
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    79.12390899658203,
+                    195.8160400390625,
+                    315.0023193359375,
+                    716.1422119140625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 19.0,
+            "face": {
+                "has_face": true,
+                "smile": 3.171082425978966e-05,
+                "gaze_h": -0.3114387653102391,
+                "gaze_v": 0.010405059903860092,
+                "emotions": {
+                    "smile": 3.171082425978966e-05,
+                    "angry": 0.16070081796497107,
+                    "blank": 0.0,
+                    "dissatisfied": 0.10957990244496613,
+                    "anxious": 0.24925900623202324
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    79.514404296875,
+                    196.324951171875,
+                    320.21844482421875,
+                    716.16064453125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 19.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    82.66729736328125,
+                    200.6707763671875,
+                    314.322509765625,
+                    717.1241455078125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 19.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    82.55899047851562,
+                    199.11297607421875,
+                    312.4564208984375,
+                    718.5966186523438
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 19.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    91.29932403564453,
+                    199.141845703125,
+                    314.28778076171875,
+                    718.394775390625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 19.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    102.11477661132812,
+                    195.8565673828125,
+                    321.0819396972656,
+                    718.7843017578125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 20.0,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    117.38127899169922,
+                    195.88909912109375,
+                    326.04681396484375,
+                    717.701171875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 20.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    138.59786987304688,
+                    196.0277099609375,
+                    334.7627258300781,
+                    716.936279296875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 20.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    158.00839233398438,
+                    195.8541259765625,
+                    340.7580261230469,
+                    717.4256591796875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 20.6,
+            "face": {
+                "has_face": true,
+                "smile": 0.03189013712108135,
+                "gaze_h": -0.8245576911446637,
+                "gaze_v": 0.025720160221681,
+                "emotions": {
+                    "smile": 0.03189013712108135,
+                    "angry": 0.0804892337997444,
+                    "blank": 0.0,
+                    "dissatisfied": 0.025434513110667464,
+                    "anxious": 0.1658912282437086
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    172.28759765625,
+                    196.3179931640625,
+                    352.51324462890625,
+                    717.7540283203125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 20.8,
+            "face": {
+                "has_face": true,
+                "smile": 0.005396654363721609,
+                "gaze_h": -0.2800836973002194,
+                "gaze_v": -0.015113814733922482,
+                "emotions": {
+                    "smile": 0.005396654363721609,
+                    "angry": 0.09082049410790206,
+                    "blank": 0.0,
+                    "dissatisfied": 0.005864835181273519,
+                    "anxious": 0.3081044778227806
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    180.42010498046875,
+                    197.95391845703125,
+                    367.87237548828125,
+                    716.3894653320312
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 21.0,
+            "face": {
+                "has_face": true,
+                "smile": 1.441591530237929e-05,
+                "gaze_h": -0.13433465734598235,
+                "gaze_v": -0.007845934480428696,
+                "emotions": {
+                    "smile": 1.441591530237929e-05,
+                    "angry": 0.11712491903454067,
+                    "blank": 0.0,
+                    "dissatisfied": 0.02792084801767487,
+                    "anxious": 0.21044250577688217
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    184.62425231933594,
+                    199.18865966796875,
+                    380.433349609375,
+                    716.9954833984375
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 21.2,
+            "face": {
+                "has_face": true,
+                "smile": 3.315380610047214e-07,
+                "gaze_h": -0.13297899202868613,
+                "gaze_v": -0.006551582366228104,
+                "emotions": {
+                    "smile": 3.315380610047214e-07,
+                    "angry": 0.07290484460536391,
+                    "blank": 0.07219090940036677,
+                    "dissatisfied": 0.0018645922918949507,
+                    "anxious": 0.18868014588952065
+                },
+                "info": {
+                    "main_state": "시선 분산 (좌측)"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    187.30067443847656,
+                    198.0880126953125,
+                    384.075927734375,
+                    716.8651123046875
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 21.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    186.1238250732422,
+                    196.53924560546875,
+                    388.76324462890625,
+                    717.7900390625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 21.6,
+            "face": {
+                "has_face": true,
+                "smile": 2.583845616754843e-05,
+                "gaze_h": 0.08018429990538092,
+                "gaze_v": -0.027941304724663496,
+                "emotions": {
+                    "smile": 2.583845616754843e-05,
+                    "angry": 0.09259530507260934,
+                    "blank": 0.0,
+                    "dissatisfied": 0.00041973094266722905,
+                    "anxious": 0.30345969647169113
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    180.13917541503906,
+                    195.66387939453125,
+                    390.994384765625,
+                    717.4395141601562
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 21.8,
+            "face": {
+                "has_face": true,
+                "smile": 2.5295629711763468e-05,
+                "gaze_h": 0.10942930589404835,
+                "gaze_v": 0.10220442712306976,
+                "emotions": {
+                    "smile": 2.5295629711763468e-05,
+                    "angry": 0.08866722567472607,
+                    "blank": 0.0,
+                    "dissatisfied": 0.03594721624685917,
+                    "anxious": 0.4110363908112049
+                },
+                "info": {
+                    "main_state": "정면 응시함"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    166.21034240722656,
+                    195.297119140625,
+                    384.3741455078125,
+                    716.0377197265625
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 22.0,
+            "face": {
+                "has_face": true,
+                "smile": 0.00027783682162407786,
+                "gaze_h": 0.37585169024564713,
+                "gaze_v": -0.00020517036318778992,
+                "emotions": {
+                    "smile": 0.00027783682162407786,
+                    "angry": 0.11577654825523497,
+                    "blank": 0.0,
+                    "dissatisfied": 0.08582301705610007,
+                    "anxious": 0.34605950862169266
+                },
+                "info": {
+                    "main_state": "PPT 응시 중"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    155.03277587890625,
+                    193.90423583984375,
+                    372.989990234375,
+                    715.6642456054688
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 22.2,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "중간",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    135.65625,
+                    195.5811767578125,
+                    336.9556579589844,
+                    716.5968017578125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 22.4,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "기본 자세",
+                "left_hand_state": "중간",
+                "right_hand_state": "확인 불가",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    112.38162994384766,
+                    200.91802978515625,
+                    286.7309265136719,
+                    716.4551391601562
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 22.6,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "확인 불가",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    64.48956298828125,
+                    195.9918212890625,
+                    238.45709228515625,
+                    714.6973876953125
+                ],
+                "has_person": true
+            }
+        },
+        {
+            "time": 22.8,
+            "face": {
+                "has_face": false,
+                "smile": 0.0,
+                "gaze_h": 0.0,
+                "gaze_v": 0.0,
+                "emotions": {},
+                "info": {
+                    "main_state": "얼굴 미검출"
+                }
+            },
+            "yolo": {
+                "gesture_name": "PPT 가리키기 (왼손)",
+                "left_hand_state": "중간",
+                "right_hand_state": "확인 불가",
+                "is_arm_crossed": false,
+                "left_hand_visible": true,
+                "right_hand_visible": true,
+                "l_hand_hip_dist": 0.0,
+                "r_hand_hip_dist": 0.0,
+                "person_bbox": [
+                    19.0045166015625,
+                    199.7705078125,
+                    218.45123291015625,
+                    716.12060546875
+                ],
+                "has_person": true
+            }
+        }
+    ]
+}

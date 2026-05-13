@@ -14,16 +14,16 @@ except Exception:
 
 def analyze_frame_gesture_yolo(frame_path: str) -> dict:
     """
-    YOLO는 제스처(포즈) 담당:
-    - 사람 존재 여부
-    - 골반/발목 가시성
-    - 상세 제스처 (손 높이, 팔짱 등)
+    YOLO 제스처 분석 로직 개선:
+    - PPT 위치 자동 판별 (인물 위치 반대편)
+    - 좌우 손 판별 로직 정규화
+    - 양손 모으기 우선순위 강화
     """
     data = {
         "has_person": False,
         "has_pelvis": False,
         "has_ankles": False,
-        "gesture_name": "Stand",
+        "gesture_name": "기본 자세",
         "left_hand_state": "Low",
         "right_hand_state": "Low",
         "is_arm_crossed": False,
@@ -33,90 +33,84 @@ def analyze_frame_gesture_yolo(frame_path: str) -> dict:
     }
 
     if not _YOLO_AVAILABLE or pose_model is None:
-        data["error"] = "ultralytics 미설치"
         return data
+
+    import cv2
+    img = cv2.imread(frame_path)
+    if img is None: return data
+    img_h, img_w = img.shape[:2]
 
     results = pose_model(frame_path, verbose=False)
 
-    if (
-        results
-        and len(results) > 0
-        and getattr(results[0], "boxes", None) is not None
-        and len(results[0].boxes) > 0
-        and getattr(results[0], "keypoints", None) is not None
-    ):
+    if results and len(results) > 0 and len(results[0].boxes) > 0:
         data["has_person"] = True
-        
-        # 가장 큰 박스(보통 첫 번째)를 선택하거나 신뢰도 높은 것 선택
         box = results[0].boxes[0]
         data["person_bbox"] = box.xyxy[0].cpu().numpy().tolist()
+        
+        # PPT 위치 추정: 인물이 왼쪽이면 PPT는 오른쪽(Right), 인물이 오른쪽이면 PPT는 왼쪽(Left)
+        person_center_x = (data["person_bbox"][0] + data["person_bbox"][2]) / 2
+        ppt_side = "Right" if person_center_x < img_w / 2 else "Left"
 
-        kp_xy = results[0].keypoints.xy[0].cpu().numpy()   # 좌표 (x, y)
-        kp_conf = results[0].keypoints.conf[0].cpu().numpy() # 신뢰도 (0~1)
-
+        kp_xy = results[0].keypoints.xy[0].cpu().numpy()
+        kp_conf = results[0].keypoints.conf[0].cpu().numpy()
         data["keypoints"] = kp_xy.tolist()
 
-        # 가시성 체크 (11: L_Hip, 12: R_Hip, 15: L_Ankle, 16: R_Ankle)
-        # 신뢰도가 0.5 이상인 경우에만 감지된 것으로 인정
-        data["has_pelvis"] = bool(np.any(kp_conf[11:13] > 0.5))
-        data["has_ankles"] = bool(np.any(kp_conf[15:17] > 0.5))
-
-        # --- 제스처 분석 로직 개선 ---
-        l_sh, r_sh = kp_xy[5], kp_xy[6]   # 어깨 (5:L, 6:R)
-        l_hip, r_hip = kp_xy[11], kp_xy[12] # 골반
-        l_wr, r_wr = kp_xy[9], kp_xy[10]  # 손목
-        l_el, r_el = kp_xy[7], kp_xy[8]   # 팔꿈치
-
-        # 신뢰도 추출
+        # 주요 포인트 추출 (5:L_Sh, 6:R_Sh, 9:L_Wr, 10:R_Wr, 11:L_Hip, 12:R_Hip)
+        l_sh, r_sh = kp_xy[5], kp_xy[6]
+        l_wr, r_wr = kp_xy[9], kp_xy[10]
+        l_hip, r_hip = kp_xy[11], kp_xy[12]
         l_wr_conf, r_wr_conf = kp_conf[9], kp_conf[10]
-        
-        # 어깨 너비 계산 (기준점으로 활용)
         shoulder_width = np.linalg.norm(l_sh - r_sh)
 
-        def get_hand_state_kr(wrist, shoulder, hip, confidence):
-            if confidence < 0.5: return "확인 불가"
+        # 손 높이 계산
+        def get_hand_state(wrist, shoulder, hip, conf):
+            if conf < 0.5: return "확인 불가"
             if wrist[1] < shoulder[1]: return "높음"
             if wrist[1] < hip[1]: return "중간"
             return "낮음"
 
-        data["left_hand_state"] = get_hand_state_kr(l_wr, l_sh, l_hip, l_wr_conf)
-        data["right_hand_state"] = get_hand_state_kr(r_wr, r_sh, r_hip, r_wr_conf)
+        data["left_hand_state"] = get_hand_state(l_wr, l_sh, l_hip, l_wr_conf)
+        data["right_hand_state"] = get_hand_state(r_wr, r_sh, r_hip, r_wr_conf)
 
         gesture_name = "기본 자세"
 
-        # 1. 팔짱 끼기 (가장 명확한 동작이므로 우선 순위)
+        # [우선순위 1] 팔짱 끼기
         if l_wr_conf > 0.5 and r_wr_conf > 0.5:
-            if np.linalg.norm(l_wr - r_el) < 50 and np.linalg.norm(r_wr - l_el) < 50:
+            if np.linalg.norm(l_wr - kp_xy[8]) < 40 and np.linalg.norm(r_wr - kp_xy[7]) < 40:
                 data["is_arm_crossed"] = True
                 gesture_name = "팔짱 끼기"
 
-        # 2. 양손 모으기 (발표자의 대기 자세 - 가만히 있는 경우)
+        # [우선순위 2] 양손 모으기 (활발한 손동작보다 우선)
         if gesture_name == "기본 자세" and l_wr_conf > 0.5 and r_wr_conf > 0.5:
-            if np.linalg.norm(l_wr - r_wr) < 60: # 양 손목 사이 거리가 가까우면
+            if np.linalg.norm(l_wr - r_wr) < (shoulder_width * 0.4):
                 gesture_name = "양손 모으기"
 
-        # 3. 가리키기 및 강조 동작 (확실히 팔을 뻗었을 때만)
+        # [우선순위 3] PPT 가리키기 (확실한 방향성)
         if gesture_name == "기본 자세":
-            # 오른손으로 왼쪽 가리키기 (팔을 몸 안쪽으로 가로질러 뻗음)
-            if r_wr_conf > 0.5 and r_wr[0] < (r_sh[0] - shoulder_width * 0.4) and r_wr[1] < r_hip[1]:
-                gesture_name = "오른손으로 왼쪽 가리키기"
-            # 왼손으로 오른쪽 가리키기
-            elif l_wr_conf > 0.5 and l_wr[0] > (l_sh[0] + shoulder_width * 0.4) and l_wr[1] < l_hip[1]:
-                gesture_name = "왼손으로 오른쪽 가리키기"
-            # 강조 (손을 아주 높이 올렸을 때)
-            elif data["left_hand_state"] == "높음" or data["right_hand_state"] == "높음":
-                gesture_name = "손을 높여 강조"
-            # 활발한 손동작 (손이 몸통 바깥쪽으로 어느 정도 나갔을 때만)
-            elif (l_wr_conf > 0.5 and abs(l_wr[0] - l_sh[0]) > shoulder_width * 0.3) or \
-                 (r_wr_conf > 0.5 and abs(r_wr[0] - r_sh[0]) > shoulder_width * 0.3):
-                gesture_name = "활발한 손동작"
+            # 오른손(화면상 좌측)이 바깥쪽(화면 좌측)으로 뻗어질 때
+            if r_wr_conf > 0.6 and (r_sh[0] - r_wr[0]) > (shoulder_width * 0.5):
+                if ppt_side == "Left":
+                    gesture_name = "PPT 가리키기 (오른손)"
+                else:
+                    gesture_name = "손 뻗기 (바깥쪽)"
+            
+            # 왼손(화면상 우측)이 바깥쪽(화면 우측)으로 뻗어질 때
+            elif l_wr_conf > 0.6 and (l_wr[0] - l_sh[0]) > (shoulder_width * 0.5):
+                if ppt_side == "Right":
+                    gesture_name = "PPT 가리키기 (왼손)"
+                else:
+                    gesture_name = "손 뻗기 (바깥쪽)"
+
+            # [우선순위 4] 강조 및 활발한 동작
+            if gesture_name == "기본 자세":
+                if data["left_hand_state"] == "높음" or data["right_hand_state"] == "높음":
+                    gesture_name = "손을 높여 강조"
+                elif (l_wr_conf > 0.5 and abs(l_wr[0] - l_sh[0]) > shoulder_width * 0.6) or \
+                     (r_wr_conf > 0.5 and abs(r_wr[0] - r_sh[0]) > shoulder_width * 0.6):
+                    gesture_name = "활발한 손동작"
 
         data["gesture_name"] = gesture_name
-
-        # 몸의 기울기
-        if l_sh[1] > 0 and r_sh[1] > 0:
-            data["body_tilt"] = float(l_sh[1] - r_sh[1])
-
+        data["ppt_side"] = ppt_side
     return data
 
 def analyze_frame_yolo_pose(frame_path: str) -> YoloPoseResult:
@@ -131,7 +125,12 @@ def analyze_frame_yolo_pose(frame_path: str) -> YoloPoseResult:
         is_arm_crossed=bool(y.get("is_arm_crossed", False)),
         body_tilt=float(y.get("body_tilt", 0.0)),
         keypoints=list(y.get("keypoints", [])),
-        person_bbox=list(y.get("person_bbox", []))
+        person_bbox=list(y.get("person_bbox", [])),
+        left_hand_visible=bool(y.get("left_hand_visible", True)),
+        right_hand_visible=bool(y.get("right_hand_visible", True)),
+        l_hand_hip_dist=float(y.get("l_hand_hip_dist", 0.0)),
+        r_hand_hip_dist=float(y.get("r_hand_hip_dist", 0.0)),
+        ppt_side=str(y.get("ppt_side", "Unknown"))
     )
 
 def save_gesture_data(all_vision_results: list, frame_rate: int, job_id: str = "default"):

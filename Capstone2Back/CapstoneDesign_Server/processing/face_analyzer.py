@@ -4,7 +4,6 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime
-
 import numpy as np
 
 try:
@@ -12,56 +11,31 @@ try:
     import mediapipe as mp  # type: ignore
     from mediapipe.tasks import python  # type: ignore
     from mediapipe.tasks.python import vision  # type: ignore
-
     _MP_AVAILABLE = True
 except Exception:
-    cv2 = None  # type: ignore
-    mp = None  # type: ignore
-    python = None  # type: ignore
-    vision = None  # type: ignore
+    cv2 = mp = python = vision = None
     _MP_AVAILABLE = False
 
-# MediaPipe 설정
 if _MP_AVAILABLE:
     FaceLandmarker = vision.FaceLandmarker
     FaceLandmarkerOptions = vision.FaceLandmarkerOptions
     VisionRunningMode = vision.RunningMode
 else:
-    FaceLandmarker = None
-    FaceLandmarkerOptions = None
-    VisionRunningMode = None
+    FaceLandmarker = FaceLandmarkerOptions = VisionRunningMode = None
 
 face_landmarker_instance = None
-
-# 현재 파일 위치를 기준으로 절대 경로 재구성
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "face_landmarker.task"
 
-# 🌟 참고: 이제 개별 저장은 하지 않고 상위 모듈(task_manager)에서 통합 저장합니다.
-# 하지만 폴더 경로는 구조 유지를 위해 남겨둡니다.
-JSON_SAVE_DIR = Path(__file__).resolve().parent / "MediaPipe_json"
-
 def setup_face_landmarker():
-    """MediaPipe 모델을 로드합니다."""
     global face_landmarker_instance
-    if not _MP_AVAILABLE:
-        return None
-    if face_landmarker_instance:
-        return face_landmarker_instance
-
+    if not _MP_AVAILABLE: return None
+    if face_landmarker_instance: return face_landmarker_instance
     model_path_str = os.path.abspath(str(MODEL_PATH))
-    print(f"\n   > [1/5] AI 모델 로드 시도: {model_path_str}")
-    
-    if not os.path.exists(model_path_str):
-        print(f"❌ 파일을 찾을 수 없습니다: {model_path_str}")
-        raise FileNotFoundError(f"모델 파일이 없습니다.")
-
     try:
         with open(model_path_str, 'rb') as f:
             model_data = f.read()
-            
         base_options = python.BaseOptions(model_asset_buffer=model_data)
-        
         options = FaceLandmarkerOptions(
             base_options=base_options,
             running_mode=VisionRunningMode.IMAGE,
@@ -69,145 +43,95 @@ def setup_face_landmarker():
             output_face_blendshapes=True
         )
         face_landmarker_instance = FaceLandmarker.create_from_options(options)
-        print("   > [1/5] ✅ MediaPipe 모델 로드 완료.")
         return face_landmarker_instance
-    except Exception as e:
-        print(f"❌ 로드 실패: {e}")
-        raise
+    except Exception: return None
 
-def _process_blendshapes(blendshapes: list, image_path: str = None) -> dict:
-    """얼굴 특징 수치를 계산하여 반환합니다. 원천 데이터는 결과 딕셔너리에 포함됩니다."""
-    if not blendshapes:
+def _process_face_data(results) -> dict:
+    """코와 눈의 상대적 위치를 이용한 초정밀 시선 분석"""
+    if not results.face_blendshapes or not results.face_landmarks:
         return {}
         
-    # 52개의 모든 카테고리와 점수를 추출
-    cats = {c.category_name: c.score for c in blendshapes[0]}
-    
-    def pick(n):
-        return cats.get(n, 0)
+    # 1. Blendshapes (표정용)
+    cats = {c.category_name: c.score for c in results.face_blendshapes[0]}
+    def pick(n): return cats.get(n, 0)
 
-    # 시선, 웃음, 찡그림 등 주요 지표 계산
-    gaze_h = ((pick('eyeLookOutLeft') - pick('eyeLookInLeft')) + (pick('eyeLookInRight') - pick('eyeLookOutRight'))) / 2
-    gaze_v = ((pick('eyeLookUpLeft') - pick('eyeLookDownLeft')) + (pick('eyeLookUpRight') - pick('eyeLookDownRight'))) / 2
+    # 2. 초정밀 시선 분석 (Nose-to-Eye Center Ratio)
+    # Landmark Indices: 코끝(4), 왼쪽 눈 외곽(33), 오른쪽 눈 외곽(263)
+    lm = results.face_landmarks[0]
+    nose = lm[4]
+    l_eye = lm[33]
+    r_eye = lm[263]
+    
+    # 양 눈의 중심점 X좌표
+    eye_center_x = (l_eye.x + r_eye.x) / 2
+    # 눈 사이의 수평 거리 (기준값)
+    eye_dist = abs(r_eye.x - l_eye.x) + 1e-6
+    
+    # 코가 중심에서 벗어난 정도 (Positive = Right, Negative = Left)
+    # 화면 기준: 코가 눈 중심보다 오른쪽에 있으면(x값이 크면) 우측 응시
+    gaze_ratio = (nose.x - eye_center_x) / eye_dist
+    
+    # 보정 가중치 (고개를 돌릴 때 수치가 더 확실히 변하도록)
+    combined_gaze_h = gaze_ratio * 5.0 
+
+    # 3. 기타 감정 및 표정
     smile = (pick('mouthSmileLeft') + pick('mouthSmileRight')) / 2
     frown = (pick('mouthFrownLeft') + pick('mouthFrownRight')) / 2
-    brow_down = (pick('browDownLeft') + pick('browDownRight')) / 2
-    jaw_open = pick('jawOpen')
-    
     brow_up = (pick('browInnerUp') + pick('browOuterUpLeft') + pick('browOuterUpRight')) / 3
-    mouth_open = pick('mouthOpen')
-    squint = (pick('eyeSquintLeft') + pick('eyeSquintRight')) / 2
+    jaw_open = pick('jawOpen')
+
+    emotions = {
+        "smile": float(smile),
+        "angry": float(pick('browDownLeft') * 0.5 + pick('browDownRight') * 0.5 + frown * 0.5),
+        "blank": float(max(0, 1.0 - (smile + frown + brow_up + jaw_open) * 2.0)),
+        "anxious": float(pick('browInnerUp') * 0.5 + pick('eyeSquintLeft') * 0.5)
+    }
     
-    # 🌟 핵심: 모든 좌표 데이터(cats)를 'all_blendshapes'라는 키로 반환합니다.
-    # 이를 통해 task_manager에서 이 데이터를 모아 하나의 통합 JSON을 만들 수 있습니다.
     return {
-        "gaze_h": gaze_h,
-        "gaze_v": gaze_v,
-        "smile": smile,
-        "frown": frown,
-        "brow_down": brow_down,
-        "jaw_open": jaw_open,
-        "brow_up": brow_up,
-        "mouth_open": mouth_open,
-        "squint": squint,
-        "all_blendshapes": cats  # 통합 저장을 위한 원천 데이터 전송
+        "gaze_h": float(combined_gaze_h),
+        "gaze_v": float((pick('eyeLookUpLeft') + pick('eyeLookUpRight')) / 2 - (pick('eyeLookDownLeft') + pick('eyeLookDownRight')) / 2),
+        "smile": float(smile),
+        "emotions": emotions,
+        "all_blendshapes": cats
     }
 
 def analyze_image(image_input: str | np.ndarray) -> dict:
-    """프레임을 분석하여 표정 및 시선 데이터를 반환합니다.
-    image_input: 이미지 파일 경로(str) 또는 로드된 이미지(np.ndarray)
-    """
     landmarker = setup_face_landmarker()
-    if not landmarker:
-        if not _MP_AVAILABLE:
-            return {"error": "mediapipe 미설치"}
-        return {"error": "모델 미로드"}
-    
+    if not landmarker: return {"error": "모델 로드 실패"}
     try:
-        if cv2 is None or mp is None:
-            return {"error": "라이브러리 초기화 실패"}
-            
         if isinstance(image_input, str):
             image_bgr = cv2.imread(image_input)
-            if image_bgr is None:
-                return {"error": "이미지 읽기 실패"}
+            if image_bgr is None: return {"error": "이미지 읽기 실패"}
         else:
             image_bgr = image_input
-        
+            
         image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
         results = landmarker.detect(mp_image)
         
-        if results.face_blendshapes:
-            # 이미지 경로가 없는 경우(ROI인 경우) None 전달
-            img_path = image_input if isinstance(image_input, str) else None
-            return _process_blendshapes(results.face_blendshapes, img_path)
-        else:
-            return {"error": "얼굴 미검출"}
-            
+        if results.face_blendshapes and results.face_landmarks:
+            return _process_face_data(results)
+        return {"error": "얼굴 미검출"}
     except Exception as e:
         return {"error": str(e)}
 
 def save_face_data(all_vision_results: list, frame_rate: int, job_id: str = "default"):
-    """UI와 AI 피드백 모두에 최적화된 시계열 데이터를 저장합니다."""
     time_series_face = {}
-    processed_events = []
-    
-    if not all_vision_results:
-        return
-
-    current_state = None
-    start_time = 0.0
-
     for i, res in enumerate(all_vision_results):
         seconds = i / frame_rate
-        timestamp_key = f"{seconds:.2f}"
         face = res.face
-        
-        # 1. 상태 판별 로직
         state = "정면 응시함"
-        if not face.has_face:
-            state = "얼굴 미검출"
-        elif abs(face.gaze_h) > 0.35:
-            state = "시선 분산 (좌우)"
-        elif face.gaze_v < -0.2:
-            state = "시선 분산 (바닥)"
-        elif face.gaze_v > 0.3:
-            state = "시선 분산 (천장)"
-        elif face.brow_up > 0.45:
-            state = "눈썹 강조 (열정적)"
-        elif face.jaw_open > 0.3 or face.mouth_open > 0.3:
-            state = "말하는 중"
-
-        # 2. UI용 데이터 구성 (핵심만 포함하여 다이어트)
-        # UI는 blendshapes 내의 특정 키를 찾으므로 해당 키들만 유지
-        cats = face.all_blendshapes if face.has_face else {}
-        time_series_face[timestamp_key] = {
+        if not face.has_face: state = "얼굴 미검출"
+        elif face.gaze_h > 0.1: state = "우측 응시 (PPT)"
+        elif face.gaze_h < -0.1: state = "좌측 응시 (PPT)"
+        
+        time_series_face[f"{seconds:.2f}"] = {
             "info": {"main_state": state},
-            "blendshapes": {
-                "eyeLookInLeft": cats.get("eyeLookInLeft", 0.0),
-                "eyeLookInRight": cats.get("eyeLookInRight", 0.0),
-                "mouthSmileLeft": 0.0 # 사용자 요청으로 미소 제거
-            }
+            "gaze_h": face.gaze_h,
+            "emotions": face.emotions if hasattr(face, 'emotions') else {}
         }
-
-        # 3. AI 피드백용 이벤트 압축 로직
-        if state != current_state:
-            if current_state is not None:
-                processed_events.append({"start": round(start_time, 2), "end": round(seconds, 2), "state": current_state})
-            current_state = state
-            start_time = seconds
-
-    # AI 요약 정보 추가 (UI 로직에 방해되지 않도록 특수 키 사용)
-    time_series_face["__AI_SUMMARY__"] = {
-        "events": processed_events,
-        "detection_ratio": round(len([r for r in all_vision_results if r.face.has_face]) / len(all_vision_results) * 100, 1)
-    }
-
-    face_out_dir = Path("analysis_json/MediaPipe_json")
-    face_out_dir.mkdir(parents=True, exist_ok=True)
-    file_name = f"{job_id}_face.json"
-    with open(face_out_dir / file_name, 'w', encoding='utf-8') as f:
+    
+    out_dir = Path("analysis_json/MediaPipe_json")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with open(out_dir / f"{job_id}_face.json", 'w', encoding='utf-8') as f:
         json.dump(time_series_face, f, indent=4, ensure_ascii=False)
-
-    print(f"   > [UI/AI 통합] 시선/표정 리포트 저장 완료: {face_out_dir / file_name}")

@@ -1,0 +1,1714 @@
+{
+    "0.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "0.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "0.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "0.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "0.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "1.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "1.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "1.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "1.60": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "1.80": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "2.00": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "2.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "2.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "2.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "2.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "3.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "3.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "3.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "3.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "3.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "4.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "4.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "4.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "4.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "4.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "5.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "5.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "5.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "5.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "5.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "6.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "6.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "6.40": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "6.60": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "6.80": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "7.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "7.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "7.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "7.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "7.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "8.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "8.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "8.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "8.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "8.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "9.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "9.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "9.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "9.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "9.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "10.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "10.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "10.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "10.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "10.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "11.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "11.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "11.40": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "11.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "11.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "12.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "12.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "12.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "12.60": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "12.80": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "13.00": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "13.20": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "13.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "13.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "13.80": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "14.00": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "14.20": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "14.40": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "14.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "14.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "15.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "15.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "15.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "15.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "15.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "16.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "16.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "16.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "16.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "16.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "17.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "17.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "17.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "17.60": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "17.80": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "18.00": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "18.20": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "18.40": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "18.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "18.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "19.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "19.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "19.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "19.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "19.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "20.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "20.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "20.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "20.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "20.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "21.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "21.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "21.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "21.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "21.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "22.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "22.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "22.40": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "22.60": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "22.80": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "23.00": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "23.20": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "23.40": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "23.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "23.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "24.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "24.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "24.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "24.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "24.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "25.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "확인 불가",
+        "is_arm_crossed": false
+    },
+    "25.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "25.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "25.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "25.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "26.00": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "26.20": {
+        "gesture_name": "활발한 손동작",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "26.40": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "26.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "26.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "27.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "27.20": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "27.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "27.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "27.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "28.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "28.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "28.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "28.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "28.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "29.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "29.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "29.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "29.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "29.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "30.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "30.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "30.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "30.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "30.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "31.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "31.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "31.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "31.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "31.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "32.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "32.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "32.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "32.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "32.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "33.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "33.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "33.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "33.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "33.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "34.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "34.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "34.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "34.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "34.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "35.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "35.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "35.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "35.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "35.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "36.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "36.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "높음",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "36.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "36.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "36.80": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "37.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "37.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "37.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "37.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "37.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "38.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "38.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "38.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "38.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "38.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "39.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "39.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "39.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "39.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "39.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "40.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "40.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "40.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "40.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "40.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "41.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "41.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "41.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "41.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "41.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "42.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "42.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "42.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "42.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "42.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "43.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "43.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "43.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "43.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "43.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "44.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "44.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "44.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "44.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "44.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "45.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "45.20": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "45.40": {
+        "gesture_name": "손 뻗기 (바깥쪽)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "45.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "45.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "46.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "46.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "46.40": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "46.60": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "46.80": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "47.00": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "47.20": {
+        "gesture_name": "PPT 가리키기 (왼손)",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "47.40": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "47.60": {
+        "gesture_name": "양손 모으기",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "47.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "48.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "48.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "48.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "48.60": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "48.80": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "49.00": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "49.20": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "49.40": {
+        "gesture_name": "기본 자세",
+        "left_hand": "중간",
+        "right_hand": "중간",
+        "is_arm_crossed": false
+    },
+    "__AI_SUMMARY__": {
+        "events": [
+            {
+                "start": 0.0,
+                "end": 0.6,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 0.6,
+                "end": 1.6,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 1.6,
+                "end": 1.8,
+                "gesture": "활발한 손동작"
+            },
+            {
+                "start": 1.8,
+                "end": 2.2,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 2.2,
+                "end": 2.6,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 2.6,
+                "end": 4.6,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 4.6,
+                "end": 6.4,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 6.4,
+                "end": 6.8,
+                "gesture": "활발한 손동작"
+            },
+            {
+                "start": 6.8,
+                "end": 7.0,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 7.0,
+                "end": 7.2,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 7.2,
+                "end": 8.8,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 8.8,
+                "end": 9.0,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 9.0,
+                "end": 11.2,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 11.2,
+                "end": 11.4,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 11.4,
+                "end": 11.6,
+                "gesture": "활발한 손동작"
+            },
+            {
+                "start": 11.6,
+                "end": 12.6,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 12.6,
+                "end": 13.4,
+                "gesture": "손 뻗기 (바깥쪽)"
+            },
+            {
+                "start": 13.4,
+                "end": 13.8,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 13.8,
+                "end": 14.6,
+                "gesture": "손 뻗기 (바깥쪽)"
+            },
+            {
+                "start": 14.6,
+                "end": 17.6,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 17.6,
+                "end": 18.6,
+                "gesture": "손 뻗기 (바깥쪽)"
+            },
+            {
+                "start": 18.6,
+                "end": 20.8,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 20.8,
+                "end": 22.4,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 22.4,
+                "end": 22.8,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 22.8,
+                "end": 23.4,
+                "gesture": "활발한 손동작"
+            },
+            {
+                "start": 23.4,
+                "end": 23.6,
+                "gesture": "손 뻗기 (바깥쪽)"
+            },
+            {
+                "start": 23.6,
+                "end": 23.8,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 23.8,
+                "end": 24.0,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 24.0,
+                "end": 24.2,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 24.2,
+                "end": 24.6,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 24.6,
+                "end": 24.8,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 24.8,
+                "end": 25.0,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 25.0,
+                "end": 25.4,
+                "gesture": "기본 자세"
+            },
+            {
+                "start": 25.4,
+                "end": 26.0,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 26.0,
+                "end": 26.4,
+                "gesture": "활발한 손동작"
+            },
+            {
+                "start": 26.4,
+                "end": 26.6,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 26.6,
+                "end": 27.2,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 27.2,
+                "end": 27.4,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 27.4,
+                "end": 36.8,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 36.8,
+                "end": 37.0,
+                "gesture": "양손 모으기"
+            },
+            {
+                "start": 37.0,
+                "end": 45.2,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 45.2,
+                "end": 45.6,
+                "gesture": "손 뻗기 (바깥쪽)"
+            },
+            {
+                "start": 45.6,
+                "end": 47.4,
+                "gesture": "PPT 가리키기 (왼손)"
+            },
+            {
+                "start": 47.4,
+                "end": 47.8,
+                "gesture": "양손 모으기"
+            }
+        ]
+    }
+}

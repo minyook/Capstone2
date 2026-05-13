@@ -50,6 +50,7 @@ def analyze_frame_face(image_input: str | np.ndarray) -> MediaPipeFaceResult:
         squint=float(f.get("squint", 0.0)),
         gaze_h=float(f.get("gaze_h", 0.0)),
         gaze_v=float(f.get("gaze_v", 0.0)),
+        emotions=f.get("emotions", {}),
         all_blendshapes=f.get("all_blendshapes", {}),
         error=None,
     )

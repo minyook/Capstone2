@@ -1,0 +1,2028 @@
+{
+    "0.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 15.595240019662045,
+        "emotions": {
+            "smile": 0.0008804955577943474,
+            "angry": 0.34037301503121853,
+            "blank": 0.0,
+            "anxious": 0.5187927335500717
+        }
+    },
+    "0.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 40.605408812857405,
+        "emotions": {
+            "smile": 0.0011707023077178746,
+            "angry": 0.36074918136000633,
+            "blank": 0.5396653903687063,
+            "anxious": 0.19229203090071678
+        }
+    },
+    "0.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "0.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "0.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -2.5177879975967077,
+        "emotions": {
+            "smile": 0.15278173610568047,
+            "angry": 0.027487535495311022,
+            "blank": 0.08078128813455498,
+            "anxious": 0.06870501139201224
+        }
+    },
+    "1.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "1.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -1.7419608020692037,
+        "emotions": {
+            "smile": 0.1868306901305914,
+            "angry": 0.5064171828421422,
+            "blank": 0.5753691869886097,
+            "anxious": 0.08784179788199253
+        }
+    },
+    "1.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "1.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "1.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": 0.025247948196176706,
+        "emotions": {
+            "smile": 0.00747812120243907,
+            "angry": 0.3052023518830538,
+            "blank": 0.8960785962020358,
+            "anxious": 0.18395649967715144
+        }
+    },
+    "2.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "2.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "2.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "2.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.9459455685833993,
+        "emotions": {
+            "smile": 0.00011167479169671424,
+            "angry": 0.005721985828131437,
+            "blank": 0.568674039292091,
+            "anxious": 0.2681919038295746
+        }
+    },
+    "2.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.5459604235416672,
+        "emotions": {
+            "smile": 0.003053755732253194,
+            "angry": 0.014642089023254812,
+            "blank": 0.6135719174829621,
+            "anxious": 0.2471633329987526
+        }
+    },
+    "3.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": -0.0039790125355230865,
+        "emotions": {
+            "smile": 0.000168948681675829,
+            "angry": 0.09398899506777525,
+            "blank": 0.503673510752075,
+            "anxious": 0.13903560489416122
+        }
+    },
+    "3.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": -0.08201997315607842,
+        "emotions": {
+            "smile": 7.098073911038227e-05,
+            "angry": 0.07969156629405916,
+            "blank": 0.4173887611274647,
+            "anxious": 0.23303554952144623
+        }
+    },
+    "3.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": 0.04352976505302164,
+        "emotions": {
+            "smile": 7.131031634344254e-05,
+            "angry": 0.003567032064893283,
+            "blank": 0.0,
+            "anxious": 0.4415135383605957
+        }
+    },
+    "3.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.5148645511964827,
+        "emotions": {
+            "smile": 2.4675597160239704e-05,
+            "angry": 0.0519723619800061,
+            "blank": 0.5215147773039159,
+            "anxious": 0.3607935383915901
+        }
+    },
+    "3.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "4.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "4.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "4.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "4.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "4.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "5.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "5.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "5.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "5.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "5.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "6.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "6.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "6.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "6.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "6.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "7.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "7.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "7.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "7.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "7.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 3.012630081942496,
+        "emotions": {
+            "smile": 1.9050656646868447e-05,
+            "angry": 0.050379868131130934,
+            "blank": 0.0,
+            "anxious": 0.028163948794826865
+        }
+    },
+    "8.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "8.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "8.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "8.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "8.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.9362767556072258,
+        "emotions": {
+            "smile": 0.019609315786510706,
+            "angry": 0.35471837036311626,
+            "blank": 0.6894557217989739,
+            "anxious": 0.18439011042937636
+        }
+    },
+    "9.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.5897186633270048,
+        "emotions": {
+            "smile": 7.952027658575389e-06,
+            "angry": 0.06941615068353713,
+            "blank": 0.819202779622098,
+            "anxious": 0.21618794277310371
+        }
+    },
+    "9.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": 0.07039450902901785,
+        "emotions": {
+            "smile": 1.1604905694184708e-05,
+            "angry": 0.030885269516147673,
+            "blank": 0.48668950686366463,
+            "anxious": 0.30193912982940674
+        }
+    },
+    "9.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.1656069284730259,
+        "emotions": {
+            "smile": 4.321802953199949e-05,
+            "angry": 0.012957782950252295,
+            "blank": 0.5902505325975653,
+            "anxious": 0.226788692176342
+        }
+    },
+    "9.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.4369636038021945,
+        "emotions": {
+            "smile": 0.0007135084888432175,
+            "angry": 0.08259303355589509,
+            "blank": 0.17556448546626302,
+            "anxious": 0.24842292815446854
+        }
+    },
+    "9.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "10.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "10.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "10.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "10.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "10.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "11.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "11.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "11.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "11.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "11.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "12.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "12.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "12.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "12.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "12.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "13.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "13.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "13.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "13.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "13.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "14.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "14.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "14.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "14.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "14.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "15.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "15.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "15.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "15.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "15.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "16.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "16.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "16.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "16.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "16.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "17.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "17.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "17.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "17.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "17.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "18.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "18.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "18.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "18.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "18.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "19.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "19.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "19.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "19.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "19.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "20.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "20.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.13224193008988744,
+        "emotions": {
+            "smile": 0.19416198879480362,
+            "angry": 0.10000941838393373,
+            "blank": 0.39229910723618866,
+            "anxious": 0.11578715173527598
+        }
+    },
+    "20.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "20.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "20.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "21.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "21.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "21.40": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.4990628834660432,
+        "emotions": {
+            "smile": 1.0908480362559203e-05,
+            "angry": 0.0009585075604263693,
+            "blank": 0.0,
+            "anxious": 0.36291008442640305
+        }
+    },
+    "21.60": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.45110680729330155,
+        "emotions": {
+            "smile": 9.333235340136525e-08,
+            "angry": 0.00980479217007968,
+            "blank": 0.48854394367808607,
+            "anxious": 0.2651541605591774
+        }
+    },
+    "21.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.26593855121154897,
+        "emotions": {
+            "smile": 1.7167834442943786e-07,
+            "angry": 0.05580142559483647,
+            "blank": 0.337284401050051,
+            "anxious": 0.2281467244029045
+        }
+    },
+    "22.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "22.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.154370528880345,
+        "emotions": {
+            "smile": 0.0041078077629208565,
+            "angry": 0.08434355910867453,
+            "blank": 0.4353516430904468,
+            "anxious": 0.2210475131869316
+        }
+    },
+    "22.40": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.5806883331489205,
+        "emotions": {
+            "smile": 0.00010130413465958554,
+            "angry": 0.03412831132300198,
+            "blank": 0.18334257139576948,
+            "anxious": 0.3914868161082268
+        }
+    },
+    "22.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "22.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -1.3995612905759804,
+        "emotions": {
+            "smile": 0.00019256568339187652,
+            "angry": 0.021510910475626588,
+            "blank": 0.6446596902775734,
+            "anxious": 0.21771369874477386
+        }
+    },
+    "23.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "23.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "23.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "23.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "23.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "24.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "24.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "24.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "24.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "24.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "25.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "25.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "25.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "25.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "25.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "26.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "26.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.4732612953589562,
+        "emotions": {
+            "smile": 0.04516869969666004,
+            "angry": 0.061358410741377156,
+            "blank": 0.7747942279978209,
+            "anxious": 0.12822224269621074
+        }
+    },
+    "26.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "26.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "26.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "27.00": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.7601864285264603,
+        "emotions": {
+            "smile": 0.03430000878870487,
+            "angry": 0.4122308166062112,
+            "blank": 0.7180846879414275,
+            "anxious": 0.12548704221990192
+        }
+    },
+    "27.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "27.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "27.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "27.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "28.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "28.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "28.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "28.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "28.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "29.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "29.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "29.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "29.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 1.6073334487011095,
+        "emotions": {
+            "smile": 0.2141660824418068,
+            "angry": 0.041184877743944526,
+            "blank": 0.4885709612087036,
+            "anxious": 0.14717319142073393
+        }
+    },
+    "29.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.7489124439495147,
+        "emotions": {
+            "smile": 8.520895335095702e-06,
+            "angry": 0.01429853227455169,
+            "blank": 0.7192012186627228,
+            "anxious": 0.23145334422588348
+        }
+    },
+    "30.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.47972077351101045,
+        "emotions": {
+            "smile": 0.00015875793906161562,
+            "angry": 0.10149180050939322,
+            "blank": 0.3318438187755721,
+            "anxious": 0.14281754940748215
+        }
+    },
+    "30.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 1.2751064071358764,
+        "emotions": {
+            "smile": 0.0015506672207266092,
+            "angry": 0.13051369786262512,
+            "blank": 0.0,
+            "anxious": 0.3596406262367964
+        }
+    },
+    "30.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "30.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "30.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "31.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "31.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "31.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "31.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "31.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "32.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "32.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "32.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "32.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "32.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "33.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "33.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "33.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "33.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "33.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "34.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "34.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "34.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "34.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.22776405262487479,
+        "emotions": {
+            "smile": 1.493085483161849e-05,
+            "angry": 0.09277372434735298,
+            "blank": 0.20096829927842919,
+            "anxious": 0.21336740627884865
+        }
+    },
+    "34.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": 0.008691807916778583,
+        "emotions": {
+            "smile": 3.282215584476944e-05,
+            "angry": 0.28572635546152014,
+            "blank": 0.3563465988057336,
+            "anxious": 0.07954537030309439
+        }
+    },
+    "35.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": -0.05335264513267676,
+        "emotions": {
+            "smile": 0.0008396159973926842,
+            "angry": 0.01498156413435936,
+            "blank": 0.032212069296899015,
+            "anxious": 0.252024807035923
+        }
+    },
+    "35.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "35.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.3245485186360658,
+        "emotions": {
+            "smile": 0.006312471115961671,
+            "angry": 0.0831489902921021,
+            "blank": 0.0,
+            "anxious": 0.23860101401805878
+        }
+    },
+    "35.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.36843175766027236,
+        "emotions": {
+            "smile": 1.1836938483611448e-05,
+            "angry": 0.02966081362683326,
+            "blank": 0.0,
+            "anxious": 0.25700628757476807
+        }
+    },
+    "35.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 1.4883406103131882,
+        "emotions": {
+            "smile": 3.16744235533406e-05,
+            "angry": 0.00989493471570313,
+            "blank": 0.7107722352817898,
+            "anxious": 0.30045071244239807
+        }
+    },
+    "36.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "36.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "36.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "36.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "36.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "37.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "37.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "37.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "37.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "37.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "38.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "38.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "38.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "38.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "38.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "39.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "39.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "39.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "39.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "39.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "40.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "40.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "40.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "40.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 2.1368461415383924,
+        "emotions": {
+            "smile": 0.0035974713973701,
+            "angry": 0.06882810511160642,
+            "blank": 0.8914592910247544,
+            "anxious": 0.3623814464081079
+        }
+    },
+    "40.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.9312544182918299,
+        "emotions": {
+            "smile": 0.0005317850882420316,
+            "angry": 0.012121762971219141,
+            "blank": 0.08997114252997562,
+            "anxious": 0.28324001282453537
+        }
+    },
+    "41.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.7714465554412133,
+        "emotions": {
+            "smile": 4.3750387703767046e-05,
+            "angry": 0.04756632773205638,
+            "blank": 0.14777261399770691,
+            "anxious": 0.1943688839673996
+        }
+    },
+    "41.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.5079773138656258,
+        "emotions": {
+            "smile": 0.004363503539934754,
+            "angry": 0.02550616255030036,
+            "blank": 0.1484276858779291,
+            "anxious": 0.09214259311556816
+        }
+    },
+    "41.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": -0.05043065090752079,
+        "emotions": {
+            "smile": 0.0001175328106910456,
+            "angry": 0.19593415985582396,
+            "blank": 0.6856026644454687,
+            "anxious": 0.17511200113222003
+        }
+    },
+    "41.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": 0.028000282931566214,
+        "emotions": {
+            "smile": 7.41754504929304e-07,
+            "angry": 0.09553662315011024,
+            "blank": 0.7210778250306191,
+            "anxious": 0.1260843276977539
+        }
+    },
+    "41.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.15139752346186747,
+        "emotions": {
+            "smile": 2.8027505294403454e-07,
+            "angry": 0.0008570388276893937,
+            "blank": 0.031196466145023805,
+            "anxious": 0.41148073971271515
+        }
+    },
+    "42.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.16570211721935454,
+        "emotions": {
+            "smile": 2.44675684157869e-08,
+            "angry": 0.00601280036062235,
+            "blank": 0.0,
+            "anxious": 0.27251341938972473
+        }
+    },
+    "42.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.3543097829689346,
+        "emotions": {
+            "smile": 0.0010306279000360519,
+            "angry": 0.25648168846964836,
+            "blank": 0.0,
+            "anxious": 0.12390263192355633
+        }
+    },
+    "42.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.9790580914317173,
+        "emotions": {
+            "smile": 0.02564128302037716,
+            "angry": 0.0971739161759615,
+            "blank": 0.07220678279797244,
+            "anxious": 0.19774563051760197
+        }
+    },
+    "42.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "42.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "43.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "43.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "43.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "43.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "43.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "44.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "44.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "44.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "44.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "44.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "45.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "45.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "45.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.4346967770690705,
+        "emotions": {
+            "smile": 0.0001662093236518558,
+            "angry": 0.006177046860102564,
+            "blank": 0.043197452660630686,
+            "anxious": 0.27123771607875824
+        }
+    },
+    "45.60": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.1726740055589237,
+        "emotions": {
+            "smile": 1.1290451880086039e-06,
+            "angry": 0.07955464015822145,
+            "blank": 0.6962875168174303,
+            "anxious": 0.12238911259919405
+        }
+    },
+    "45.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.20953014733928277,
+        "emotions": {
+            "smile": 4.710926077677868e-06,
+            "angry": 0.06106717884540558,
+            "blank": 0.8368175781300426,
+            "anxious": 0.2328524850308895
+        }
+    },
+    "46.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.2803159147811674,
+        "emotions": {
+            "smile": 0.00013838807899446692,
+            "angry": 0.04983026999980211,
+            "blank": 0.1483329390454552,
+            "anxious": 0.1567123420536518
+        }
+    },
+    "46.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "46.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "46.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "46.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "47.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "47.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "47.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 1.4882198170611223,
+        "emotions": {
+            "smile": 0.011841901578009129,
+            "angry": 0.23915383825078607,
+            "blank": 0.953605911306416,
+            "anxious": 0.20790984272025526
+        }
+    },
+    "47.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.5332377957863791,
+        "emotions": {
+            "smile": 0.3616352677345276,
+            "angry": 0.1552516466472298,
+            "blank": 0.18375933232406771,
+            "anxious": 0.1771623957902193
+        }
+    },
+    "47.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.3763692242178915,
+        "emotions": {
+            "smile": 1.2662574135902105e-05,
+            "angry": 0.1595163932070136,
+            "blank": 0.22169201696518337,
+            "anxious": 0.18582918075844646
+        }
+    },
+    "48.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.43855613293397094,
+        "emotions": {
+            "smile": 0.013951192609965801,
+            "angry": 0.07575919385999441,
+            "blank": 0.6189766954630613,
+            "anxious": 0.19281056057661772
+        }
+    },
+    "48.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.24962064563862865,
+        "emotions": {
+            "smile": 0.006196146132424474,
+            "angry": 0.32742741890251637,
+            "blank": 0.5725973035829763,
+            "anxious": 0.11102187167853117
+        }
+    },
+    "48.40": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "gaze_h": -0.21763277412921586,
+        "emotions": {
+            "smile": 5.977299110782042e-06,
+            "angry": 0.02059206340345554,
+            "blank": 0.6173800276339989,
+            "anxious": 0.37329141050577164
+        }
+    },
+    "48.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "48.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "49.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "gaze_h": 0.0,
+        "emotions": {}
+    },
+    "49.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "gaze_h": -0.011943877924976427,
+        "emotions": {
+            "smile": 4.2975217695584433e-07,
+            "angry": 0.03878377552609891,
+            "blank": 0.5712022746735196,
+            "anxious": 0.2128988616168499
+        }
+    },
+    "49.40": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "gaze_h": 0.14999249611007473,
+        "emotions": {
+            "smile": 0.000248101532633882,
+            "angry": 0.13294782870798372,
+            "blank": 0.6681351428608953,
+            "anxious": 0.20116070937365294
+        }
+    }
+}

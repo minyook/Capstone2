@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overnight.AI | 정밀 진단 모드</title>
+    <style>
+        :root {
+            --primary: #00ff88;
+            --bg: #0a0a0c;
+            --card-bg: #16161a;
+            --text: #ffffff;
+            --accent: #ff0055;
+        }
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .header { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        
+        .main-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; width: 100%; max-width: 1200px; }
+        
+        .video-container { background: #000; border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        video { width: 100%; height: auto; display: block; }
+        
+        .overlay-info { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 4px; font-family: monospace; font-size: 12px; pointer-events: none; }
+
+        .diagnostic-panel { display: flex; flex-direction: column; gap: 15px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #2d2d33; }
+        .card h2 { margin-top: 0; font-size: 1.1em; color: #aaa; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+
+        /* Emotion Bars */
+        .emotion-row { margin-bottom: 12px; }
+        .emotion-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+        .bar-container { background: #222; height: 8px; border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; transition: width 0.1s ease-out; background: var(--primary); }
+        .bar-fill.angry { background: #ff4444; }
+        .bar-fill.anxious { background: #ffaa00; }
+        .bar-fill.dissatisfied { background: #aa44ff; }
+        .bar-fill.blank { background: #888888; }
+
+        /* YOLO Info */
+        .gesture-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; background: #333; font-weight: bold; font-size: 0.9em; margin-bottom: 10px; border: 1px solid var(--primary); color: var(--primary); }
+        .hand-status { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hand-box { background: #1f1f25; padding: 10px; border-radius: 8px; text-align: center; }
+        .hand-box span { display: block; font-size: 11px; color: #777; margin-bottom: 3px; }
+        .hand-box b { font-size: 14px; }
+
+        .upload-area { width: 100%; max-width: 600px; padding: 40px; border: 2px dashed #333; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; margin-top: 50px; }
+        .upload-area:hover { border-color: var(--primary); background: #111; }
+        .hidden { display: none; }
+
+        .status-msg { margin-top: 20px; font-size: 14px; color: #888; }
+
+        /* Real-time Box on Video */
+        #bbox_overlay { position: absolute; border: 2px solid var(--primary); display: none; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Overnight.AI Diagnostic Mode</h1>
+        <div id="fileInfo" style="font-size: 12px; color: #666;">파일을 업로드해주세요</div>
+    </div>
+
+    <div id="uploadSection" class="upload-area">
+        <div style="font-size: 40px; margin-bottom: 10px;">📤</div>
+        <p>분석할 영상을 선택하거나 이곳에 드래그하세요</p>
+        <input type="file" id="videoInput" class="hidden" accept="video/*">
+    </div>
+
+    <div id="mainSection" class="main-layout hidden">
+        <div class="video-container">
+            <video id="player" controls></video>
+            <div id="bbox_overlay"></div>
+            <div class="overlay-info" id="timeDisplay">00:00.00</div>
+        </div>
+
+        <div class="diagnostic-panel">
+            <div class="card">
+                <h2>😊 표정 정밀 분석 (MediaPipe)</h2>
+                <div class="emotion-row">
+                    <div class="emotion-label"><span>웃음 (Smile)</span><span id="val_smile">0%</span></div>
+                    <div class="bar-container"><div class="bar-fill" id="bar_smile"></div></div>
+                </div>
+                <div class="emotion-row">
+                    <div class="emotion-label"><span>화남 (Angry)</span><span id="val_angry">0%</span></div>
+                    <div class="bar-container"><div class="bar-fill angry" id="bar_angry"></div></div>
+                </div>
+                <div class="emotion-row">
+                    <div class="emotion-label"><span>불안 (Anxious)</span><span id="val_anxious">0%</span></div>
+                    <div class="bar-container"><div class="bar-fill anxious" id="bar_anxious"></div></div>
+                </div>
+                <div class="emotion-row">
+                    <div class="emotion-label"><span>불만 (Dissatisfied)</span><span id="val_dissatisfied">0%</span></div>
+                    <div class="bar-container"><div class="bar-fill dissatisfied" id="bar_dissatisfied"></div></div>
+                </div>
+                <div class="emotion-row">
+                    <div class="emotion-label"><span>멍때림 (Blank)</span><span id="val_blank">0%</span></div>
+                    <div class="bar-container"><div class="bar-fill blank" id="bar_blank"></div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>✋ 포즈 및 제스처 (YOLO)</h2>
+                <div id="gesture_name" class="gesture-badge">Stand</div>
+                <div class="hand-status">
+                    <div class="hand-box">
+                        <span>왼손 높이</span>
+                        <b id="l_hand">Low</b>
+                    </div>
+                    <div class="hand-box">
+                        <span>오른손 높이</span>
+                        <b id="r_hand">Low</b>
+                    </div>
+                </div>
+                <div style="margin-top:15px; font-size:13px; color:#aaa;">
+                    팔짱 감지: <span id="is_crossed" style="color:white">-</span><br>
+                    시선 방향: <span id="gaze_dir" style="color:white">-</span>
+                </div>
+            </div>
+            
+            <div id="statusText" class="status-msg">분석 데이터를 동기화 중입니다...</div>
+        </div>
+    </div>
+
+    <script>
+        const uploadSection = document.getElementById('uploadSection');
+        const videoInput = document.getElementById('videoInput');
+        const mainSection = document.getElementById('mainSection');
+        const player = document.getElementById('player');
+        const bbox = document.getElementById('bbox_overlay');
+        
+        let analysisData = [];
+        let jobId = '';
+
+        uploadSection.onclick = () => videoInput.click();
+
+        videoInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            uploadSection.innerHTML = "<div style='font-size: 20px;'>분석 중... 잠시만 기다려주세요</div><div id='prog' style='font-size:12px; color:#888;'>업로드 중...</div>";
+            
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                jobId = data.job_id;
+                player.src = data.video_url;
+                document.getElementById('fileInfo').innerText = `Job ID: ${jobId} | ${file.name}`;
+                pollStatus();
+            } catch (err) {
+                alert("업로드 실패: " + err.message);
+                location.reload();
+            }
+        };
+
+        function pollStatus() {
+            const interval = setInterval(async () => {
+                const res = await fetch(`/api/status/${jobId}`);
+                const data = await res.json();
+                document.getElementById('prog').innerText = data.message || data.status;
+
+                if (data.status === 'Complete') {
+                    clearInterval(interval);
+                    await loadData(data.result.video_filename);
+                } else if (data.status === 'Error') {
+                    clearInterval(interval);
+                    alert("분석 오류: " + data.message);
+                }
+            }, 2000);
+        }
+
+        async function loadData(filename) {
+            const res = await fetch(`/results/total/${filename}_total.json`);
+            const data = await res.json();
+            analysisData = data.raw_data;
+            
+            uploadSection.classList.add('hidden');
+            mainSection.classList.remove('hidden');
+            document.getElementById('statusText').innerText = "데이터 동기화 완료. 재생을 시작하세요.";
+        }
+
+        player.ontimeupdate = () => {
+            const time = player.currentTime;
+            document.getElementById('timeDisplay').innerText = time.toFixed(2) + "s";
+            
+            // 데이터 매칭 (가장 가까운 시간)
+            const frame = analysisData.find(d => Math.abs(d.time - time) < 0.15);
+            if (frame) {
+                updateUI(frame);
+            }
+        };
+
+        function updateUI(data) {
+            const f = data.face;
+            const y = data.yolo;
+
+            // Emotions
+            if (f.has_face && f.emotions) {
+                const emos = f.emotions;
+                ["smile", "angry", "anxious", "dissatisfied", "blank"].forEach(e => {
+                    const val = (emos[e] || 0) * 100;
+                    document.getElementById(`bar_${e}`).style.width = val + "%";
+                    document.getElementById(`val_${e}`).innerText = Math.round(val) + "%";
+                });
+                
+                let gazeText = "정면";
+                if (f.gaze_h > 0.3) gazeText = "우측 (◀)";
+                else if (f.gaze_h < -0.3) gazeText = "좌측 (▶)";
+                document.getElementById('gaze_dir').innerText = gazeText;
+            } else {
+                document.getElementById('statusText').innerText = "얼굴 미검출 구간";
+            }
+
+            // YOLO
+            document.getElementById('gesture_name').innerText = y.gesture_name;
+            document.getElementById('l_hand').innerText = y.left_hand_state;
+            document.getElementById('r_hand').innerText = y.right_hand_state;
+            document.getElementById('is_crossed').innerText = y.is_arm_crossed ? "⚠️ 감지됨" : "정상";
+
+            // Bounding Box (비율 계산 필요 - 단순 구현)
+            if (y.has_person && y.person_bbox) {
+                const [x1, y1, x2, y2] = y.person_bbox;
+                // 실제 영상 해상도와 비디오 태그 크기 비율 계산이 필요하지만 생략하거나 대략적으로 표시
+                // 여기서는 시각적 확인이 목적이므로 지표 위주로 노출
+            }
+        }
+    </script>
+</body>
+</html>

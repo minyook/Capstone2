@@ -1,0 +1,1162 @@
+{
+    "0.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "0.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "0.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "0.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.34946689009666443,
+            "eyeLookInRight": 0.6069879531860352
+        }
+    },
+    "0.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "1.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "1.20": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.7635875940322876,
+            "eyeLookInRight": 0.9815785884857178
+        }
+    },
+    "1.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "1.60": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.018165666610002518,
+            "eyeLookInRight": 0.36891797184944153
+        }
+    },
+    "1.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "2.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "2.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "2.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "2.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "2.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "3.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "3.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "3.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "3.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "3.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "4.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "4.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "4.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "4.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "4.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "5.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "5.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.2929723262786865,
+            "eyeLookInRight": 0.1618288904428482
+        }
+    },
+    "5.40": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.3366658389568329,
+            "eyeLookInRight": 0.010498454794287682
+        }
+    },
+    "5.60": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0387757234275341,
+            "eyeLookInRight": 0.08793767541646957
+        }
+    },
+    "5.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.011955030262470245,
+            "eyeLookInRight": 0.22821082174777985
+        }
+    },
+    "6.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03845227509737015,
+            "eyeLookInRight": 0.09002808481454849
+        }
+    },
+    "6.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.07241760194301605,
+            "eyeLookInRight": 0.06864559650421143
+        }
+    },
+    "6.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03852137550711632,
+            "eyeLookInRight": 0.0679248496890068
+        }
+    },
+    "6.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.1784319132566452,
+            "eyeLookInRight": 0.02465132623910904
+        }
+    },
+    "6.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.014379795640707016,
+            "eyeLookInRight": 0.17700836062431335
+        }
+    },
+    "7.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.025362761691212654,
+            "eyeLookInRight": 0.1544462889432907
+        }
+    },
+    "7.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.03590017929673195,
+            "eyeLookInRight": 0.08030243217945099
+        }
+    },
+    "7.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "7.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "7.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "8.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "8.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "8.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "8.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "8.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "9.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "9.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "9.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "9.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "9.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "10.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "10.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "10.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "10.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "10.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "11.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "11.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "11.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "11.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "11.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "12.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "12.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.1646202802658081,
+            "eyeLookInRight": 0.038174256682395935
+        }
+    },
+    "12.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "12.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "12.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "13.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "13.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "13.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "13.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "13.80": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.00044080245424993336,
+            "eyeLookInRight": 0.89306640625
+        }
+    },
+    "14.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "14.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "14.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "14.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "14.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "15.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "15.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "15.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "15.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "15.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "16.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "16.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "16.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "16.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "16.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "17.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "17.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "17.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "17.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "17.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "18.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "18.20": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.15952061116695404,
+            "eyeLookInRight": 0.13540402054786682
+        }
+    },
+    "18.40": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.042849499732255936,
+            "eyeLookInRight": 0.09993329644203186
+        }
+    },
+    "18.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.02605809085071087,
+            "eyeLookInRight": 0.1031552404165268
+        }
+    },
+    "18.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.019697759300470352,
+            "eyeLookInRight": 0.17682228982448578
+        }
+    },
+    "19.00": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.08859211951494217,
+            "eyeLookInRight": 0.057490963488817215
+        }
+    },
+    "19.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "19.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "19.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "19.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "20.00": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "20.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "20.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "20.60": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.46534737944602966,
+            "eyeLookInRight": 0.011059615761041641
+        }
+    },
+    "20.80": {
+        "info": {
+            "main_state": "좌측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.07935170084238052,
+            "eyeLookInRight": 0.0662522092461586
+        }
+    },
+    "21.00": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.039853423833847046,
+            "eyeLookInRight": 0.08699364215135574
+        }
+    },
+    "21.20": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0723736584186554,
+            "eyeLookInRight": 0.032671015709638596
+        }
+    },
+    "21.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "21.60": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.010013097897171974,
+            "eyeLookInRight": 0.24779720604419708
+        }
+    },
+    "21.80": {
+        "info": {
+            "main_state": "정면 응시함"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.00912305898964405,
+            "eyeLookInRight": 0.18355220556259155
+        }
+    },
+    "22.00": {
+        "info": {
+            "main_state": "우측 응시 (PPT)"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.01828506588935852,
+            "eyeLookInRight": 0.057512156665325165
+        }
+    },
+    "22.20": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "22.40": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "22.60": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "22.80": {
+        "info": {
+            "main_state": "얼굴 미검출"
+        },
+        "blendshapes": {
+            "eyeLookInLeft": 0.0,
+            "eyeLookInRight": 0.0
+        }
+    },
+    "__AI_SUMMARY__": {
+        "events": [
+            {
+                "start": 0.0,
+                "end": 0.6,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 0.6,
+                "end": 0.8,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 0.8,
+                "end": 1.2,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 1.2,
+                "end": 1.4,
+                "state": "우측 응시 (PPT)"
+            },
+            {
+                "start": 1.4,
+                "end": 1.6,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 1.6,
+                "end": 1.8,
+                "state": "우측 응시 (PPT)"
+            },
+            {
+                "start": 1.8,
+                "end": 5.2,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 5.2,
+                "end": 6.0,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 6.0,
+                "end": 7.2,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 7.2,
+                "end": 7.4,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 7.4,
+                "end": 12.2,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 12.2,
+                "end": 12.4,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 12.4,
+                "end": 13.8,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 13.8,
+                "end": 14.0,
+                "state": "우측 응시 (PPT)"
+            },
+            {
+                "start": 14.0,
+                "end": 18.2,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 18.2,
+                "end": 18.4,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 18.4,
+                "end": 19.0,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 19.0,
+                "end": 19.2,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 19.2,
+                "end": 20.6,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 20.6,
+                "end": 21.0,
+                "state": "좌측 응시 (PPT)"
+            },
+            {
+                "start": 21.0,
+                "end": 21.4,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 21.4,
+                "end": 21.6,
+                "state": "얼굴 미검출"
+            },
+            {
+                "start": 21.6,
+                "end": 22.0,
+                "state": "정면 응시함"
+            },
+            {
+                "start": 22.0,
+                "end": 22.2,
+                "state": "우측 응시 (PPT)"
+            }
+        ],
+        "detection_ratio": 24.3
+    }
+}
