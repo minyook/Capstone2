@@ -40,6 +40,16 @@ class FeedbackEngine:
                 low_cpu_mem_usage=True,
                 trust_remote_code=True
             ).to(self.device)
+
+            # --- [Patch] EXAONE 모델의 Peft 호환성 이슈 해결 ---
+            def patch_exaone_embeddings(model):
+                model.get_input_embeddings = lambda: model.transformer.wte
+                model.set_input_embeddings = lambda value: setattr(model.transformer, 'wte', value)
+                model.transformer.get_input_embeddings = lambda: model.transformer.wte
+                model.transformer.set_input_embeddings = lambda value: setattr(model.transformer, 'wte', value)
+            
+            patch_exaone_embeddings(base_model)
+            # ------------------------------------------------
             
             # 3. LoRA 어댑터 강제 로드 (학습한 내용 적용)
             if os.path.exists(lora_path):
@@ -61,15 +71,29 @@ class FeedbackEngine:
         detailed_data = self._load_json_data(json_paths)
         analysis_summary = detailed_data.get("summary", {})
         
-        # 프롬프트 구성 (학습 때와 동일한 포맷)
+        # 프롬프트 구성 (마크다운 및 줄바꿈 강조)
         prompt_style = """[|system|]
-발표 자료 구성 및 시각화 전문가로서 사용자의 요청에 대해 전문적이고 구체적인 피드백을 제공합니다.
+당신은 대한민국 최고의 발표 전문가이자 스피치 컨설턴트입니다. 
+입력된 기술 분석 데이터를 바탕으로 사용자의 발표에 대해 전문적인 피드백을 제공하십시오.
+
+[출력 규칙]
+1. 반드시 한국어로 답변하십시오.
+2. 가독성을 위해 마크다운(Markdown) 형식을 사용하십시오.
+3. 각 분석 항목별로 소제목(##)을 사용하고, 상세 내용은 글머리 기호(-)를 사용하여 5줄 이상 작성하십시오.
+4. 문장 사이에 적절한 줄바꿈을 적용하여 읽기 편하게 만드십시오.
+5. 마지막에는 종합적인 개선 방향을 '총평'으로 요약하십시오.
+
 [|user|]
-제시된 기술 분석 데이터(PPT, Whisper, YOLO, MediaPipe)를 기반으로, 영역별 5줄 이상의 상세 피드백을 포함한 분석 보고서를 작성해줘.
-[{project_name}] PPT: 텍스트 면적 {face_rate:.1f}%, 이미지 있음 / Whisper: 필러워드 분당 {speed:.1f}회 / YOLO: 상체 흔들림 높음 / MediaPipe: 시선 응시율 {gaze:.1f}%
+제시된 기술 분석 데이터(PPT, Whisper, YOLO, MediaPipe)를 기반으로 분석 보고서를 작성해줘.
+[{project_name}] 
+- PPT: 텍스트 면적 {face_rate:.1f}%, 이미지 포함 여부(있음)
+- Whisper(음성): 필러워드 분당 {speed:.1f}회
+- YOLO(자세): 상체 흔들림 분석 결과(높음)
+- MediaPipe(시선): 정면 응시율 {gaze:.1f}%
+
 [|assistant|]
 """
-        # 데이터 매핑 (안전한 기본값 설정)
+        # 데이터 매핑
         prompt = prompt_style.format(
             project_name=project_name,
             face_rate=analysis_summary.get('face_detection_rate', 50.0),
@@ -78,7 +102,7 @@ class FeedbackEngine:
         )
 
         if self.provider == "exaone" and self.local_model:
-            print(f"   > [AI] 학습된 지식을 바탕으로 심층 리포트 생성 중... (CPU 모드)")
+            print(f"   > [AI] 학습된 지식을 바탕으로 심층 리포트 생성 중...")
             inputs = self.local_tokenizer([prompt], return_tensors="pt").to(self.device)
             with torch.no_grad():
                 outputs = self.local_model.generate(
@@ -86,10 +110,20 @@ class FeedbackEngine:
                     max_new_tokens=1024,
                     temperature=0.7,
                     repetition_penalty=1.2,
+                    do_sample=True,
                     eos_token_id=self.local_tokenizer.eos_token_id
                 )
             response = self.local_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
-            return response.split("[|assistant|]")[1].strip() if "[|assistant|]" in response else response
+            
+            # 답변 추출 및 줄바꿈 정리
+            if "[|assistant|]" in response:
+                final_text = response.split("[|assistant|]")[1].strip()
+            else:
+                final_text = response.strip()
+            
+            # 소제목 앞뒤 줄바꿈 보강 (가독성 향상)
+            final_text = final_text.replace("##", "\n\n##").replace("###", "\n###")
+            return final_text
         else:
             return "모델 로드 오류로 피드백을 생성할 수 없습니다."
 
