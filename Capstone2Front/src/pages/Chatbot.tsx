@@ -445,27 +445,21 @@ export function Chatbot() {
     }
   }
 
-  async function handleDeleteActiveChat() {
-    if (!db || !uid || !activeThreadId || isDeletingChat) return;
-    const ok = window.confirm("현재 대화 기록을 삭제할까요? 삭제 후 복구할 수 없습니다.");
+  async function handleDeleteThread(threadId: string) {
+    if (!db || !uid || isDeletingChat) return;
+    const ok = window.confirm("이 대화 기록을 삭제할까요? 삭제 후 복구할 수 없습니다.");
     if (!ok) return;
 
     setPersistHint(null);
     setIsDeletingChat(true);
     try {
-      await deleteAllMessagesInThread(activeThreadId);
-      await deleteDoc(doc(db, "users", uid, "chatThreads", activeThreadId));
-      const colRef = collection(db, "users", uid, "chatThreads");
-      const newRef = doc(colRef);
-      await setDoc(newRef, {
-        title: "새 대화",
-        preview: "",
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-      setActiveThreadId(newRef.id);
-      setMessages([WELCOME_MSG]);
-      setPersistHint("대화를 삭제하고 새 채팅방으로 이동했습니다.");
+      await deleteAllMessagesInThread(threadId);
+      await deleteDoc(doc(db, "users", uid, "chatThreads", threadId));
+
+      if (activeThreadIdRef.current === threadId) {
+        setMessages([WELCOME_MSG]);
+        setActiveThreadId(null);
+      }
     } catch (e: unknown) {
       console.error(e);
       const code =
@@ -477,6 +471,26 @@ export function Chatbot() {
       );
     } finally {
       setIsDeletingChat(false);
+    }
+  }
+
+  async function handleRenameThread(threadId: string, currentTitle: string) {
+    if (!db || !uid) return;
+    const next = window.prompt("대화 이름을 입력하세요.", currentTitle)?.trim();
+    if (!next) return;
+
+    try {
+      await setDoc(
+        doc(db, "users", uid, "chatThreads", threadId),
+        {
+          title: next,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      console.error(e);
+      setPersistHint("대화 이름을 변경하지 못했습니다. 네트워크 상태를 확인해 주세요.");
     }
   }
 
@@ -763,18 +777,10 @@ export function Chatbot() {
               <button type="button" className="chatbot-sidebar__new" onClick={() => void handleNewChat()}>
                 새 대화
               </button>
-              <button
-                type="button"
-                className="chatbot-sidebar__delete"
-                onClick={() => void handleDeleteActiveChat()}
-                disabled={!activeThreadId || isDeletingChat}
-              >
-                {isDeletingChat ? "삭제 중..." : "현재 대화 삭제"}
-              </button>
             </div>
             <ul className="chatbot-sidebar__list">
               {threads.map((t) => (
-                <li key={t.id}>
+                <li key={t.id} className="chatbot-thread-row">
                   <button
                     type="button"
                     className={
@@ -791,6 +797,29 @@ export function Chatbot() {
                       <span className="chatbot-sidebar__item-preview">{t.preview}</span>
                     ) : null}
                   </button>
+                  <div className="chatbot-thread-row__actions">
+                    <button
+                      type="button"
+                      className="chatbot-thread-row__action"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void handleRenameThread(t.id, t.title);
+                      }}
+                    >
+                      이름 변경
+                    </button>
+                    <button
+                      type="button"
+                      className="chatbot-thread-row__action chatbot-thread-row__action--danger"
+                      disabled={isDeletingChat}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void handleDeleteThread(t.id);
+                      }}
+                    >
+                      {isDeletingChat && activeThreadId === t.id ? "삭제 중..." : "삭제"}
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>

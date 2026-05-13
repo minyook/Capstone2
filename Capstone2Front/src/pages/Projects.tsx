@@ -2,12 +2,49 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Link } from "react-router-dom";
 
+import { useFirestoreSyncRevision } from "../context/FirestoreSyncContext";
 import { useFolders } from "../context/FoldersContext";
 import { formatFolderDate } from "../data/folderStorage";
+import type { FolderSubmission, SubmissionFile } from "../data/folderFileTypes";
 import { listFolderSubmissions } from "../data/folderFilesStorage";
 
 import "./Notes.css";
 import "./Projects.css";
+
+const SESSION_VIDEO_PREVIEW_KEY = "overnight-video-preview-by-submission-v1";
+const SESSION_PPT_BLOB_KEY = "overnight-ppt-blob-by-submission-v1";
+
+function readSubmissionUrlMap(key: string): Record<string, string> {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+}
+
+type FileViewerState = {
+  submissionId: string;
+  file: SubmissionFile;
+  url: string | null;
+} | null;
+
+function groupSubmissionsByPresentationTitle(subs: FolderSubmission[]): {
+  title: string;
+  submissions: FolderSubmission[];
+}[] {
+  const order: string[] = [];
+  const map = new Map<string, FolderSubmission[]>();
+  for (const s of subs) {
+    const label = s.presentationTitle?.trim() ? s.presentationTitle.trim() : "(제목 없음)";
+    if (!map.has(label)) {
+      map.set(label, []);
+      order.push(label);
+    }
+    map.get(label)!.push(s);
+  }
+  return order.map((title) => ({ title, submissions: map.get(title)! }));
+}
 
 
 
@@ -19,6 +56,8 @@ export function Projects() {
 
   const { folders, createFolder, removeFolder, scopeId } = useFolders();
 
+  const fsRevision = useFirestoreSyncRevision();
+
   const [newFolderOpen, setNewFolderOpen] = useState(false);
 
   const [folderName, setFolderName] = useState("");
@@ -28,6 +67,11 @@ export function Projects() {
   const [sort, setSort] = useState<SortKey>("latest");
 
   const [fileSheetFolderId, setFileSheetFolderId] = useState<string | null>(null);
+
+  /** null: 제목(하위) 목록 / 문자열: 해당 제목 안의 제출·파일 */
+  const [fileSheetGroupTitle, setFileSheetGroupTitle] = useState<string | null>(null);
+
+  const [fileViewer, setFileViewer] = useState<FileViewerState>(null);
 
   const sorted = useMemo(() => {
 
@@ -54,14 +98,39 @@ export function Projects() {
 
   const fileSheetSubmissions = useMemo(
     () => (fileSheetFolderId ? listFolderSubmissions(scopeId, fileSheetFolderId) : []),
-    [scopeId, fileSheetFolderId]
+    [scopeId, fileSheetFolderId, fsRevision]
   );
+
+  const submissionGroups = useMemo(
+    () => groupSubmissionsByPresentationTitle(fileSheetSubmissions),
+    [fileSheetSubmissions]
+  );
+
+  const activeSubmissionGroup = useMemo(() => {
+    if (!fileSheetGroupTitle) return null;
+    return submissionGroups.find((g) => g.title === fileSheetGroupTitle) ?? null;
+  }, [fileSheetGroupTitle, submissionGroups]);
+
+  useEffect(() => {
+    if (!fileSheetFolderId) {
+      setFileSheetGroupTitle(null);
+    }
+  }, [fileSheetFolderId]);
 
   useEffect(() => {
     if (fileSheetFolderId && !folders.some((f) => f.id === fileSheetFolderId)) {
       setFileSheetFolderId(null);
     }
   }, [folders, fileSheetFolderId]);
+
+  useEffect(() => {
+    if (!fileViewer) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFileViewer(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fileViewer]);
 
   const handleCreate = async () => {
 
@@ -95,6 +164,13 @@ export function Projects() {
       removeFolder(id);
     }
 
+  };
+
+  const openFileViewer = (submissionId: string, file: SubmissionFile) => {
+    const vMap = readSubmissionUrlMap(SESSION_VIDEO_PREVIEW_KEY);
+    const pMap = readSubmissionUrlMap(SESSION_PPT_BLOB_KEY);
+    const url = file.kind === "video" ? vMap[submissionId] ?? null : pMap[submissionId] ?? null;
+    setFileViewer({ submissionId, file, url });
   };
 
 
@@ -156,10 +232,14 @@ export function Projects() {
               className="doc-card doc-card--clickable"
               role="button"
               tabIndex={0}
-              onClick={() => setFileSheetFolderId(f.id)}
+              onClick={() => {
+                setFileSheetGroupTitle(null);
+                setFileSheetFolderId(f.id);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
+                  setFileSheetGroupTitle(null);
                   setFileSheetFolderId(f.id);
                 }
               }}
@@ -343,7 +423,11 @@ export function Projects() {
                 <h2 id="projects-sheet-files-title" className="sheet-head__title">
                   저장 파일
                 </h2>
-                <p className="sheet-head__sub">「{fileSheetFolder.name}」에 연결된 자료입니다.</p>
+                <p className="sheet-head__sub">
+                  {fileSheetGroupTitle && activeSubmissionGroup
+                    ? `「${fileSheetFolder.name}」 / ${activeSubmissionGroup.title}`
+                    : `「${fileSheetFolder.name}」 — 발표 제목(하위)을 누르면 PPT·영상을 볼 수 있습니다.`}
+                </p>
               </div>
             </div>
             <hr className="sheet-rule" />
@@ -355,43 +439,141 @@ export function Projects() {
                 </Link>
                 에서 PPT·영상을 올리면 여기에 표시됩니다.
               </p>
-            ) : (
-              <ul className="doc-projects-submission-list">
-                {fileSheetSubmissions.map((submission) => (
-                  <li key={submission.id} className="doc-projects-submission">
-                    <p className="doc-projects-submission__label" id={`sub-${submission.id}`}>
-                      제출 · {formatFolderDate(submission.submittedAt)}
-                    </p>
-                    <ul
-                      className="doc-projects-file-list doc-projects-file-list--in-submission"
-                      aria-labelledby={`sub-${submission.id}`}
+            ) : !fileSheetGroupTitle ? (
+              <ul className="doc-projects-group-picker">
+                {submissionGroups.map((group) => (
+                  <li key={group.title}>
+                    <button
+                      type="button"
+                      className="doc-projects-group-card"
+                      onClick={() => setFileSheetGroupTitle(group.title)}
                     >
-                      {submission.files.map((file) => (
-                        <li key={file.id}>
-                          <div className="doc-projects-file-row" role="group" aria-label={file.name}>
-                            <span className="sheet-item__icon" aria-hidden>
-                              {file.kind === "ppt" ? "📊" : "🎬"}
-                            </span>
-                            <div>
-                              <strong>{file.name}</strong>
-                              <span className="sheet-item__meta">
-                                {file.kind === "ppt" ? "프레젠테이션" : "영상"}
-                              </span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                      <span className="doc-projects-group-card__icon" aria-hidden>
+                        📂
+                      </span>
+                      <span className="doc-projects-group-card__body">
+                        <strong className="doc-projects-group-card__name">{group.title}</strong>
+                        <span className="doc-projects-group-card__meta">
+                          제출 {group.submissions.length}회
+                        </span>
+                      </span>
+                      <span className="doc-projects-group-card__chev" aria-hidden>
+                        ›
+                      </span>
+                    </button>
                   </li>
                 ))}
               </ul>
+            ) : activeSubmissionGroup ? (
+              <>
+                <button
+                  type="button"
+                  className="doc-projects-sheet-back"
+                  onClick={() => setFileSheetGroupTitle(null)}
+                >
+                  ← 발표 제목 목록
+                </button>
+                <div className="doc-projects-submission-groups doc-projects-submission-groups--nested">
+                  <ul className="doc-projects-submission-list">
+                    {activeSubmissionGroup.submissions.map((submission) => (
+                      <li key={submission.id} className="doc-projects-submission">
+                        <p className="doc-projects-submission__label" id={`sub-${submission.id}`}>
+                          제출 · {formatFolderDate(submission.submittedAt)}
+                        </p>
+                        <ul
+                          className="doc-projects-file-list doc-projects-file-list--in-submission"
+                          aria-labelledby={`sub-${submission.id}`}
+                        >
+                          {submission.files.map((file) => (
+                            <li key={file.id}>
+                              <button
+                                type="button"
+                                className="doc-projects-file-row doc-projects-file-row--clickable"
+                                onClick={() => openFileViewer(submission.id, file)}
+                              >
+                                <span className="sheet-item__icon" aria-hidden>
+                                  {file.kind === "ppt" ? "📊" : "🎬"}
+                                </span>
+                                <div className="doc-projects-file-row__text">
+                                  <strong>{file.name}</strong>
+                                  <span className="sheet-item__meta">
+                                    {file.kind === "ppt"
+                                      ? "프레젠테이션 · 탭하여 저장"
+                                      : "영상 · 탭하여 재생"}
+                                  </span>
+                                </div>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <div className="notes-file-hint doc-projects-file-empty">
+                <p>이 제목의 자료를 찾을 수 없습니다.</p>
+                <button type="button" className="doc-projects-sheet-back" onClick={() => setFileSheetGroupTitle(null)}>
+                  ← 목록으로
+                </button>
+              </div>
             )}
-            <button type="button" className="sheet-file-row" onClick={() => setFileSheetFolderId(null)}>
+            <button
+              type="button"
+              className="sheet-file-row"
+              onClick={() => {
+                setFileSheetGroupTitle(null);
+                setFileSheetFolderId(null);
+              }}
+            >
               닫기
             </button>
           </div>
         </div>
       )}
+
+      {fileViewer ? (
+        <div className="doc-file-viewer-root" role="dialog" aria-modal="true" aria-labelledby="doc-file-viewer-title">
+          <button
+            type="button"
+            className="doc-file-viewer-backdrop"
+            aria-label="닫기"
+            onClick={() => setFileViewer(null)}
+          />
+          <div className="doc-file-viewer-panel">
+            <h2 id="doc-file-viewer-title" className="doc-file-viewer-title">
+              {fileViewer.file.kind === "ppt" ? "프레젠테이션" : "영상"} · {fileViewer.file.name}
+            </h2>
+            {fileViewer.url && fileViewer.file.kind === "video" ? (
+              <video className="doc-file-viewer-video" src={fileViewer.url} controls playsInline />
+            ) : null}
+            {fileViewer.url && fileViewer.file.kind === "ppt" ? (
+              <div className="doc-file-viewer-ppt">
+                <p className="doc-file-viewer-note">아래 버튼으로 이 기기에 파일을 저장할 수 있습니다.</p>
+                <div className="doc-file-viewer-actions">
+                  <a
+                    className="doc-file-viewer-link doc-file-viewer-link--primary doc-file-viewer-link--block"
+                    href={fileViewer.url}
+                    download={fileViewer.file.name}
+                  >
+                    파일로 저장
+                  </a>
+                </div>
+              </div>
+            ) : null}
+            {!fileViewer.url ? (
+              <p className="doc-file-viewer-miss">
+                이 기기에서 <strong>발표 평가를 제출한 직후</strong> 같은 브라우저에만 미리보기가 남습니다. 다른 기기나
+                나중에 다시 열면 파일을 다시 볼 수 없을 수 있습니다.
+              </p>
+            ) : null}
+            <button type="button" className="doc-file-viewer-close" onClick={() => setFileViewer(null)}>
+              닫기
+            </button>
+          </div>
+        </div>
+      ) : null}
 
     </div>
 

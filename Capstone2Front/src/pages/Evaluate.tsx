@@ -23,6 +23,8 @@ export function Evaluate() {
 
   const [folderId, setFolderId] = useState<string>("");
 
+  const [presentationTitle, setPresentationTitle] = useState("");
+
   const [pptName, setPptName] = useState<string | null>(null);
   const [pptFile, setPptFile] = useState<File | null>(null);
 
@@ -63,6 +65,10 @@ export function Evaluate() {
       }
     };
   }, [recordedVideoUrl]);
+
+  useEffect(() => {
+    setPresentationTitle("");
+  }, [folderId]);
 
   useEffect(() => {
     const videoEl = previewRef.current;
@@ -209,7 +215,11 @@ export function Evaluate() {
       const jobId = videoData.job_id;
 
       // 3. 로컬 저장소에 제출 정보 등록
-      const submission = await registerFolderFiles(scopeId, folderId, { pptName, videoName });
+      const submission = await registerFolderFiles(scopeId, folderId, {
+        pptName,
+        videoName,
+        presentationTitle: presentationTitle.trim() || undefined,
+      });
       if (submission) {
         if (selectedVideoPreviewUrl) {
           try {
@@ -217,6 +227,15 @@ export function Evaluate() {
             const map = raw ? (JSON.parse(raw) as Record<string, string>) : {};
             map[submission.id] = selectedVideoPreviewUrl;
             sessionStorage.setItem("overnight-video-preview-by-submission-v1", JSON.stringify(map));
+          } catch {}
+        }
+        if (pptFile) {
+          try {
+            const pptUrl = URL.createObjectURL(pptFile);
+            const raw = sessionStorage.getItem("overnight-ppt-blob-by-submission-v1");
+            const map = raw ? (JSON.parse(raw) as Record<string, string>) : {};
+            map[submission.id] = pptUrl;
+            sessionStorage.setItem("overnight-ppt-blob-by-submission-v1", JSON.stringify(map));
           } catch {}
         }
         
@@ -338,6 +357,25 @@ export function Evaluate() {
             </Link>
 
           </div>
+
+          {hasFolders && folderId ? (
+            <div className="evaluate-presentation-title">
+              <label className="evaluate-presentation-title__label" htmlFor="evaluate-presentation-title">
+                발표 제목 (문서 화면에서 하위로 묶입니다)
+              </label>
+              <input
+                id="evaluate-presentation-title"
+                className="evaluate-presentation-title__input"
+                type="text"
+                maxLength={80}
+                placeholder="예: 1주차 중간발표, 최종 리허설"
+                value={presentationTitle}
+                onChange={(e) => setPresentationTitle(e.target.value)}
+                autoComplete="off"
+              />
+              <p className="evaluate-presentation-title__hint">비워 두면 문서 화면에서 「(제목 없음)」으로 묶입니다.</p>
+            </div>
+          ) : null}
 
         </section>
 

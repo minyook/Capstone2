@@ -47,6 +47,9 @@ function rebuildCacheFromSnap(snap: QuerySnapshot): void {
           : typeof data.submittedAt === "string"
             ? data.submittedAt
             : new Date().toISOString(),
+      ...(typeof data.presentationTitle === "string" && data.presentationTitle.trim()
+        ? { presentationTitle: data.presentationTitle.trim() }
+        : {}),
       files,
     };
     if (!sub.folderId) return;
@@ -109,6 +112,7 @@ async function migrateLocalSubmissions(uid: string): Promise<void> {
         folderId: sub.folderId,
         submittedAt: Timestamp.fromDate(new Date(sub.submittedAt)),
         files: sub.files,
+        ...(sub.presentationTitle?.trim() ? { presentationTitle: sub.presentationTitle.trim() } : {}),
       });
       n += 1;
       if (n >= 400) {
@@ -165,7 +169,7 @@ export function startSubmissionsSync(uid: string, onChange: () => void): () => v
 export async function registerSubmissionInFirestore(
   uid: string,
   folderId: string,
-  files: { pptName?: string | null; videoName?: string | null }
+  files: { pptName?: string | null; videoName?: string | null; presentationTitle?: string | null }
 ): Promise<FolderSubmission | null> {
   if (!db || !folderId) return null;
 
@@ -184,18 +188,22 @@ export async function registerSubmissionInFirestore(
   push(files.videoName, "video");
   if (submissionFiles.length === 0) return null;
 
+  const titleTrimmed = (files.presentationTitle ?? "").trim();
+
   const ref = doc(collection(db, "users", uid, "submissions"));
   const submittedAtIso = new Date().toISOString();
   await setDoc(ref, {
     folderId,
     submittedAt: serverTimestamp(),
     files: submissionFiles,
+    ...(titleTrimmed ? { presentationTitle: titleTrimmed } : {}),
   });
 
   return {
     id: ref.id,
     folderId,
     submittedAt: submittedAtIso,
+    ...(titleTrimmed ? { presentationTitle: titleTrimmed } : {}),
     files: submissionFiles,
   };
 }
