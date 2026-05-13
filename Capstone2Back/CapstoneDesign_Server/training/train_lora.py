@@ -14,7 +14,7 @@ from datasets import load_dataset
 
 # 1. 모델 및 토크나이저 로드
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+    model_name = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
     max_seq_length = 2048,
     load_in_4bit = True,
     trust_remote_code = True,
@@ -75,7 +75,7 @@ trainer = SFTTrainer(
         per_device_train_batch_size = 2,
         gradient_accumulation_steps = 4,
         warmup_steps = 5,
-        max_steps = 60,
+        max_steps = 200,
         learning_rate = 2e-4,
         fp16 = not torch.cuda.is_bf16_supported(),
         bf16 = torch.cuda.is_bf16_supported(),

@@ -5,91 +5,93 @@ import os
 def generate_expert_dataset(count=1000):
     dataset = []
     
-    # 지식 베이스 정의 (전달해주신 링크 내용 반영)
-    body_language_tips = [
-        "열린 자세(Open body language)를 유지하세요. 팔짱을 끼는 것은 청중과의 심리적 장벽을 만듭니다.",
-        "청중과 60-70%의 시선을 맞추는 것이 신뢰도 향상의 핵심입니다. 한 사람만 보지 말고 골고루 응시하세요.",
-        "손을 주머니에 넣거나 뒤로 숨기지 마세요. 가슴과 허리 사이 구역에서 제스처를 사용하는 것이 가장 자연스럽습니다.",
-        "발표 시 '뿌리 내린 자세'보다는 중요한 포인트를 강조할 때 조금씩 이동하며 에너지를 전달하는 것이 좋습니다.",
-        "미소는 청중의 긴장을 완화시킵니다. 분석된 미소 수치가 낮으니 조금 더 밝은 표정을 시도해 보세요."
-    ]
-    
-    ppt_tips = [
-        "6x6 법칙(한 슬라이드에 6줄 이하, 한 줄에 6단어 이하)을 적용하여 가독성을 높이세요.",
-        "슬라이드에 적힌 텍스트를 그대로 읽는 '스크립트 읽기'는 지양해야 합니다. 핵심 키워드만 배치하세요.",
-        "대비(Contrast)가 명확한 폰트와 크기를 선택하여 멀리 있는 청중도 배려해야 합니다.",
-        "시각적 자료(이미지, 도표)는 텍스트보다 6만 배 빠르게 뇌에 전달됩니다. 이미지를 더 활용해 보세요.",
-        "슬라이드 장수가 너무 많거나 적지 않은지, 전체 흐름과 시간 배분을 다시 점검해 보세요."
-    ]
+    # 시나리오 정의
+    scenarios = ["대학 전공 과제 발표", "기업 IR 투자 피칭", "기술 세미나 강연", "사내 분기 실적 보고", "신규 프로젝트 제안서 발표"]
+    grades = ["S (최우수)", "B (보통)", "D (보완 필요)"]
 
-    # 상황별 시나리오 세분화
-    scenarios = [
-        {
-            "type": "시선 부족 & 정적",
-            "vision_pattern": lambda: f"gaze_score: {random.uniform(0.1, 0.4):.2f}, smile: {random.uniform(0.0, 0.2):.2f}, gesture: 정적임",
-            "voice_pattern": lambda: f"speed: {random.uniform(0.8, 1.1):.1f}x",
-            "ppt_pattern": lambda: random.choice(["텍스트 많음", "양호", "키워드 중심"]),
-            "template": "시선 점수가 매우 낮고 자세가 경직되어 있습니다. Simply Amazing Training 지침에 따라 청중과 60% 이상 눈을 맞추고, 손을 활용한 제스처로 열린 자세를 보여주세요."
+    # 지식 베이스 정의 (영역별 피드백 조각)
+    kb = {
+        "visual": {
+            "S": [
+                "[현상 파악] PPT 슬라이드의 시각적 밸런스가 매우 뛰어나며, 핵심 키워드 중심의 레이아웃이 80% 이상 적용되었습니다. [원인/이론적 분석] '단순함의 미학'을 인지 심리학적으로 잘 녹여내어 정보의 위계 구조가 명확히 설계된 결과입니다. [인지적 영향] 청중은 복잡한 텍스트를 해독하는 대신 화자의 메시지를 즉각적으로 수용할 수 있는 최적의 인지 상태를 유지하게 됩니다. [구체적 개선 솔루션] 현재의 디자인 톤앤매너를 유지하되, 핵심 데이터 수치에 강조색(Point Color)을 하나 더 추가하여 시각적 정점을 형성하시길 권장합니다. 전문가로서 귀하의 시각화 전략은 업계 최고 수준임을 인정합니다."
+            ],
+            "B": [
+                "[현상 파악] 전체 슬라이드 중 약 50%의 면적이 텍스트로 채워져 있어 시각적 여백이 다소 부족한 상태입니다. [원인/이론적 분석] 이는 구두로 설명해야 할 내용을 화면에 모두 담으려는 '발표자의 불안감'에서 기인한 설계 오류입니다. [인지적 영향] 과도한 텍스트 밀도는 청중에게 인지 과부하를 유발하여 발표 내용의 핵심을 놓치게 만드는 장벽이 됩니다. [구체적 개선 솔루션] '6x6 법칙'을 적용하여 한 슬라이드에 6줄 이하, 한 줄에 6단어 이하로 텍스트를 과감히 정리하십시오. 빈 공간에는 텍스트를 보조할 수 있는 고해상도 인포그래픽을 배치하여 시각적 이해도를 높이길 제언합니다."
+            ],
+            "D": [
+                "[현상 파악] PPT 텍스트 면적이 {text_area}%에 달하며 이미지가 전무하여 시각 자료로서의 기능이 상실된 상태입니다. [원인/이론적 분석] 발표 자료를 시각 도구가 아닌 '읽는 스크립트'로 활용하고 있는 전형적인 텍스트 의존형 패턴입니다. [인지적 영향] 청중은 화자의 말에 집중하지 못하고 화면의 긴 글을 읽는 데 뇌 자원을 소모하게 되어 전달력이 급격히 하락합니다. [구체적 개선 솔루션] 전체 텍스트의 70%를 삭제하고 핵심 헤드라인만 남기십시오. 출처가 불분명한 데이터 대신 공신력 있는 통계 지표를 시각화하여 데이터의 신뢰성을 확보하는 것이 최우선 과제입니다."
+            ]
         },
-        {
-            "type": "팔짱 감지 & 방어적",
-            "vision_pattern": lambda: f"is_arm_crossed: true, gaze_score: {random.uniform(0.5, 0.8):.2f}",
-            "voice_pattern": lambda: f"speed: {random.uniform(1.0, 1.3):.1f}x",
-            "ppt_pattern": lambda: "양호",
-            "template": "현재 팔짱을 낀 자세(Closed body language)가 감지되었습니다. 이는 전문가 가이드에서 지양하는 방어적 자세입니다. 손을 앞쪽으로 내밀어 개방적인 태도를 보여주시는 것이 좋습니다."
+        "stability": {
+            "S": [
+                "[현상 파악] 발화의 유창성이 매우 높으며 필러 워드가 분당 {filler}회 미만으로 거의 나타나지 않는 안정적인 상태입니다. [원인/이론적 분석] 충분한 리허설을 통해 스크립트가 체득되었으며, 호흡 조절이 심리학적으로 안정 궤도에 올랐음을 보여줍니다. [인지적 영향] 끊김 없는 유려한 발화는 청중에게 발표자에 대한 깊은 신뢰감과 권위를 심어주어 메시지의 수용도를 극대화합니다. [구체적 개선 솔루션] 현재의 안정감을 유지하면서 중요한 강조점 직전에 1~2초간의 '전략적 멈춤(Power Pause)'을 활용해 보십시오. 전문가로서 귀하의 전달력은 청중을 압도하기에 충분한 에너지를 가지고 있습니다."
+            ],
+            "B": [
+                "[현상 파악] 필러 워드가 분당 {filler}회 감지되며, 특정 문장 끝에서 음성이 미세하게 떨리는 지터(Jitter) 현상이 관찰됩니다. [원인/이론적 분석] 발표 중반부의 논리 구조가 복잡해지면서 뇌의 부하가 음성 근육의 조절력을 일시적으로 약화시킨 결과입니다. [인지적 영향] 미세한 음성 떨림은 청중에게 발표자가 긴장하고 있다는 신호를 주어 전문성을 의심하게 만드는 요인이 됩니다. [구체적 개선 솔루션] 문장과 문장 사이에서 의도적으로 깊은 복식 호흡을 수행하고 필러 워드가 나올 타이밍에 차라리 침묵하십시오. '에', '음' 대신 짧은 휴지(Pause)를 두는 것만으로도 훨씬 더 지적인 인상을 줄 수 있습니다."
+            ],
+            "D": [
+                "[현상 파악] 필러 워드가 분당 {filler}회 이상으로 과도하며 상체 흔들림 빈도가 매우 높아 산만한 인상을 줍니다. [원인/이론적 분석] 준비 부족으로 인한 극도의 심리적 불안이 신체적 '흔들림'과 발화의 '막힘'으로 표출되는 전형적인 케이스입니다. [인지적 영향] 청중은 화자의 메시지보다 불안정한 태도와 불필요한 추임새에 신경이 분산되어 발표의 본질을 놓치게 됩니다. [구체적 개선 솔루션] 스크립트를 문장 단위가 아닌 키워드 단위로 다시 암기하고, 발표 시 발바닥 전체에 힘을 주어 지면을 지탱하십시오. 전문가로서 제언하건대, 신체의 정적인 고정이 목소리의 안정감을 찾는 첫 번째 단계입니다."
+            ]
         },
-        {
-            "type": "말 빠름 & 긴장",
-            "vision_pattern": lambda: f"gaze_score: {random.uniform(0.3, 0.6):.2f}, smile: {random.uniform(0.0, 0.1):.2f}",
-            "voice_pattern": lambda: f"speed: {random.uniform(1.5, 2.0):.1f}x, pitch: high",
-            "ppt_pattern": lambda: "텍스트 밀도 높음",
-            "template": "말하기 속도가 너무 빠르고 음조가 높습니다. 긴장하신 것으로 보입니다. 문장 끝에서 의도적으로 2초간 멈추는(Pause) 연습을 통해 여유를 가지시기 바랍니다."
-        },
-        {
-            "type": "PPT 의존 & 스크립트 읽기",
-            "vision_pattern": lambda: f"gaze_score: {random.uniform(0.1, 0.3):.2f}, gesture: 정적임",
-            "voice_pattern": lambda: f"speed: {random.uniform(0.9, 1.1):.1f}x",
-            "ppt_pattern": lambda: "텍스트 매우 많음 (불량)",
-            "template": "슬라이드의 텍스트가 너무 많아 화면을 보고 그대로 읽는 경향이 있습니다. 6x6 법칙을 적용해 텍스트를 줄이고, 청중의 눈을 보며 핵심 내용을 전달하세요."
-        },
-        {
-            "type": "최고의 발표",
-            "vision_pattern": lambda: f"gaze_score: {random.uniform(0.7, 0.9):.2f}, smile: {random.uniform(0.4, 0.7):.2f}, gesture: 활발함",
-            "voice_pattern": lambda: f"speed: {random.uniform(1.1, 1.3):.1f}x",
-            "ppt_pattern": lambda: "시각화 우수",
-            "template": "완벽한 발표입니다! 열린 자세와 적절한 시선 처리, 그리고 말하기 속도까지 매우 조화롭습니다. SlideShare 가이드에 맞는 훌륭한 슬라이드 구성도 인상적입니다."
+        "nonverbal": {
+            "S": [
+                "[현상 파악] 청중 응시율(Gaze)이 {gaze}%로 매우 높으며, 제스처가 '파워 박스' 내에서 크고 명확하게 수행됩니다. [원인/이론적 분석] 비언어적 소통의 중요성을 정확히 인지하고 있으며 청중과의 심리적 교감을 능동적으로 주도하고 있는 상태입니다. [인지적 영향] 적극적인 시선 맞춤과 개방적인 제스처는 화자의 자신감을 증명하며 청중이 발표 내용에 몰입하게 만드는 강력한 도구가 됩니다. [구체적 개선 솔루션] 현재의 우수한 태도에 더해, 제스처의 속도에 완급 조절을 주어 중요한 정보를 강조할 때 손끝의 힘을 실어 보십시오. 귀하의 비언어적 매너는 발표의 완성도를 화룡점정으로 끌어올리고 있습니다."
+            ],
+            "B": [
+                "[현상 파악] 시선 응시율이 {gaze}% 수준으로 무난하지만 주로 특정 방향의 청중에게만 쏠려 있는 편향성이 보입니다. [원인/이론적 분석] 심리적으로 편안함을 느끼는 구역에만 시선을 고정하려는 '안전지대 편향' 현상이 나타나고 있습니다. [인지적 영향] 시선을 받지 못하는 나머지 구역의 청중들은 소외감을 느끼게 되어 전체적인 반응도가 떨어질 수 있습니다. [구체적 개선 솔루션] 발표 공간을 3등분하여 'M자' 혹은 'Z자' 형태로 시선을 골고루 분산시키는 연습을 하십시오. 제스처 또한 가슴 높이까지 조금 더 올려 사용하면 권위 있는 전문가의 이미지를 구축하는 데 큰 도움이 됩니다."
+            ],
+            "D": [
+                "[현상 파악] 시선 응시율이 {gaze}%로 극히 저조하며 대부분 바닥이나 슬라이드만을 응시하는 폐쇄적 자세를 보입니다. [원인/이론적 분석] 청중과의 시각적 접촉을 회피하려는 방어 기제가 작동하여 비언어적 채널이 완전히 닫혀 있는 상태입니다. [인지적 영향] 시선이 닿지 않는 발표는 일방적인 독백으로 전락하며 청중은 화자와의 신뢰 관계를 형성하는 데 실패하게 됩니다. [구체적 개선 솔루션] 전문가로서 엄중히 권고합니다. 슬라이드가 아닌 청중의 이마나 인중을 보는 것부터 시작하십시오. 손을 주머니에 넣거나 뒤짐을 지는 행위는 절대 금물이며, 손을 항상 청중에게 보여주어 개방성을 유지해야 합니다."
+            ]
         }
-    ]
+    }
 
     for _ in range(count):
-        s = random.choice(scenarios)
+        scenario = random.choice(scenarios)
         
-        # 입력 데이터 생성
-        input_text = f"[실시간 분석 로그] 시각: {s['vision_pattern']()}, 음성: {s['voice_pattern']()}, PPT: {s['ppt_pattern']()}"
+        # 무작위 수치 생성
+        text_area = random.randint(10, 85)
+        filler = random.randint(1, 15)
+        gaze = random.randint(5, 95)
         
-        # 지식 기반 피드백 다양화
-        feedback = s['template']
-        # 랜덤하게 전문 팁 하나 추가
-        if random.random() > 0.5:
-            extra_tip = random.choice(body_language_tips if "시각" in input_text else ppt_tips)
-            feedback += " " + extra_tip
-
+        # 등급 결정 로직
+        v_grade = "S" if text_area < 30 else ("B" if text_area < 60 else "D")
+        s_grade = "S" if filler < 3 else ("B" if filler < 8 else "D")
+        n_grade = "S" if gaze > 70 else ("B" if gaze > 30 else "D")
+        
+        input_text = f"[{scenario}] PPT: 텍스트 면적 {text_area}%, 이미지 {'있음' if text_area < 40 else '없음'} / Whisper: 필러워드 분당 {filler}회 / YOLO: 상체 흔들림 {'낮음' if s_grade == 'S' else '높음'} / MediaPipe: 시선 응시율 {gaze}%"
+        
+        output_text = f"[|system|]\n발표 자료 구성 및 시나리오별 전문가 분석 리포트입니다.\n\n"
+        
+        # 영역 I: 내용 및 시각화
+        v_score = random.randint(40, 50) if v_grade == "S" else (random.randint(25, 39) if v_grade == "B" else random.randint(5, 24))
+        output_text += f"I. 내용 및 시각화 ({v_score}/50점)\n"
+        output_text += random.choice(kb["visual"][v_grade]).format(text_area=text_area) + "\n\n"
+        
+        # 영역 II: 전달의 안정성
+        s_score = random.randint(25, 30) if s_grade == "S" else (random.randint(15, 24) if s_grade == "B" else random.randint(5, 14))
+        output_text += f"II. 전달의 안정성 ({s_score}/30점)\n"
+        output_text += random.choice(kb["stability"][s_grade]).format(filler=filler) + "\n\n"
+        
+        # 영역 III: 시각적 비언어
+        n_score = random.randint(15, 20) if n_grade == "S" else (random.randint(10, 14) if n_grade == "B" else random.randint(1, 9))
+        output_text += f"III. 시각적 비언어 ({n_score}/20점)\n"
+        output_text += random.choice(kb["nonverbal"][n_grade]).format(gaze=gaze)
+        
         dataset.append({
-            "instruction": "발표 분석 수치를 기반으로 전문 코칭 지침(Simply Amazing Training 및 SlideShare)을 적용한 피드백을 작성하세요.",
+            "instruction": "제시된 기술 분석 데이터(PPT, Whisper, YOLO, MediaPipe)를 기반으로, 영역별 5줄 이상의 상세 피드백을 포함한 분석 보고서를 작성해줘.",
             "input": input_text,
-            "output": feedback
+            "output": output_text
         })
 
-    # 파일 저장
-    target_dir = os.path.join("Capstone2Back", "CapstoneDesign_Server", "training")
-    os.makedirs(target_dir, exist_ok=True)
-    target_path = os.path.join(target_dir, "dataset.json")
-    
-    with open(target_path, 'w', encoding='utf-8') as f:
+    # 저장
+    target_path = "Capstone2Back/CapstoneDesign_Server/training/dataset.json"
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    with open(target_path, "w", encoding="utf-8") as f:
         json.dump(dataset, f, indent=4, ensure_ascii=False)
     
     return target_path, len(dataset)
 
 if __name__ == "__main__":
     path, size = generate_expert_dataset(1000)
-    print(f"COMPLETE: Generated {size} items at {path}")
+    print(f"✅ 성공: {size}개의 데이터셋이 '{path}'에 저장되었습니다.")
