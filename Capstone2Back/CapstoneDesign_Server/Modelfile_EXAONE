@@ -1,4 +1,4 @@
-FROM exaone3.5
+FROM ./EXAONE-presenter-Q4_K_M.gguf
 
 # 시스템 프롬프트 설정 (전문가 평가관 페르소나 주입)
 SYSTEM """

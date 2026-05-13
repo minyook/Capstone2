@@ -134,6 +134,40 @@
   color: var(--text-secondary);
 }
 
+.evaluate-presentation-title {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(148, 163, 184, 0.6);
+}
+
+.evaluate-presentation-title__label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.evaluate-presentation-title__input {
+  width: 100%;
+  max-width: 28rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.evaluate-presentation-title__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 .evaluate-panel__title {
   margin: 0 0 0.35rem;
   font-size: 1.05rem;
@@ -305,6 +339,36 @@
 
 .evaluate-note--error {
   color: #dc2626;
+}
+
+.evaluate-persona-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.evaluate-persona-btn {
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+
+.evaluate-persona-btn:hover {
+  border-color: var(--primary-soft);
+  background: var(--bg-muted);
+}
+
+.evaluate-persona-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
 }
 
 .evaluate-foot {

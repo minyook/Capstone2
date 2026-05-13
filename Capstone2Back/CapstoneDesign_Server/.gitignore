@@ -19,6 +19,13 @@ venv/
 # 임시 분석 파일 (중요)
 uploads/
 frames/
+analysis_json/
+out/
+unsloth_compiled_cache/
+
+# 학습 결과 및 대형 파일
+training/exaone_presenter_lora/
+outputs/
 
 # 비밀번호 파일 (가장 중요)
 .env

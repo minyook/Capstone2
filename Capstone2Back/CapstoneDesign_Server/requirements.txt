@@ -3,12 +3,16 @@ fastapi
 uvicorn[standard]
 python-multipart
 pydantic
-
-# --- AI & LLM Clients ---
-google-generativeai
-ollama
-openai
 python-dotenv
+
+# --- AI & LLM (Inference) ---
+torch --index-url https://download.pytorch.org/whl/cpu
+transformers
+peft
+accelerate
+sentencepiece
+huggingface-hub
+google-generativeai
 
 # --- Computer Vision & Media Analysis ---
 mediapipe

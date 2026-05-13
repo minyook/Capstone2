@@ -13,6 +13,8 @@ export type FolderSubmission = {
   folderId: string;
   /** 제출 시각 ISO 8601 */
   submittedAt: string;
+  /** 발표 평가에서 입력한 소제목 — 문서 화면에서 하위 그룹으로 묶음 */
+  presentationTitle?: string;
   files: SubmissionFile[];
 };
 

@@ -36,6 +36,7 @@ function isFolderSubmission(x: unknown): x is FolderSubmission {
   const o = x as Record<string, unknown>;
   if (typeof o.id !== "string" || typeof o.folderId !== "string" || typeof o.submittedAt !== "string") return false;
   if (!Array.isArray(o.files)) return false;
+  if (o.presentationTitle !== undefined && typeof o.presentationTitle !== "string") return false;
   return o.files.every(isSubmissionFile);
 }
 
@@ -172,12 +173,17 @@ export function submissionPrimaryFileName(sub: FolderSubmission): string {
 export async function registerFolderFiles(
   scopeId: string,
   folderId: string,
-  files: { pptName?: string | null; videoName?: string | null }
+  files: { pptName?: string | null; videoName?: string | null; presentationTitle?: string | null }
 ): Promise<FolderSubmission | null> {
   if (!folderId) return null;
 
+  const presentationTitle = (files.presentationTitle ?? "").trim();
+
   if (foldersUseFirestore(scopeId)) {
-    return registerSubmissionInFirestore(scopeId, folderId, files);
+    return registerSubmissionInFirestore(scopeId, folderId, {
+      ...files,
+      presentationTitle: presentationTitle || undefined,
+    });
   }
 
   const submissionFiles: SubmissionFile[] = [];
@@ -195,6 +201,7 @@ export async function registerFolderFiles(
     id: newId(),
     folderId,
     submittedAt: new Date().toISOString(),
+    ...(presentationTitle ? { presentationTitle } : {}),
     files: submissionFiles,
   };
   const list = all[folderId] ?? [];
