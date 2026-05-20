@@ -9,6 +9,20 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import ReactMarkdown from "react-markdown";
 import "./Analysis.css";
 
+function voiceSubscore(
+  scores: Record<string, number | unknown>,
+  key: string,
+  itemsIndex: number
+): string {
+  const v = scores[key];
+  if (typeof v === "number") return String(v);
+  const items = scores.items_100;
+  if (Array.isArray(items) && typeof items[itemsIndex] === "number") {
+    return String(Math.round(items[itemsIndex] as number));
+  }
+  return "—";
+}
+
 export function Analysis() {
   const { scopeId } = useFolders();
   const fsRevision = useFirestoreSyncRevision();
@@ -21,16 +35,21 @@ export function Analysis() {
   const [activeTip, setActiveTip] = useState<string | null>(null);
   const [chartData, setChartData] = useState<any[]>([]);
   const [rawData, setRawData] = useState<any[]>([]);
+  const [voiceBlock, setVoiceBlock] = useState<{
+    metrics: Record<string, unknown>;
+    scores: Record<string, number>;
+  } | null>(null);
   const [currentFace, setCurrentFace] = useState<any>(null);
   const [currentGesture, setCurrentGesture] = useState<any>(null);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
   
   // 🌟 슬라이드 관련 상태
   const [tipPageIndex, setTipPageIndex] = useState(0);
+  const [scoresRevision, setScoresRevision] = useState(0);
 
   const scores = useMemo<StoredRubricScores | null>(
     () => loadScoresForView(scopeId, submissionId),
-    [scopeId, submissionId, fsRevision]
+    [scopeId, submissionId, fsRevision, scoresRevision]
   );
 
   // 🌟 타임라인 팁을 3개씩 묶기
@@ -102,7 +121,7 @@ export function Analysis() {
     [scopeId, submissionId, fsRevision]
   );
 
-  const hasData = scores !== null || overallFeedback !== null;
+  const hasData = scores !== null || overallFeedback !== null || voiceBlock !== null;
   const total = useMemo(() => (scores ? totalFromScores(scores) : null), [scores]);
   const previewVideoUrl = useMemo(() => {
     if (!submissionId) return null;
@@ -149,6 +168,15 @@ export function Analysis() {
           setOverallFeedback(resData.llama_feedback);
           setTimelineFeedback(resData.timeline_feedback || {});
           setRawData(resData.raw_data || []);
+          const sum = resData.analysis_summary;
+          if (sum?.voice_metrics && Object.keys(sum.voice_metrics).length > 0) {
+            setVoiceBlock({
+              metrics: sum.voice_metrics as Record<string, unknown>,
+              scores: (sum.voice_scores || {}) as Record<string, number>,
+            });
+          } else {
+            setVoiceBlock(null);
+          }
           
           // 차트 데이터 변환 (가독성을 위해 5개마다 샘플링)
           if (resData.raw_data) {
@@ -174,7 +202,29 @@ export function Analysis() {
               // 발표 태도 점수: 시선(40%) + 표정(30%) + 제스처(30%)
               const attitudeScore = Math.round(gazeScoreVal * 0.4 + smileScoreVal * 0.3 + gestureScoreVal * 0.3);
               
-              const voiceScore = summary.avg_speed > 0.5 && summary.avg_speed < 2.0 ? 90 : 70;
+              const vs = summary.voice_scores as Record<string, unknown> | undefined;
+              let voiceScore: number;
+              let voiceItems: number[];
+              const items100 = vs?.items_100;
+              if (Array.isArray(items100) && items100.length === 4) {
+                voiceItems = items100.map((x) => Math.round(Number(x) || 0));
+                voiceScore =
+                  typeof vs?.category_100 === "number"
+                    ? Math.round(vs.category_100 as number)
+                    : Math.round(voiceItems.reduce((a, b) => a + b, 0) / 4);
+              } else if (
+                vs &&
+                typeof vs.voice_stability === "number" &&
+                typeof vs.linguistic_fluency === "number"
+              ) {
+                const s1 = vs.voice_stability as number;
+                const s2 = vs.linguistic_fluency as number;
+                voiceItems = [s1 * 10, s2 * 10, s2 * 10, s1 * 10];
+                voiceScore = Math.round(((s1 + s2) / 20) * 100);
+              } else {
+                voiceScore = 0;
+                voiceItems = [0, 0, 0, 0];
+              }
               const contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
 
               const calculatedScores: any = {
@@ -188,16 +238,16 @@ export function Analysis() {
                 },
                 "voice": { 
                   category: voiceScore, 
-                  items: [voiceScore, 85, 80, 85] 
+                  items: voiceItems,
                 }
               };
               saveAnalysisResultForSubmission(scopeId, submissionId, calculatedScores);
+              setScoresRevision((n) => n + 1);
             });
           }
           
           clearInterval(timerId);
-        }
- else if (data.status === "Error") {
+        } else if (data.status === "Error") {
           clearInterval(timerId);
         }
       } catch (e) {
@@ -343,6 +393,54 @@ export function Analysis() {
           </div>
         )}
 
+        {voiceBlock ? (
+          <section className="analysis-section">
+            <h2>발표 음성 (음성 분석)</h2>
+            <p className="analysis-voice-lead">
+              항목기준표 <strong>발표 음성</strong> 4개 세부 항목(각 100점 만점)에 맞춰 측정했습니다.
+            </p>
+            <div className="analysis-voice-metrics">
+              <div className="analysis-voice-metric">
+                <span className="analysis-voice-metric__label">말버릇(필러)</span>
+                <strong className="analysis-voice-metric__val">{String(voiceBlock.metrics.filler_total ?? 0)}</strong>
+                <span className="analysis-voice-metric__unit">
+                  회 (분당 {Number(voiceBlock.metrics.fillers_per_minute ?? 0).toFixed(1)})
+                </span>
+              </div>
+              <div className="analysis-voice-metric">
+                <span className="analysis-voice-metric__label">반복 구절</span>
+                <strong className="analysis-voice-metric__val">{String(voiceBlock.metrics.repeated_phrase_hits ?? 0)}</strong>
+                <span className="analysis-voice-metric__unit">건</span>
+              </div>
+              <div className="analysis-voice-metric">
+                <span className="analysis-voice-metric__label">긴 무음</span>
+                <strong className="analysis-voice-metric__val">{String(voiceBlock.metrics.silence_pause_count ?? 0)}</strong>
+                <span className="analysis-voice-metric__unit">
+                  회 · {Number(voiceBlock.metrics.silence_total_sec ?? 0).toFixed(1)}초
+                </span>
+              </div>
+              <div className="analysis-voice-metric">
+                <span className="analysis-voice-metric__label">말 속도</span>
+                <strong className="analysis-voice-metric__val">
+                  {Number(voiceBlock.metrics.avg_speech_rate_cps ?? 0).toFixed(2)}
+                </strong>
+                <span className="analysis-voice-metric__unit">글자/초</span>
+              </div>
+            </div>
+            <div className="analysis-voice-subscores">
+              <span>
+                속도 <strong>{voiceSubscore(voiceBlock.scores, "speech_speed", 0)}</strong>
+                {" · "}
+                안정 <strong>{voiceSubscore(voiceBlock.scores, "voice_stability_item", 1)}</strong>
+                {" · "}
+                말버릇 <strong>{voiceSubscore(voiceBlock.scores, "filler_control", 2)}</strong>
+                {" · "}
+                반복 <strong>{voiceSubscore(voiceBlock.scores, "repetition_control", 3)}</strong>
+              </span>
+            </div>
+          </section>
+        ) : null}
+
         {chartData.length > 0 && (
           <section className="analysis-section">
             <h2>발표 흐름 분석 (시선 및 표정 변화)</h2>
@@ -456,7 +554,7 @@ export function Analysis() {
                       <li key={label}>
                         <span className="analysis-cat__label">{label}</span>
                         <span className="analysis-cat__itemscore">
-                          {d?.items[i] ?? "—"}
+                          {d?.items[i] != null ? String(d.items[i]) : "—"}
                         </span>
                       </li>
                     ))}

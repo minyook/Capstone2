@@ -92,18 +92,25 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         # audio_analyzer.py 내부에서 파일 저장을 위해 file_id(video_filename)를 넘겨야 함
         from processing.audio_analyzer import transcribe_audio_with_timestamps
         audio_segments, whisper_error = transcribe_audio_with_timestamps(str(audio_path), video_filename=file_id)
-        
-        if not audio_segments: 
+        voice_metrics: dict = {}
+        voice_scores: dict = {}
+        aligned_data: list = []
+
+        if not audio_segments:
             print(f"\n[4/6] ⚠️ 목소리 텍스트가 추출되지 않았습니다. (음성 분석 스킵)")
-            aligned_data = [] 
         else:
             print(f"\n[4/6] ✅ 로컬 음성 인식 완료.")
             from processing.audio_analyzer import analyze_prosody_for_segments
             audio_segments = analyze_prosody_for_segments(audio_path, audio_segments, video_filename=file_id)
             print(f"\n[5/6] ✅ 운율 분석 완료.")
-            
+
             job_status[job_id] = {"status": "Analyzing", "message": "6/6: 데이터 정렬 중..."}
             aligned_data = align_data(all_vision_results, audio_segments)
+
+            print(f"\n[5b/6] 발화 습관·항목기준표(발표 음성) 분석 중...")
+            from processing.voice_patterns import analyze_voice_behavior, voice_scores_from_metrics
+            voice_metrics = analyze_voice_behavior(audio_segments, aligned_data, audio_path)
+            voice_scores = voice_scores_from_metrics(voice_metrics)
 
         # 4단계 비디오 분류
         if max_visibility["ankles"]: video_type = VideoType.FULL_BODY
@@ -135,13 +142,23 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
 
         # 음성 데이터 집계
         voice_summary = "음성 데이터 없음"
-        avg_speed = 0 # 초기화
-        if audio_segments:
-            avg_pitch = sum(s.get('pitch', 0) for s in audio_segments) / len(audio_segments)
-            avg_db = sum(s.get('db', 0) for s in audio_segments) / len(audio_segments)
-            avg_speed = sum(s.get('speed', 1.0) for s in audio_segments) / len(audio_segments)
-            voice_summary = (f"평균 주파수: {avg_pitch:.1f}Hz, 평균 음량: {avg_db:.1f}dB, "
-                             f"말하기 속도: {avg_speed:.1f}x, 총 {len(audio_segments)}개 구간")
+        avg_speed = 0.0
+        if audio_segments and voice_metrics:
+            vm = voice_metrics
+            avg_speed = float(vm.get("avg_speech_rate_cps", 0) or 0)
+            vs = voice_scores
+            items = vs.get("items_100") or []
+            voice_summary = (
+                f"발표 음성 영역 {vs.get('category_100', 0)}점 "
+                f"(속도 {items[0] if len(items) > 0 else 0}, "
+                f"안정 {items[1] if len(items) > 1 else 0}, "
+                f"말버릇 {items[2] if len(items) > 2 else 0}, "
+                f"반복 {items[3] if len(items) > 3 else 0}), "
+                f"필러 분당 {vm.get('fillers_per_minute', 0):.1f}회, "
+                f"말 속도 {avg_speed:.2f} 글자/초"
+            )
+        elif audio_segments:
+            voice_summary = f"STT 구간 {len(audio_segments)}개 (습관 분석 없음)"
 
         # PPT 분석 결과 수신
         ppt_summary = "PPT 분석 데이터 없음"
@@ -167,7 +184,9 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "avg_speed": avg_speed,
             "ppt_summary": ppt_summary,
             "voice_summary": voice_summary,
-            "video_type": video_type.value
+            "video_type": video_type.value,
+            "voice_metrics": voice_metrics,
+            "voice_scores": voice_scores,
         }
 
         # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
