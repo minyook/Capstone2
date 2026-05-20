@@ -74,15 +74,18 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         if all_vision_results and frame_paths:
             import cv2
             debug_frame = cv2.imread(str(frame_paths[0]))
-            y_res = all_vision_results[0].yolo
-            cv2.putText(debug_frame, f"Gesture: {y_res.gesture_name}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-            cv2.putText(debug_frame, f"L-Hand: {y_res.left_hand_state}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-            cv2.putText(debug_frame, f"R-Hand: {y_res.right_hand_state}", (50, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-            
-            check_dir = Path("out/aa/testopen")
-            check_dir.mkdir(parents=True, exist_ok=True)
-            cv2.imwrite(str(check_dir / "yolo_check.jpg"), debug_frame)
-            print(f"   > 🖼️ [시각화 체크] 분석 샘플 이미지가 저장되었습니다: {check_dir / 'yolo_check.jpg'}")
+            if debug_frame is not None:
+                y_res = all_vision_results[0].yolo
+                cv2.putText(debug_frame, f"Gesture: {y_res.gesture_name}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                cv2.putText(debug_frame, f"L-Hand: {y_res.left_hand_state}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                cv2.putText(debug_frame, f"R-Hand: {y_res.right_hand_state}", (50, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                
+                check_dir = Path("out/aa/testopen")
+                check_dir.mkdir(parents=True, exist_ok=True)
+                cv2.imwrite(str(check_dir / "yolo_check.jpg"), debug_frame)
+                print(f"   > 🖼️ [시각화 체크] 분석 샘플 이미지가 저장되었습니다: {check_dir / 'yolo_check.jpg'}")
+            else:
+                print(f"   > ⚠️ [시각화 체크 실패] 첫 번째 프레임을 읽을 수 없습니다.")
 
         # 4 & 5. Whisper 및 Praat 음성 분석
         job_status[job_id] = {"status": "Analyzing", "message": "4/6: 로컬 음성 인식 실행 중..."}

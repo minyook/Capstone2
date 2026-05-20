@@ -71,6 +71,11 @@ class FeedbackEngine:
         detailed_data = self._load_json_data(json_paths)
         analysis_summary = detailed_data.get("summary", {})
         
+        # 데이터 매핑
+        face_rate = analysis_summary.get('face_detection_rate', 50.0)
+        speed = analysis_summary.get('avg_speed', 5.0)
+        gaze = analysis_summary.get('gaze_score', 0.5) * 100
+
         # 프롬프트 구성 (마크다운 및 줄바꿈 강조)
         prompt_style = """[|system|]
 당신은 대한민국 최고의 발표 전문가이자 스피치 컨설턴트입니다. 
@@ -93,14 +98,14 @@ class FeedbackEngine:
 
 [|assistant|]
 """
-        # 데이터 매핑
         prompt = prompt_style.format(
             project_name=project_name,
-            face_rate=analysis_summary.get('face_detection_rate', 50.0),
-            speed=analysis_summary.get('avg_speed', 5.0),
-            gaze=analysis_summary.get('gaze_score', 0.5) * 100
+            face_rate=face_rate,
+            speed=speed,
+            gaze=gaze
         )
 
+        # 로컬 모델(EXAONE) 사용 시도
         if self.provider == "exaone" and self.local_model:
             print(f"   > [AI] 학습된 지식을 바탕으로 심층 리포트 생성 중...")
             inputs = self.local_tokenizer([prompt], return_tensors="pt").to(self.device)
@@ -124,11 +129,21 @@ class FeedbackEngine:
             # 소제목 앞뒤 줄바꿈 보강 (가독성 향상)
             final_text = final_text.replace("##", "\n\n##").replace("###", "\n###")
             return final_text
+        
+        # 로컬 모델 실패 시 Gemini로 폴백
         else:
+            print(f"   > [AI] Gemini API를 사용하여 피드백 생성 중 (폴백 모드)...")
+            from core.gemini_client import chat_with_gemini
+            # Gemini는 대화 형식으로 호출
+            clean_prompt = prompt.replace("[|system|]", "").replace("[|user|]", "").replace("[|assistant|]", "").strip()
+            chat_res = chat_with_gemini(clean_prompt, [])
+            if chat_res and len(chat_res) > 1:
+                return chat_res[-1]["content"]
             return "모델 로드 오류로 피드백을 생성할 수 없습니다."
 
     def _find_project_json_files(self, project_name: str) -> Dict[str, Path]:
-        base_dir = Path("Capstone2Back/CapstoneDesign_Server/analysis_json")
+        # 프로젝트 루트의 analysis_json 폴더를 가리키도록 수정
+        base_dir = Path(__file__).resolve().parent.parent / "analysis_json"
         paths = {}
         mapping = {"total": "total_json", "face": "MediaPipe_json", "gesture": "Yolo_json", "voice": "Voice_json", "ppt": "ppt_json"}
         for key, folder in mapping.items():
@@ -151,4 +166,4 @@ class FeedbackEngine:
     def generate_timeline_feedback(self, aligned_data: list, project_name: str, persona: str = "soft") -> Dict[str, str]:
         return {"0.0": "학습된 AI 코치가 실시간 분석을 시작합니다."}
 
-feedback_engine = FeedbackEngine(provider="exaone")
+feedback_engine = FeedbackEngine(provider="gemini")
