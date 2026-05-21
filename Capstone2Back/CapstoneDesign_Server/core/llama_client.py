@@ -1,12 +1,12 @@
 import ollama
 
-# EXAONE 3.5 기반 커스텀 코치 모델명
-MODEL_NAME = "exaone-coach"
+# Gemma 3 기반 커스텀 코치 모델명
+MODEL_NAME = "gemma3:4b"
 
 def get_feedback_from_coach(vision_audio_data: str) -> str:
     """
     [발표 코치] 분석 데이터를 기반으로 피드백 생성
-    - 모델: exaone-coach (Ollama 커스텀 모델)
+    - 모델: gemma3:4b (Ollama 모델)
     """
     system_prompt = """
 당신은 대한민국 최고의 발표 전문가이자 스피치 컨설턴트인 '오버나잇 AI 코치'입니다.
@@ -30,7 +30,7 @@ def get_feedback_from_coach(vision_audio_data: str) -> str:
         )
         return response['message']['content']
     except Exception as e:
-        return f"코칭 AI(EXAONE 3.5) 응답 실패: {e}\n(모델이 설치되어 있는지 확인해주세요: ollama run exaone3.5)"
+        return f"코칭 AI(Gemma 3) 응답 실패: {e}\n(모델이 설치되어 있는지 확인해주세요: ollama run gemma3:4b)"
 
 # 🧪 피드백 코치 테스트
 if __name__ == "__main__":

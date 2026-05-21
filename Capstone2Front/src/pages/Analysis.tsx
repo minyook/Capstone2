@@ -491,7 +491,7 @@ export function Analysis() {
 
         {overallFeedback && (
           <section className="analysis-section">
-            <h2>AI 전문가 심층 피드백 (EXAONE 3.5 2.4B)</h2>
+            <h2>AI 전문가 심층 피드백</h2>
             <div className="analysis-feedback-card">
               <div className="analysis-feedback-content">
                 <ReactMarkdown>{overallFeedback}</ReactMarkdown>

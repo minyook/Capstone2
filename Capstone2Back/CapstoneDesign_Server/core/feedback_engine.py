@@ -4,6 +4,7 @@ import sys
 import io
 import glob
 import torch
+import ollama
 from pathlib import Path
 from typing import Dict, Any, Optional
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -14,7 +15,7 @@ if sys.stdout.encoding != 'utf-8':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 class FeedbackEngine:
-    def __init__(self, provider: str = "exaone"):
+    def __init__(self, provider: str = "gemma"):
         self.provider = provider.lower()
         self.local_model = None
         self.local_tokenizer = None
@@ -63,7 +64,7 @@ class FeedbackEngine:
             print(f"✅ 모델 및 학습 데이터 로드 완료!")
         except Exception as e:
             print(f"❌ 모델 로드 실패: {e}")
-            self.provider = "gemini"
+            self.provider = "gemma" # 실패 시 gemma로 변경
 
     def generate_feedback(self, project_name: str, rubric: str = "", persona: str = "soft") -> str:
         # 데이터 취합 (기존 로직)
@@ -76,39 +77,46 @@ class FeedbackEngine:
         speed = analysis_summary.get('avg_speed', 5.0)
         gaze = analysis_summary.get('gaze_score', 0.5) * 100
 
-        # 프롬프트 구성 (마크다운 및 줄바꿈 강조)
-        prompt_style = """[|system|]
-당신은 대한민국 최고의 발표 전문가이자 스피치 컨설턴트입니다. 
-입력된 기술 분석 데이터를 바탕으로 사용자의 발표에 대해 전문적인 피드백을 제공하십시오.
+        # 시스템 지시문 및 데이터 구성
+        system_prompt = "당신은 대한민국 최고의 발표 전문가이자 스피치 컨설턴트입니다. 입력된 기술 분석 데이터를 바탕으로 사용자의 발표에 대해 전문적인 피드백을 제공하십시오."
+        
+        user_content = f"""
+[분석 데이터]
+- 프로젝트 명: {project_name} 
+- PPT 레이아웃: 텍스트 면적 {face_rate:.1f}%, 시각 자료 활용도(보통)
+- 음성 분석(Whisper): 평균 발화 속도 {speed:.1f} cps, 필러워드 사용 빈도(보통)
+- 자세 분석(YOLO): 자세 안정성(보통), 상체 움직임(감지됨)
+- 시선 처리(MediaPipe): 정면 응시율 {gaze:.1f}%, 시선 분산도(낮음)
 
 [출력 규칙]
 1. 반드시 한국어로 답변하십시오.
 2. 가독성을 위해 마크다운(Markdown) 형식을 사용하십시오.
-3. 각 분석 항목별로 소제목(##)을 사용하고, 상세 내용은 글머리 기호(-)를 사용하여 5줄 이상 작성하십시오.
+3. 각 분석 항목별로 소제목(##)을 사용하고, 상세 내용은 글머리 기호(-)를 사용하여 5줄 이상 구체적으로 작성하십시오.
 4. 문장 사이에 적절한 줄바꿈을 적용하여 읽기 편하게 만드십시오.
 5. 마지막에는 종합적인 개선 방향을 '총평'으로 요약하십시오.
-
-[|user|]
-제시된 기술 분석 데이터(PPT, Whisper, YOLO, MediaPipe)를 기반으로 분석 보고서를 작성해줘.
-[{project_name}] 
-- PPT: 텍스트 면적 {face_rate:.1f}%, 이미지 포함 여부(있음)
-- Whisper(음성): 필러워드 분당 {speed:.1f}회
-- YOLO(자세): 상체 흔들림 분석 결과(높음)
-- MediaPipe(시선): 정면 응시율 {gaze:.1f}%
-
-[|assistant|]
 """
-        prompt = prompt_style.format(
-            project_name=project_name,
-            face_rate=face_rate,
-            speed=speed,
-            gaze=gaze
-        )
 
-        # 로컬 모델(EXAONE) 사용 시도
+        # 1. Gemma (Ollama) 사용 (우선순위 상향)
+        if self.provider == "gemma":
+            print(f"   > [AI] Gemma 3:4B (Ollama)를 사용하여 피드백 생성 중...")
+            try:
+                response = ollama.chat(
+                    model='gemma3:4b',
+                    messages=[
+                        {'role': 'system', 'content': system_prompt},
+                        {'role': 'user', 'content': user_content}
+                    ]
+                )
+                return response['message']['content']
+            except Exception as e:
+                print(f"❌ Gemma API 오류: {e}")
+                self.provider = "gemini" # 실패 시 gemini로 폴백
+
+        # 2. 로컬 모델(EXAONE) 사용
         if self.provider == "exaone" and self.local_model:
             print(f"   > [AI] 학습된 지식을 바탕으로 심층 리포트 생성 중...")
-            inputs = self.local_tokenizer([prompt], return_tensors="pt").to(self.device)
+            full_prompt = f"[|system|]\n{system_prompt}\n[|user|]\n{user_content}\n[|assistant|]\n"
+            inputs = self.local_tokenizer([full_prompt], return_tensors="pt").to(self.device)
             with torch.no_grad():
                 outputs = self.local_model.generate(
                     **inputs,
@@ -120,23 +128,21 @@ class FeedbackEngine:
                 )
             response = self.local_tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
             
-            # 답변 추출 및 줄바꿈 정리
+            # 답변 추출
             if "[|assistant|]" in response:
                 final_text = response.split("[|assistant|]")[1].strip()
             else:
                 final_text = response.strip()
             
-            # 소제목 앞뒤 줄바꿈 보강 (가독성 향상)
+            # 소제목 앞뒤 줄바꿈 보강
             final_text = final_text.replace("##", "\n\n##").replace("###", "\n###")
             return final_text
         
-        # 로컬 모델 실패 시 Gemini로 폴백
+        # 3. Gemini 폴백
         else:
             print(f"   > [AI] Gemini API를 사용하여 피드백 생성 중 (폴백 모드)...")
             from core.gemini_client import chat_with_gemini
-            # Gemini는 대화 형식으로 호출
-            clean_prompt = prompt.replace("[|system|]", "").replace("[|user|]", "").replace("[|assistant|]", "").strip()
-            chat_res = chat_with_gemini(clean_prompt, [])
+            chat_res = chat_with_gemini(f"{system_prompt}\n\n{user_content}", [])
             if chat_res and len(chat_res) > 1:
                 return chat_res[-1]["content"]
             return "모델 로드 오류로 피드백을 생성할 수 없습니다."
@@ -166,4 +172,4 @@ class FeedbackEngine:
     def generate_timeline_feedback(self, aligned_data: list, project_name: str, persona: str = "soft") -> Dict[str, str]:
         return {"0.0": "학습된 AI 코치가 실시간 분석을 시작합니다."}
 
-feedback_engine = FeedbackEngine(provider="gemini")
+feedback_engine = FeedbackEngine(provider="gemma")

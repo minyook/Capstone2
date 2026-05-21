@@ -1,4 +1,13 @@
 import os
+import sys
+
+# --- [Fix] Fortran Runtime Error (forrtl 200) & TF Warnings ---
+# 1. libifcoremd.dll (Fortran) 관련 Ctrl+C 강제 종료 오류 방지
+os.environ["FOR_DISABLE_CONSOLE_CTRL_HANDLER"] = "1"
+# 2. TensorFlow oneDNN 관련 수치 경고 끄기
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+# -----------------------------------------------------------
+
 import uvicorn
 import uuid 
 import asyncio
