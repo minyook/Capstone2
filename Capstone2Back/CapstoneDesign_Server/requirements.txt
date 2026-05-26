@@ -27,3 +27,6 @@ praat-parselmouth
 # --- Document & Data Analysis ---
 python-pptx
 scikit-learn
+Pillow
+imagehash
+pdf2image

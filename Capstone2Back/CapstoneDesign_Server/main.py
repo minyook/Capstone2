@@ -33,6 +33,7 @@ from processing.audio_analyzer import load_local_whisper_model
 from processing.task_manager import run_analysis_task, job_status
 from core.exceptions import QualityException
 from core.gemini_client import chat_with_gemini, stream_chat_with_gemini, upload_to_gemini
+from slide_verify.service import run_slide_verify
 
 # 환경 변수 설정
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -105,7 +106,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # 🌟 필수 디렉토리 확인 및 생성
-for d in ["uploads", "analysis_json/MediaPipe_json", "analysis_json/Yolo_json", "analysis_json/total_json", "analysis_json/Voice_json"]:
+for d in [
+    "uploads",
+    "analysis_json/MediaPipe_json",
+    "analysis_json/Yolo_json",
+    "analysis_json/total_json",
+    "analysis_json/Voice_json",
+    "analysis_json/slide_verify_cache",
+]:
     Path(d).mkdir(parents=True, exist_ok=True)
 
 # 🌟 정적 파일 서버 설정
@@ -270,6 +278,52 @@ async def analyze_ppt(file: UploadFile = File(...)):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PPT 분석 실패: {e}") from e
+
+
+@app.post("/api/ppt/verify")
+async def verify_ppt_slides(
+    ppt: UploadFile = File(...),
+    video: UploadFile = File(...),
+    video_type: str = Form(default="fullscreen"),
+):
+    """PPT 슬라이드와 영상 프레임의 시각적 일치 여부 검증."""
+    ppt_name = (ppt.filename or "").lower()
+    video_name = (video.filename or "").lower()
+    if not ppt_name.endswith((".ppt", ".pptx")):
+        raise HTTPException(status_code=400, detail="PPT 또는 PPTX 파일만 업로드할 수 있습니다.")
+    if not video_name.endswith((".mp4", ".mov", ".avi", ".mkv", ".webm")):
+        raise HTTPException(
+            status_code=400,
+            detail="mp4, mov, avi, mkv, webm 영상만 업로드할 수 있습니다.",
+        )
+    if video_type not in ("fullscreen", "pip", "audience"):
+        raise HTTPException(
+            status_code=400,
+            detail="video_type은 fullscreen, pip, audience 중 하나입니다.",
+        )
+
+    verify_dir = Path("uploads") / "slide_verify" / str(uuid.uuid4())[:12]
+    verify_dir.mkdir(parents=True, exist_ok=True)
+    ppt_path = verify_dir / (ppt.filename or "upload.pptx")
+    video_path = verify_dir / (video.filename or "upload.mp4")
+
+    try:
+        with ppt_path.open("wb") as f:
+            shutil.copyfileobj(ppt.file, f)
+        with video_path.open("wb") as f:
+            shutil.copyfileobj(video.file, f)
+
+        result = run_slide_verify(ppt_path, video_path, video_type=video_type)
+        return result
+    except HTTPException:
+        raise
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"슬라이드 일치 검증 실패: {e}") from e
+    finally:
+        shutil.rmtree(verify_dir, ignore_errors=True)
+
 
 @app.exception_handler(QualityException)
 async def quality_exception_handler(request, exc: QualityException):

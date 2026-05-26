@@ -5,6 +5,12 @@ import { useFolders } from "../context/FoldersContext";
 import { findSubmissionById, submissionPrimaryFileName } from "../data/folderFilesStorage";
 import { loadScoresForView, totalFromScores, type StoredRubricScores } from "../data/analysisResultStorage";
 import { RUBRIC } from "../data/rubric";
+import {
+  loadSlideVerifyForSubmission,
+  summarizeLowMatchReasons,
+  verdictLabelKo,
+  type SlideVerifyResult,
+} from "../data/slideVerifyStorage";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import ReactMarkdown from "react-markdown";
 import "./Analysis.css";
@@ -42,6 +48,7 @@ export function Analysis() {
   const [currentFace, setCurrentFace] = useState<any>(null);
   const [currentGesture, setCurrentGesture] = useState<any>(null);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
+  const [slideVerify, setSlideVerify] = useState<SlideVerifyResult | null>(null);
   
   // 🌟 슬라이드 관련 상태
   const [tipPageIndex, setTipPageIndex] = useState(0);
@@ -121,7 +128,17 @@ export function Analysis() {
     [scopeId, submissionId, fsRevision]
   );
 
-  const hasData = scores !== null || overallFeedback !== null || voiceBlock !== null;
+  useEffect(() => {
+    setSlideVerify(loadSlideVerifyForSubmission(submissionId));
+  }, [submissionId]);
+
+  const slideVerifyReasons = useMemo(
+    () => (slideVerify ? summarizeLowMatchReasons(slideVerify) : []),
+    [slideVerify]
+  );
+
+  const hasData =
+    scores !== null || overallFeedback !== null || voiceBlock !== null || slideVerify !== null;
   const total = useMemo(() => (scores ? totalFromScores(scores) : null), [scores]);
   const previewVideoUrl = useMemo(() => {
     if (!submissionId) return null;
@@ -225,7 +242,20 @@ export function Analysis() {
                 voiceScore = 0;
                 voiceItems = [0, 0, 0, 0];
               }
-              const contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
+              const storedVerify = loadSlideVerifyForSubmission(submissionId);
+              let contentScore: number;
+              let contentItems: number[];
+              if (storedVerify) {
+                contentScore = Math.round(storedVerify.overall_match_percent);
+                contentItems = [
+                  Math.round(storedVerify.overall_match_percent),
+                  Math.round(storedVerify.visual_match_percent),
+                  Math.round(storedVerify.slide_coverage_percent),
+                ];
+              } else {
+                contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
+                contentItems = [contentScore, contentScore - 5, contentScore + 5];
+              }
 
               const calculatedScores: any = {
                 "attitude": { 
@@ -234,7 +264,7 @@ export function Analysis() {
                 },
                 "content": { 
                   category: contentScore, 
-                  items: [contentScore, contentScore - 5, contentScore + 5] 
+                  items: contentItems,
                 },
                 "voice": { 
                   category: voiceScore, 
@@ -392,6 +422,67 @@ export function Analysis() {
             </div>
           </div>
         )}
+
+        {slideVerify ? (
+          <section className="analysis-section analysis-slide-verify">
+            <h2>PPT 슬라이드 일치 (영상 대조)</h2>
+            <div className="analysis-slide-verify__head">
+              <span
+                className={
+                  "analysis-slide-verify__badge analysis-slide-verify__badge--" +
+                  slideVerify.verdict
+                }
+              >
+                {verdictLabelKo(slideVerify.verdict)}
+              </span>
+              <div className="analysis-slide-verify__percent">
+                <span className="analysis-slide-verify__num">
+                  {slideVerify.overall_match_percent}
+                </span>
+                <span className="analysis-slide-verify__unit">% 종합 일치</span>
+              </div>
+            </div>
+            <p className="analysis-slide-verify__formula">
+              화면 유사도 {slideVerify.visual_match_percent}% × 슬라이드 커버리지{" "}
+              {slideVerify.slide_coverage_percent}%
+              {slideVerify.video_type === "audience" ? " · 제3자 촬영 모드" : ""}
+            </p>
+            {slideVerify.diagnostics?.slide_present_rate != null &&
+            slideVerify.video_type === "audience" ? (
+              <p className="analysis-slide-verify__diag">
+                스크린 검출{" "}
+                {Math.round((slideVerify.diagnostics.slide_present_rate ?? 0) * 100)}% · 원근 OK{" "}
+                {Math.round((slideVerify.diagnostics.perspective_ok_rate ?? 0) * 100)}%
+              </p>
+            ) : null}
+            {slideVerify.detected_slide_sequence?.length > 0 ? (
+              <p className="analysis-slide-verify__seq">
+                영상에서 감지한 슬라이드 순서:{" "}
+                {slideVerify.detected_slide_sequence.join(" → ")}장
+              </p>
+            ) : null}
+            {slideVerify.overall_match_percent < 70 && slideVerifyReasons.length > 0 ? (
+              <div className="analysis-slide-verify__reasons">
+                <h3>일치율이 낮은 이유</h3>
+                <ul>
+                  {slideVerifyReasons.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {(slideVerify.issues?.length ?? 0) > 0 ? (
+              <div className="analysis-slide-verify__issues">
+                <h3>상세 이슈</h3>
+                <ul>
+                  {slideVerify.issues.slice(0, 12).map((issue, idx) => (
+                    <li key={`${issue.issue_type}-${idx}`}>{issue.message}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </section>
+        ) : null}
 
         {voiceBlock ? (
           <section className="analysis-section">

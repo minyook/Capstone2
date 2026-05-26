@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useFolders } from "../context/FoldersContext";
 import { registerFolderFiles } from "../data/folderFilesStorage";
+import { saveSlideVerifyForSubmission, type SlideVerifyResult } from "../data/slideVerifyStorage";
 
 import "./Evaluate.css";
 
@@ -31,6 +32,7 @@ export function Evaluate() {
   const [videoName, setVideoName] = useState<string | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [persona, setPersona] = useState<string>("soft");
+  const [videoType, setVideoType] = useState<"fullscreen" | "pip" | "audience">("fullscreen");
 
   const [isRecording, setIsRecording] = useState(false);
 
@@ -199,20 +201,37 @@ export function Evaluate() {
         throw new Error(err?.detail ?? "PPT 분석 요청에 실패했습니다.");
       }
 
-      // 2. 영상 업로드 및 분석 시작 요청
+      // 2. 영상 업로드 + PPT 슬라이드 일치 검증 (병렬)
       const videoFormData = new FormData();
       videoFormData.append("file", videoFile);
       videoFormData.append("persona", persona);
 
-      const videoRes = await fetch("http://127.0.0.1:8000/api/upload", {
-        method: "POST",
-        body: videoFormData,
-      });
+      const verifyFormData = new FormData();
+      verifyFormData.append("ppt", pptFile);
+      verifyFormData.append("video", videoFile);
+      verifyFormData.append("video_type", videoType);
+
+      const [videoRes, verifyRes] = await Promise.all([
+        fetch("http://127.0.0.1:8000/api/upload", {
+          method: "POST",
+          body: videoFormData,
+        }),
+        fetch("http://127.0.0.1:8000/api/ppt/verify", {
+          method: "POST",
+          body: verifyFormData,
+        }),
+      ]);
+
       if (!videoRes.ok) {
         throw new Error("영상 업로드 및 분석 요청에 실패했습니다.");
       }
       const videoData = await videoRes.json();
       const jobId = videoData.job_id;
+
+      let slideVerifyResult: SlideVerifyResult | null = null;
+      if (verifyRes.ok) {
+        slideVerifyResult = (await verifyRes.json()) as SlideVerifyResult;
+      }
 
       // 3. 로컬 저장소에 제출 정보 등록
       const submission = await registerFolderFiles(scopeId, folderId, {
@@ -246,6 +265,10 @@ export function Evaluate() {
           map[submission.id] = jobId;
           sessionStorage.setItem("overnight-analysis-job-ids-v1", JSON.stringify(map));
         } catch {}
+
+        if (slideVerifyResult) {
+          saveSlideVerifyForSubmission(submission.id, slideVerifyResult);
+        }
       }
       navigate(
         submission
@@ -516,6 +539,22 @@ export function Evaluate() {
             아래에서 녹화하거나 파일을 업로드하세요. 음성·얼굴이 나와야 태도·음성 항목을 채점할 수 있습니다.
 
           </p>
+
+          <label className="evaluate-field-label" htmlFor="videoType">
+            영상 촬영 유형 (PPT 일치 검사)
+          </label>
+          <select
+            id="videoType"
+            className="evaluate-select"
+            value={videoType}
+            onChange={(e) =>
+              setVideoType(e.target.value as "fullscreen" | "pip" | "audience")
+            }
+          >
+            <option value="fullscreen">전체화면 슬라이드 녹화</option>
+            <option value="pip">화면 녹화 + 얼굴 (PiP)</option>
+            <option value="audience">제3자 촬영 (강의실·청중 시점)</option>
+          </select>
 
           <div className="evaluate-preview" role="region" aria-label="카메라 미리보기">
             {recordedVideoUrl && !isRecording ? (
