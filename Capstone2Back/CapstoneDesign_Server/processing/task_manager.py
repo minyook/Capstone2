@@ -17,7 +17,7 @@ from schemas.video_type import VideoType
 from core.llama_client import get_feedback_from_coach
 from core.exceptions import QualityException
 
-FRAME_RATE = 5
+FRAME_RATE = 0.2
 job_status = {} 
 
 def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None, persona: str = "soft"):

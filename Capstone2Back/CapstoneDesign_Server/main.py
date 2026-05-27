@@ -208,7 +208,8 @@ async def get_status(job_id: str):
                         "llama_feedback": data.get("overall_feedback"),
                         "timeline_feedback": data.get("timeline_feedback"),
                         "analysis_summary": data.get("summary"),
-                        "raw_data": data.get("raw_data")
+                        "raw_data": data.get("raw_data"),
+                        "timeline_data": data.get("timeline_data")
                     }
                 }
         except Exception as e:

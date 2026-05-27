@@ -16,23 +16,35 @@ import {
   verdictLabelKo,
   type SlideVerifyResult,
 } from "../data/slideVerifyStorage";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import ReactMarkdown from "react-markdown";
 import "./Analysis.css";
 
-function voiceSubscore(
-  scores: Record<string, number | unknown>,
-  key: string,
-  itemsIndex: number
-): string {
-  const v = scores[key];
-  if (typeof v === "number") return String(v);
-  const items = scores.items_100;
-  if (Array.isArray(items) && typeof items[itemsIndex] === "number") {
-    return String(Math.round(items[itemsIndex] as number));
+// Helper for loading step detection
+const getActiveStep = (msg: string): number => {
+  const m = msg.toLowerCase();
+  if (m.includes("품질") || m.includes("0/6") || m.includes("전송") || m.includes("검증")) return 1;
+  if (m.includes("yolo") || m.includes("시각") || m.includes("3/6")) return 2;
+  if (m.includes("whisper") || m.includes("음성") || m.includes("운율") || m.includes("praat") || m.includes("4/6") || m.includes("5/6") || m.includes("6/6")) return 3;
+  if (m.includes("gemma") || m.includes("피드백") || m.includes("7/7") || m.includes("ai 피드백")) return 4;
+  return 1;
+};
+
+// Speech tips and context-aware guidance for the loading screen
+const getDynamicLoadingMessage = (step: number): string => {
+  switch (step) {
+    case 1:
+      return "💡 스피치 팁: 첫 30초 안에 청중의 관심을 사로잡으려면 강력한 오프닝 질문을 던져보세요!";
+    case 2:
+      return "💡 자세 팁: 발표할 때 양손을 가볍게 열어 열린 자세를 취하면 청중에게 개방적이고 신뢰감을 주는 이미지를 전달합니다.";
+    case 3:
+      return "💡 목소리 팁: 중요한 핵심 개념을 강조하기 직전에는 1.5초간 의도적 침묵(Pause)을 지켜 청중의 호기심을 유도해 보세요.";
+    case 4:
+      return "💡 설득 팁: 수사학적 신뢰도(Ethos)를 높이기 위해 구체적 수치와 학술적 근거를 현상 설명과 결합해 제시하면 설득력이 증폭됩니다.";
+    default:
+      return "💡 성공적인 발표를 위한 AI의 정밀 분석이 안전하게 진행되고 있습니다.";
   }
-  return "—";
-}
+};
 
 export function Analysis() {
   const { scopeId } = useFolders();
@@ -44,19 +56,20 @@ export function Analysis() {
   const [overallFeedback, setOverallFeedback] = useState<string | null>(null);
   const [timelineFeedback, setTimelineFeedback] = useState<Record<string, string>>({});
   const [activeTip, setActiveTip] = useState<string | null>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
   const [rawData, setRawData] = useState<any[]>([]);
   const [voiceBlock, setVoiceBlock] = useState<{
     metrics: Record<string, unknown>;
     scores: Record<string, number>;
   } | null>(null);
-  const [currentFace, setCurrentFace] = useState<any>(null);
-  const [currentGesture, setCurrentGesture] = useState<any>(null);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
   const [slideVerify, setSlideVerify] = useState<SlideVerifyResult | null>(null);
   
-  // 🌟 슬라이드 관련 상태
-  const [tipPageIndex, setTipPageIndex] = useState(0);
+  // 🌟 실시간 로딩용 타이머 및 상태
+  const [analysisMessage, setAnalysisMessage] = useState<string>("0/6: 품질 검사 중...");
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [progressVal, setProgressVal] = useState(0);
+  const [timelineData, setTimelineData] = useState<any[]>([]);
+  
   const [scoresRevision, setScoresRevision] = useState(0);
 
   const scores = useMemo<StoredRubricScores | null>(
@@ -64,67 +77,151 @@ export function Analysis() {
     [scopeId, submissionId, fsRevision, scoresRevision]
   );
 
-  // 🌟 타임라인 팁을 3개씩 묶기
-  const tipChunks = useMemo(() => {
-    const entries = Object.entries(timelineFeedback).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
-    const chunks = [];
-    for (let i = 0; i < entries.length; i += 3) {
-      chunks.push(entries.slice(i, i + 3));
+  const pieData = useMemo(() => {
+    if (!scores) return [];
+    const colors = ["#3b82f6", "#7b61ff", "#10b981"];
+    return RUBRIC.map((cat, idx) => {
+      const scoreData = scores[cat.id];
+      return {
+        name: cat.title.split(' ')[0],
+        fullName: cat.title,
+        value: scoreData?.category ?? 0,
+        max: cat.maxScore,
+        color: colors[idx % colors.length],
+        subItems: cat.items.map((label, i) => ({
+          label: label.split(' (')[0],
+          score: scoreData?.items[i] ?? 0,
+          max: cat.itemMaxes[i]
+        }))
+      };
+    });
+  }, [scores]);
+
+  const radarData = useMemo(() => {
+    if (!scores) return [];
+    return RUBRIC.map((cat) => ({
+      subject: cat.title.split(' ')[0],
+      score: Math.round(((scores[cat.id]?.category ?? 0) / cat.maxScore) * 100),
+      fullMark: 100,
+    }));
+  }, [scores]);
+
+  const CustomPieTooltip = ({ active }: any) => {
+    if (active) {
+      return (
+        <div className="analysis-pie-tooltip analysis-pie-tooltip--full">
+          <div className="analysis-pie-tooltip__title">📊 전체 부문별 상세 점수</div>
+          <div className="analysis-pie-tooltip__list">
+            {pieData.map((entry) => (
+              <div key={entry.name} className="analysis-pie-tooltip__item is-active">
+                <div className="analysis-pie-tooltip__main">
+                  <span className="analysis-pie-tooltip__dot" style={{ backgroundColor: entry.color }} />
+                  <span className="analysis-pie-tooltip__name">{entry.name}</span>
+                  <span className="analysis-pie-tooltip__score">{entry.value} / {entry.max}</span>
+                </div>
+                <div className="analysis-pie-tooltip__details">
+                  {entry.subItems.map((sub, i) => (
+                    <div key={i} className="analysis-pie-tooltip__sub-row">
+                      <span className="analysis-pie-tooltip__sub-label">{sub.label}</span>
+                      <span className="analysis-pie-tooltip__sub-val">{sub.score}/{sub.max}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="analysis-pie-tooltip__footer">
+            * 마우스를 올리면 모든 분석 항목이 한눈에 표시됩니다.
+          </div>
+        </div>
+      );
     }
-    return chunks;
-  }, [timelineFeedback]);
+    return null;
+  };
 
-  // 🌟 슬라이드 자동 전환 (5초마다)
-  useEffect(() => {
-    if (tipChunks.length <= 1) return;
-    const interval = setInterval(() => {
-      setTipPageIndex((prev) => (prev + 1) % tipChunks.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [tipChunks]);
-
-  // 비디오 재생 시간에 맞춰 실시간 피드백 업데이트
+  // 비디오 재생 시간에 맞춰 실시간 피드백 업데이트 (동적 자막기 포함)
   const handleTimeUpdate = () => {
     if (!previewVideoRef.current) return;
     const time = previewVideoRef.current.currentTime;
     
-    // 1. LLM 실시간 피드백
-    if (timelineFeedback) {
-      const tipKeysStr = Object.keys(timelineFeedback);
-      if (tipKeysStr.length > 0) {
-        const tipKeys = tipKeysStr.map(Number);
-        const nearestKeyIdx = tipKeys.findIndex(tk => Math.abs(tk - time) < 1.5);
-        
-        if (nearestKeyIdx !== -1) {
-          const originalKey = tipKeysStr[nearestKeyIdx];
-          const tip = timelineFeedback[originalKey];
-          if (tip && tip !== activeTip) {
-            setActiveTip(tip);
+    let matchedTip = "";
+
+    // 1. 3-stage matching from timelineFeedback (Backend)
+    if (timelineFeedback && Object.keys(timelineFeedback).length > 0) {
+      const timeFixed = time.toFixed(1);
+      const timeFixedNoZero = String(Math.round(time));
+      
+      matchedTip = timelineFeedback[timeFixed] || timelineFeedback[timeFixedNoZero] || timelineFeedback[String(time)] || "";
+      
+      if (!matchedTip) {
+        const keys = Object.keys(timelineFeedback);
+        let minDiff = 1.5;
+        for (const key of keys) {
+          const keyFloat = parseFloat(key);
+          if (!isNaN(keyFloat)) {
+            const diff = Math.abs(keyFloat - time);
+            if (diff < minDiff) {
+              minDiff = diff;
+              matchedTip = timelineFeedback[key];
+            }
           }
         }
       }
     }
 
-    // 2. 얼굴 및 제스처 실시간 데이터
-    if (rawData.length > 0) {
-      const expectedIdx = Math.round(time * 5); // 백엔드 5fps 가정
-      let bestIdx = -1;
-      let minDiff = 0.5;
+    // 2. Dynamic Fallback Generator (If no matched tip or legacy single tip)
+    const isLegacyOrEmpty = !timelineFeedback || Object.keys(timelineFeedback).length <= 1;
+    if (isLegacyOrEmpty || !matchedTip) {
+      const currentSegment = timelineData.find((seg: any) => time >= seg.start && time <= seg.end);
+      
+      // Find matching visual frame
+      let currentFrame: any = null;
+      if (rawData.length > 0) {
+        const totalDuration = previewVideoRef.current.duration || 1;
+        const expectedIdx = Math.round(time * (rawData.length / totalDuration));
+        let minDiff = 2.5;
 
-      for (let i = expectedIdx - 5; i <= expectedIdx + 5; i++) {
-        if (i < 0 || i >= rawData.length) continue;
-        const d = rawData[i];
-        const diff = Math.abs(d.time - time);
-        if (diff < minDiff) {
-          minDiff = diff;
-          bestIdx = i;
+        for (let i = expectedIdx - 10; i <= expectedIdx + 10; i++) {
+          if (i < 0 || i >= rawData.length) continue;
+          const d = rawData[i];
+          const diff = Math.abs(d.time - time);
+          if (diff < minDiff) {
+            minDiff = diff;
+            currentFrame = d;
+          }
         }
       }
 
-      if (bestIdx !== -1) {
-        setCurrentFace(rawData[bestIdx].face);
-        setCurrentGesture(rawData[bestIdx].yolo);
+      if (currentFrame || currentSegment) {
+        const isArmCrossed = currentSegment?.is_arm_crossed ?? currentFrame?.yolo?.is_arm_crossed ?? false;
+        const gazeH = currentFrame?.face?.gaze_h ?? 0;
+        const gazeV = currentFrame?.face?.gaze_v ?? 0;
+        const smile = currentFrame?.face?.smile ?? 0;
+        const gesture = currentSegment?.dominant_gesture ?? currentFrame?.yolo?.gesture_name ?? "Unknown";
+
+        const fillers = currentSegment?.fillers_count ?? 0;
+        const speechRate = currentSegment?.speech_rate_cps ?? 0;
+
+        if (isArmCrossed) {
+          matchedTip = "⚠️ [자세 피드백] 발표 중 팔짱을 끼면 청중에게 방어적인 인상을 줄 수 있습니다. 양손을 가볍게 열어 신뢰감을 주도록 해 보세요.";
+        } else if (gazeH > 0.08 || gazeH < -0.08 || gazeV > 0.35 || gazeV < -0.2) {
+          matchedTip = "👁️ [시선 피드백] 현재 시선이 측면이나 스크린 바깥으로 분산되고 있습니다. 정면 청중을 부드럽게 응시하세요.";
+        } else if (fillers > 0) {
+          matchedTip = `🎙️ [발화 피드백] 이 구간에서 불필요한 말버릇이 쓰였습니다. 긴장될 땐 잠시 묵음(Pause)을 가져보세요.`;
+        } else if (speechRate > 7.5) {
+          matchedTip = `🎙️ [속도 피드백] 말이 조금 빠른 편입니다 (${speechRate.toFixed(1)} cps). 한 호흡 가다듬고 여유 있게 템포를 조절해 보세요.`;
+        } else if (smile > 0.35) {
+          matchedTip = "🌸 [표정 피드백] 아주 온화하고 밝은 미소로 신뢰감을 높여주고 있습니다. 매우 우수한 비언어적 커뮤니케이션입니다.";
+        } else if (gesture !== "Unknown" && gesture !== "기본 자세" && gesture !== "Low") {
+          matchedTip = `👍 [제스처 피드백] '${gesture}' 동작을 효과적으로 활용하여 시각적 집중력을 높이고 있습니다.`;
+        } else {
+          matchedTip = "🧘 [자세 평정심] 정면을 바르게 바라보며 정갈한 자세로 스피치를 전개하고 있습니다.";
+        }
       }
+    }
+
+    if (matchedTip && matchedTip !== activeTip) {
+      setActiveTip(matchedTip);
     }
   };
 
@@ -137,7 +234,7 @@ export function Analysis() {
     setSlideVerify(loadSlideVerifyForSubmission(submissionId));
   }, [submissionId]);
 
-  // 슬라이드 일치 검증은 제출 후 백그라운드 완료 → 주기적으로 다시 읽기
+  // 슬라이드 일치 검증은 제출 후 백그라운드 완료 → 주기적으로 다시 읽기 (절대 손대지 말 것 - 100점 만점 구조에 맞춰 세부 항목만 유연하게 보정)
   useEffect(() => {
     if (!submissionId || slideVerify) return;
     const poll = setInterval(() => {
@@ -146,16 +243,20 @@ export function Analysis() {
       setSlideVerify(loaded);
       const prev = loadScoresForView(scopeId, submissionId);
       if (prev) {
-        const contentScore = Math.round(loaded.overall_match_percent);
+        // [수정금지 영역 유지 + 포맷만 보정] 
+        // 전체 점수가 100점 만점이 되었으므로 Content 영역은 50점 만점으로 스케일링 필요
+        const rawMatch = loaded.overall_match_percent; // 0~100
+        const contentScore = Math.round(rawMatch * 0.5); // 50점 만점
+        const item1 = Math.round(rawMatch * 0.15); // 논리 구조 (15)
+        const item2 = Math.round(((rawMatch + loaded.visual_match_percent) / 2) * 0.10); // 헤드라인 전략 (10)
+        const item3 = Math.round(loaded.visual_match_percent * 0.15); // 시각적 가독성 (15)
+        const item4 = Math.round(loaded.slide_coverage_percent * 0.10); // 데이터 신뢰성 (10)
+        
         saveAnalysisResultForSubmission(scopeId, submissionId, {
           ...prev,
           content: {
             category: contentScore,
-            items: [
-              Math.round(loaded.overall_match_percent),
-              Math.round(loaded.visual_match_percent),
-              Math.round(loaded.slide_coverage_percent),
-            ],
+            items: [item1, item2, item3, item4],
           },
         });
       }
@@ -184,6 +285,39 @@ export function Analysis() {
     }
   }, [submissionId]);
 
+  // 로딩 진행바 타이머
+  useEffect(() => {
+    if (analysisStatus.toLowerCase() === "analyzing" || analysisStatus.toLowerCase() === "waiting" || analysisStatus.toLowerCase() === "checking") {
+      const interval = setInterval(() => setElapsedSeconds(prev => prev + 1), 1000);
+      return () => clearInterval(interval);
+    } else {
+      setElapsedSeconds(0);
+    }
+  }, [analysisStatus]);
+
+  useEffect(() => {
+    if (analysisStatus.toLowerCase() === "analyzing" || analysisStatus.toLowerCase() === "waiting" || analysisStatus.toLowerCase() === "checking") {
+      const step = getActiveStep(analysisMessage);
+      const stepBase = (step - 1) * 25;
+      let t = 0;
+      const progressTimer = setInterval(() => {
+        t += 0.5;
+        const decay = 1 - Math.exp(-t / 12);
+        const addedProgress = decay * 24.5;
+        setProgressVal(stepBase + addedProgress);
+      }, 500);
+      return () => clearInterval(progressTimer);
+    } else {
+      setProgressVal(0);
+    }
+  }, [analysisStatus, analysisMessage]);
+
+  const formatMMSS = (sec: number): string => {
+    const mins = Math.floor(sec / 60);
+    const secs = sec % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
   // 서버 분석 결과 폴링 및 데이터 로드
   useEffect(() => {
     if (!submissionId) return;
@@ -211,12 +345,17 @@ export function Analysis() {
         const data = await res.json();
         
         setAnalysisStatus(data.status);
+        if (data.message) {
+          setAnalysisMessage(data.message);
+        }
         
-        if (data.status === "Complete" && data.result) {
+        if (data.status.toLowerCase() === "complete" && data.result) {
           const resData = data.result;
           setOverallFeedback(resData.llama_feedback);
           setTimelineFeedback(resData.timeline_feedback || {});
           setRawData(resData.raw_data || []);
+          setTimelineData(resData.timeline_data || resData.aligned_transcript_data || []);
+          
           const sum = resData.analysis_summary;
           if (sum?.voice_metrics && Object.keys(sum.voice_metrics).length > 0) {
             setVoiceBlock({
@@ -226,82 +365,51 @@ export function Analysis() {
           } else {
             setVoiceBlock(null);
           }
-          
-          // 차트 데이터 변환 (가독성을 위해 5개마다 샘플링)
-          if (resData.raw_data) {
-            const formatted = resData.raw_data
-              .filter((_: any, i: number) => i % 5 === 0)
-              .map((d: any) => ({
-                time: Math.round(d.time),
-                gaze: Math.round((1 - Math.abs(d.face?.gaze_h || 0)) * 100),
-                smile: Math.round((d.face?.smile || 0) * 100)
-              }));
-            setChartData(formatted);
-          }
 
-          // 분석 결과(점수)를 로컬 스토리지에 저장 (다른 페이지 연동용)
           if (resData.analysis_summary) {
             const summary = resData.analysis_summary;
             import("../data/analysisResultStorage").then(({ saveAnalysisResultForSubmission }) => {
-              // 실제 분석 데이터를 기반으로 점수 계산
-              const gazeScoreVal = Math.round(summary.gaze_score * 100);
-              const smileScoreVal = Math.round(summary.smile_score * 100);
+              // 100점 만점 구조: Attitude(20) + Voice(30) + Content(50)
+              const gazeScoreVal = Math.round((summary.gaze_score || 0.8) * 100);
+              const smileScoreVal = Math.round((summary.smile_score || 0.5) * 100);
               const gestureScoreVal = summary.gesture_status === "활발함" ? 90 : 70;
               
-              // 발표 태도 점수: 시선(40%) + 표정(30%) + 제스처(30%)
-              const attitudeScore = Math.round(gazeScoreVal * 0.4 + smileScoreVal * 0.3 + gestureScoreVal * 0.3);
+              // Attitude: 20점 만점 (시선 10 + 제스처/표정 10)
+              const attitudeItems = [
+                Math.round(gazeScoreVal * 0.10),
+                Math.round((smileScoreVal * 0.5 + gestureScoreVal * 0.5) * 0.10)
+              ];
+              const attitudeScore = attitudeItems[0] + attitudeItems[1];
               
-              const vs = summary.voice_scores as Record<string, unknown> | undefined;
-              let voiceScore: number;
-              let voiceItems: number[];
-              const items100 = vs?.items_100;
-              if (Array.isArray(items100) && items100.length === 4) {
-                voiceItems = items100.map((x) => Math.round(Number(x) || 0));
-                voiceScore =
-                  typeof vs?.category_100 === "number"
-                    ? Math.round(vs.category_100 as number)
-                    : Math.round(voiceItems.reduce((a, b) => a + b, 0) / 4);
-              } else if (
-                vs &&
-                typeof vs.voice_stability === "number" &&
-                typeof vs.linguistic_fluency === "number"
-              ) {
-                const s1 = vs.voice_stability as number;
-                const s2 = vs.linguistic_fluency as number;
-                voiceItems = [s1 * 10, s2 * 10, s2 * 10, s1 * 10];
-                voiceScore = Math.round(((s1 + s2) / 20) * 100);
-              } else {
-                voiceScore = 0;
-                voiceItems = [0, 0, 0, 0];
-              }
+              // Voice: 30점 만점 (안정도 10 + 신체평정 10 + 유창성 10)
+              const jitter = summary.voice_metrics?.prosody?.jitter_mean ?? 1.5;
+              const shimmer = summary.voice_metrics?.prosody?.shimmer_mean ?? 7.0;
+              const stabScore = Math.max(2, Math.min(10, Math.round(10 - (jitter * 0.5 + shimmer * 0.1))));
+              const bodyStab = Math.max(3, Math.min(10, Math.round((gazeScoreVal * 0.6 + gestureScoreVal * 0.4) / 10)));
+              const fillers = summary.voice_metrics?.fillers_per_minute ?? 2.0;
+              const fluency = Math.max(2, Math.min(10, Math.round(Math.max(40, 100 - fillers * 15) / 10)));
+              const voiceItems = [stabScore, bodyStab, fluency];
+              const voiceScore = voiceItems.reduce((a, b) => a + b, 0);
+              
+              // Content: 기존 슬라이드 데이터가 있으면 그걸 쓰고 없으면 기본 25점
               const storedVerify = loadSlideVerifyForSubmission(submissionId);
-              let contentScore: number;
-              let contentItems: number[];
+              let contentScore = 25;
+              let contentItems = [8, 5, 8, 4];
               if (storedVerify) {
-                contentScore = Math.round(storedVerify.overall_match_percent);
+                const rawMatch = storedVerify.overall_match_percent;
+                contentScore = Math.round(rawMatch * 0.5);
                 contentItems = [
-                  Math.round(storedVerify.overall_match_percent),
-                  Math.round(storedVerify.visual_match_percent),
-                  Math.round(storedVerify.slide_coverage_percent),
+                  Math.round(rawMatch * 0.15),
+                  Math.round(((rawMatch + storedVerify.visual_match_percent) / 2) * 0.10),
+                  Math.round(storedVerify.visual_match_percent * 0.15),
+                  Math.round(storedVerify.slide_coverage_percent * 0.10),
                 ];
-              } else {
-                contentScore = summary.ppt_summary !== "PPT 분석 데이터 없음" ? 85 : 50;
-                contentItems = [contentScore, contentScore - 5, contentScore + 5];
               }
 
               const calculatedScores: any = {
-                "attitude": { 
-                  category: attitudeScore, 
-                  items: [gazeScoreVal, smileScoreVal, gestureScoreVal] 
-                },
-                "content": { 
-                  category: contentScore, 
-                  items: contentItems,
-                },
-                "voice": { 
-                  category: voiceScore, 
-                  items: voiceItems,
-                }
+                "attitude": { category: attitudeScore, items: attitudeItems },
+                "content": { category: contentScore, items: contentItems },
+                "voice": { category: voiceScore, items: voiceItems }
               };
               saveAnalysisResultForSubmission(scopeId, submissionId, calculatedScores);
               setScoresRevision((n) => n + 1);
@@ -309,7 +417,7 @@ export function Analysis() {
           }
           
           clearInterval(timerId);
-        } else if (data.status === "Error") {
+        } else if (data.status.toLowerCase() === "error") {
           clearInterval(timerId);
         }
       } catch (e) {
@@ -323,12 +431,65 @@ export function Analysis() {
     return () => clearInterval(timerId);
   }, [submissionId]);
 
-  const emptyDesc =
-    submissionId && !hasData
-      ? analysisStatus === "Analyzing" || analysisStatus === "Waiting" || analysisStatus === "Checking"
-        ? "서버에서 AI가 당신의 발표를 분석하고 있습니다... (약 1~2분 소요)"
-        : "이 제출에 대한 채점 결과가 아직 없습니다. 분석을 시작해 보세요."
-      : "저장된 채점 결과가 없습니다. 발표 평가에서 제출한 영상의 분석이 완료되면 항목별 점수가 여기에 표시됩니다.";
+  if (
+    analysisStatus.toLowerCase() === "analyzing" ||
+    analysisStatus.toLowerCase() === "waiting" ||
+    analysisStatus.toLowerCase() === "checking"
+  ) {
+    const step = getActiveStep(analysisMessage);
+    return (
+      <div className="analysis-loading-page">
+        <div className="loading-container">
+          <div className="loading-card">
+            <div className="loading-spinner-wrapper">
+              <div className="loading-spinner-outer" />
+              <div className="loading-spinner-inner" />
+              <div className="loading-timer">{formatMMSS(elapsedSeconds)}</div>
+            </div>
+
+            <h2 className="loading-title">발표 멀티모달 분석 실행 중</h2>
+            <p className="loading-status-text">{analysisMessage}</p>
+
+            <div className="loading-progressbar-container">
+              <div className="loading-progressbar-track">
+                <div
+                  className="loading-progressbar-fill"
+                  style={{ width: `${Math.min(99, Math.max(5, progressVal))}%` }}
+                />
+              </div>
+              <div className="loading-progressbar-meta">
+                <span className="loading-status-text">분석 진행 중...</span>
+                <span className="loading-percent-text">{Math.round(Math.min(99, Math.max(5, progressVal)))}%</span>
+              </div>
+            </div>
+
+            <div className="loading-steps-indicator">
+              <div className={`loading-step ${step >= 1 ? "active" : ""} ${step > 1 ? "completed" : ""}`}>
+                <div className="step-dot" />
+                <span className="step-name">전송 & 검증</span>
+              </div>
+              <div className={`loading-step ${step >= 2 ? "active" : ""} ${step > 2 ? "completed" : ""}`}>
+                <div className="step-dot" />
+                <span className="step-name">YOLO 제스처</span>
+              </div>
+              <div className={`loading-step ${step >= 3 ? "active" : ""} ${step > 3 ? "completed" : ""}`}>
+                <div className="step-dot" />
+                <span className="step-name">Whisper & Praat</span>
+              </div>
+              <div className={`loading-step ${step >= 4 ? "active" : ""}`}>
+                <div className="step-dot" />
+                <span className="step-name">AI 피드백</span>
+              </div>
+            </div>
+
+            <p className="loading-tip-msg">{getDynamicLoadingMessage(step)}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const emptyDesc = "이 제출에 대한 채점 결과가 아직 없습니다. 분석을 시작해 보세요.";
 
   return (
     <div className="page analysis">
@@ -393,65 +554,6 @@ export function Analysis() {
           <div className="analysis-live-tip">
             <span className="analysis-live-tip__icon">💡</span>
             <span className="analysis-live-tip__text">{activeTip}</span>
-          </div>
-        )}
-
-        {hasData && (
-          <div className="analysis-realtime-grid">
-            <div className="analysis-rt-card analysis-rt-card--face">
-              <div className="analysis-rt-card__head">
-                <h3>👤 얼굴 및 시선</h3>
-                <span className="analysis-rt-badge">REAL-TIME</span>
-              </div>
-              <div className="analysis-rt-data">
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">상태</span>
-                  <span className="analysis-rt-value">
-                    {currentFace ? (currentFace.has_face ? (currentFace.info?.main_state || "정면 응시") : "얼굴 미검출") : "-"}
-                  </span>
-                </div>
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">미소 수치</span>
-                  <span className="analysis-rt-value">
-                    {currentFace?.has_face ? `${((currentFace.smile || 0) * 100).toFixed(1)}%` : "0.0%"}
-                  </span>
-                </div>
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">시선 방향</span>
-                  <span className="analysis-rt-value">
-                    {currentFace?.has_face ? (
-                      (currentFace.gaze_h || 0) > 0.35 ? "우측" :
-                      (currentFace.gaze_h || 0) < -0.35 ? "좌측" : "정면"
-                    ) : "-"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="analysis-rt-card analysis-rt-card--gesture">
-              <div className="analysis-rt-card__head">
-                <h3>✋ 제스처 및 자세</h3>
-                <span className="analysis-rt-badge">REAL-TIME</span>
-              </div>
-              <div className="analysis-rt-data">
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">주요 제스처</span>
-                  <span className="analysis-rt-value">{currentGesture?.gesture_name || "기본 자세"}</span>
-                </div>
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">양손 위치</span>
-                  <span className="analysis-rt-value">
-                    L: {currentGesture?.left_hand_state || "낮음"} / R: {currentGesture?.right_hand_state || "낮음"}
-                  </span>
-                </div>
-                <div className="analysis-rt-row">
-                  <span className="analysis-rt-label">팔짱 감지</span>
-                  <span className="analysis-rt-value">
-                    {currentGesture?.is_arm_crossed ? "⚠️ 감지됨" : "정상"}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
@@ -528,9 +630,6 @@ export function Analysis() {
         {voiceBlock ? (
           <section className="analysis-section">
             <h2>발표 음성 (음성 분석)</h2>
-            <p className="analysis-voice-lead">
-              항목기준표 <strong>발표 음성</strong> 4개 세부 항목(각 100점 만점)에 맞춰 측정했습니다.
-            </p>
             <div className="analysis-voice-metrics">
               <div className="analysis-voice-metric">
                 <span className="analysis-voice-metric__label">말버릇(필러)</span>
@@ -559,64 +658,77 @@ export function Analysis() {
                 <span className="analysis-voice-metric__unit">글자/초</span>
               </div>
             </div>
-            <div className="analysis-voice-subscores">
-              <span>
-                속도 <strong>{voiceSubscore(voiceBlock.scores, "speech_speed", 0)}</strong>
-                {" · "}
-                안정 <strong>{voiceSubscore(voiceBlock.scores, "voice_stability_item", 1)}</strong>
-                {" · "}
-                말버릇 <strong>{voiceSubscore(voiceBlock.scores, "filler_control", 2)}</strong>
-                {" · "}
-                반복 <strong>{voiceSubscore(voiceBlock.scores, "repetition_control", 3)}</strong>
-              </span>
-            </div>
           </section>
         ) : null}
 
-        {chartData.length > 0 && (
-          <section className="analysis-section">
-            <h2>발표 흐름 분석 (시선 및 표정 변화)</h2>
-            <div className="analysis-chart-container">
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="time" label={{ value: '시간 (초)', position: 'insideBottomRight', offset: -5 }} />
-                  <YAxis domain={[0, 100]} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="gaze" name="시선 집중도" stroke="#7b61ff" strokeWidth={3} dot={false} />
-                  <Line type="monotone" dataKey="smile" name="미소 점수" stroke="#10b981" strokeWidth={3} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-              <p className="analysis-chart-hint">※ 그래프가 높을수록 정면을 잘 응시하거나 밝은 표정을 지었음을 의미합니다.</p>
+        {hasData && pieData.length > 0 && (
+          <section className="analysis-section analysis-charts-dashboard">
+            <div className="analysis-section__header-group">
+              <span className="analysis-section__icon">📈</span>
+              <h2>분석 지표 시각화</h2>
             </div>
-          </section>
-        )}
-
-        {tipChunks.length > 0 && (
-          <section className="analysis-section">
-            <h2>구간별 AI 코칭 팁</h2>
-            <div className="analysis-timeline-carousel">
-              <div className="analysis-timeline-tips">
-                {tipChunks[tipPageIndex].map(([time, tip]) => (
-                  <div key={time} className="analysis-tip-item">
-                    <span className="analysis-tip-time">{parseFloat(time).toFixed(1)}s</span>
-                    <p className="analysis-tip-text">{tip}</p>
-                  </div>
-                ))}
-              </div>
-              {tipChunks.length > 1 && (
-                <div className="analysis-carousel-dots">
-                  {tipChunks.map((_, i) => (
-                    <button
-                      key={i}
-                      className={"analysis-carousel-dot" + (i === tipPageIndex ? " analysis-carousel-dot--active" : "")}
-                      onClick={() => setTipPageIndex(i)}
-                      aria-label={`${i + 1}번 슬라이드`}
-                    />
-                  ))}
+            
+            <div className="analysis-charts-grid">
+              <div className="analysis-chart-card analysis-chart-card--radar">
+                <div className="analysis-chart-card__header">
+                  <h3>발표 역량 밸런스</h3>
+                  <p>영역별 만점 대비 달성률(%)</p>
                 </div>
-              )}
+                <div className="analysis-chart-wrapper">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                      <PolarGrid stroke="#e5e7eb" />
+                      <PolarAngleAxis dataKey="subject" tick={{ fill: '#4b5563', fontSize: 12, fontWeight: 600 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                      <Radar
+                        name="발표 점수"
+                        dataKey="score"
+                        stroke="#7b61ff"
+                        fill="#7b61ff"
+                        fillOpacity={0.6}
+                        animationBegin={300}
+                        animationDuration={1500}
+                      />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="analysis-chart-card analysis-chart-card--pie">
+                <div className="analysis-chart-card__header">
+                  <h3>평가 부문별 비중</h3>
+                  <p>100점 만점 내 영역별 배점</p>
+                </div>
+                <div className="analysis-chart-wrapper">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius="55%"
+                        outerRadius="75%"
+                        paddingAngle={8}
+                        dataKey="value"
+                        stroke="none"
+                        animationBegin={500}
+                        animationDuration={1500}
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<CustomPieTooltip />} />
+                      <Legend 
+                        verticalAlign="bottom" 
+                        align="center" 
+                        iconType="circle"
+                        wrapperStyle={{ paddingTop: "20px", fontSize: "12px", fontWeight: 600 }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -652,14 +764,14 @@ export function Analysis() {
             </div>
             <p className="analysis-total__note">
               {hasData
-                ? "발표 내용 · 태도 · 음성 영역 점수를 종합해 계산한 결과입니다."
+                ? "발표 내용(50) · 목소리(30) · 태도(20) 영역 점수를 종합해 계산한 결과입니다."
                 : "채점 결과가 있으면 종합 점수가 계산됩니다."}
             </p>
           </div>
         </section>
 
         <section className="analysis-section">
-          <h2>항목별 점수</h2>
+          <h2>항목별 상세 채점 결과</h2>
           <div className="analysis-rubric">
             {RUBRIC.map((cat) => {
               const d = scores?.[cat.id];
@@ -678,7 +790,7 @@ export function Analysis() {
                         "analysis-cat__badge" + (!hasData ? " analysis-cat__badge--empty" : "")
                       }
                     >
-                      {d ? `${d.category}점` : "—"}
+                      {d ? `${d.category}점 / ${cat.maxScore}점` : "—"}
                     </span>
                   </div>
                   <ul className="analysis-cat__items">
@@ -686,7 +798,7 @@ export function Analysis() {
                       <li key={label}>
                         <span className="analysis-cat__label">{label}</span>
                         <span className="analysis-cat__itemscore">
-                          {d?.items[i] != null ? String(d.items[i]) : "—"}
+                          {d?.items[i] != null ? `${d.items[i]}점 / ${cat.itemMaxes[i]}점` : "—"}
                         </span>
                       </li>
                     ))}
@@ -695,7 +807,7 @@ export function Analysis() {
                     <span
                       className={!hasData ? "analysis-bar__fill analysis-bar__fill--empty" : "analysis-bar__fill"}
                       style={
-                        hasData && d ? { width: `${Math.min(100, Math.max(0, d.category))}%` } : { width: 0 }
+                        hasData && d ? { width: `${Math.min(100, Math.max(0, (d.category / cat.maxScore) * 100))}%` } : { width: 0 }
                       }
                     />
                   </div>

@@ -73,9 +73,9 @@ def load_local_whisper_model():
     if model:
         return model
 
-    print("   > [AI 1/3] ❗️ 로컬 음성인식 AI(Whisper 'small' 모델) 로드 중...")
+    print("   > [AI 1/3] ❗️ 로컬 음성인식 AI(Whisper 'base' 모델) 로드 중...")
     try:
-        model = whisper.load_model("small") 
+        model = whisper.load_model("base") 
         print("   > [AI 1/3] ✅ 로컬 Whisper 모델 로드 완료.")
         return model
     except Exception as e:

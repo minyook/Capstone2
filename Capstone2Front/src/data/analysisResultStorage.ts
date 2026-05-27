@@ -93,6 +93,6 @@ export function clearAnalysisResult(): void {
 
 export function totalFromScores(scores: StoredRubricScores): number {
   return Math.round(
-    RUBRIC.reduce((sum, cat) => sum + scores[cat.id as RubricCategoryId].category, 0) / RUBRIC.length
+    RUBRIC.reduce((sum, cat) => sum + scores[cat.id as RubricCategoryId].category, 0)
   );
 }
