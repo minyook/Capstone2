@@ -188,20 +188,9 @@ export function Evaluate() {
     setSubmitError("");
     setIsSubmitting(true);
     try {
-      // 1. PPT 분석 요청
       const pptFormData = new FormData();
       pptFormData.append("file", pptFile);
 
-      const pptRes = await fetch("http://127.0.0.1:8000/api/ppt/analyze", {
-        method: "POST",
-        body: pptFormData,
-      });
-      if (!pptRes.ok) {
-        const err = (await pptRes.json().catch(() => null)) as { detail?: string } | null;
-        throw new Error(err?.detail ?? "PPT 분석 요청에 실패했습니다.");
-      }
-
-      // 2. 영상 업로드 + PPT 슬라이드 일치 검증 (병렬)
       const videoFormData = new FormData();
       videoFormData.append("file", videoFile);
       videoFormData.append("persona", persona);
@@ -211,29 +200,29 @@ export function Evaluate() {
       verifyFormData.append("video", videoFile);
       verifyFormData.append("video_type", videoType);
 
-      const [videoRes, verifyRes] = await Promise.all([
+      // PPT 분석 + 영상 업로드만 대기 (슬라이드 일치 검증은 아래에서 백그라운드)
+      const [pptRes, videoRes] = await Promise.all([
+        fetch("http://127.0.0.1:8000/api/ppt/analyze", {
+          method: "POST",
+          body: pptFormData,
+        }),
         fetch("http://127.0.0.1:8000/api/upload", {
           method: "POST",
           body: videoFormData,
         }),
-        fetch("http://127.0.0.1:8000/api/ppt/verify", {
-          method: "POST",
-          body: verifyFormData,
-        }),
       ]);
 
+      if (!pptRes.ok) {
+        const err = (await pptRes.json().catch(() => null)) as { detail?: string } | null;
+        throw new Error(err?.detail ?? "PPT 분석 요청에 실패했습니다.");
+      }
       if (!videoRes.ok) {
         throw new Error("영상 업로드 및 분석 요청에 실패했습니다.");
       }
       const videoData = await videoRes.json();
       const jobId = videoData.job_id;
 
-      let slideVerifyResult: SlideVerifyResult | null = null;
-      if (verifyRes.ok) {
-        slideVerifyResult = (await verifyRes.json()) as SlideVerifyResult;
-      }
-
-      // 3. 로컬 저장소에 제출 정보 등록
+      // 로컬 저장소에 제출 정보 등록
       const submission = await registerFolderFiles(scopeId, folderId, {
         pptName,
         videoName,
@@ -266,10 +255,23 @@ export function Evaluate() {
           sessionStorage.setItem("overnight-analysis-job-ids-v1", JSON.stringify(map));
         } catch {}
 
-        if (slideVerifyResult) {
-          saveSlideVerifyForSubmission(submission.id, slideVerifyResult);
-        }
       }
+
+      // 슬라이드 일치: 결과 화면으로 먼저 이동한 뒤 백그라운드 완료 시 저장
+      const submissionIdForVerify = submission?.id;
+      if (submissionIdForVerify) {
+        fetch("http://127.0.0.1:8000/api/ppt/verify", {
+          method: "POST",
+          body: verifyFormData,
+        })
+          .then(async (verifyRes) => {
+            if (!verifyRes.ok) return;
+            const slideVerifyResult = (await verifyRes.json()) as SlideVerifyResult;
+            saveSlideVerifyForSubmission(submissionIdForVerify, slideVerifyResult);
+          })
+          .catch(() => {});
+      }
+
       navigate(
         submission
           ? `/analysis?submissionId=${encodeURIComponent(submission.id)}`
@@ -662,7 +664,7 @@ export function Evaluate() {
             {canAnalyze
 
               ? isSubmitting
-                ? "PPT 분석 중..."
+                ? "전송 중… (슬라이드 일치는 결과 화면에서 이어집니다)"
                 : "채점 시작하기"
 
               : !hasFolders

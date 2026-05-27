@@ -12,7 +12,9 @@ from slide_verify.video_frames import extract_frames
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CACHE_DIR = BASE_DIR / "analysis_json" / "slide_verify_cache"
-FRAME_FPS = 1.0
+# 1fps는 10분 영상 기준 600프레임 → 매칭만 수 분. 0.5fps + 상한으로 체감 속도 개선.
+FRAME_FPS = 0.5
+MAX_VERIFY_FRAMES = 90
 
 
 def run_slide_verify(
@@ -31,6 +33,15 @@ def run_slide_verify(
     frame_paths = extract_frames(video_path, frame_dir, fps=FRAME_FPS)
     if not frame_paths:
         raise RuntimeError("영상 프레임 추출에 실패했습니다.")
+    if len(frame_paths) > MAX_VERIFY_FRAMES:
+        step = max(1, len(frame_paths) // MAX_VERIFY_FRAMES)
+        head = frame_paths[: min(4, len(frame_paths))]
+        sampled = frame_paths[::step]
+        merged: list[Path] = []
+        for p in head + sampled:
+            if p not in merged:
+                merged.append(p)
+        frame_paths = merged[:MAX_VERIFY_FRAMES]
 
     result = verify_ppt_video(
         slide_images=slide_images,

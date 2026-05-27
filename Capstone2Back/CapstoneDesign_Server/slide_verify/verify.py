@@ -279,6 +279,29 @@ def _find_missing_slides(slides_seen: set[int], n_slides: int) -> list[int]:
     return [i + 1 for i in range(n_slides) if i not in slides_seen]
 
 
+def _slides_seen_in_frames(
+    dist_matrix: np.ndarray,
+    raw_matches: list[FrameMatch],
+    dist_weak: int,
+    min_confidence: float = 0.28,
+) -> set[int]:
+    """
+    Viterbi 경로가 아니라, 프레임 단위로 '이 슬라이드와 비슷했다'고 볼 수 있는 장.
+    초반 1~2장이 경로에서만 빠지고 실제 영상에는 있는 경우 누락 오판을 줄입니다.
+    """
+    seen: set[int] = set()
+    n_frames, n_slides = dist_matrix.shape
+    weak_loose = dist_weak * 1.08
+    for t in range(n_frames):
+        rm = raw_matches[t]
+        if rm.confidence >= min_confidence and rm.best_dist <= weak_loose:
+            seen.add(rm.slide_index)
+        for s in range(n_slides):
+            if dist_matrix[t, s] <= weak_loose:
+                seen.add(s)
+    return seen
+
+
 def _find_sequence_gaps(detected_seq: list[int]) -> list[dict[str, Any]]:
     """감지 순서에서 건너뛴 구간 (예: 17장 다음 19장 → 18장 누락)."""
     gaps: list[dict[str, Any]] = []
@@ -386,22 +409,32 @@ def verify_ppt_video(
 
     segments = _segments_from_path(path, viterbi_confidences, frame_interval_sec)
     detected_seq = _collapsed_sequence(path)
-    # 누락·커버리지는 "실제로 넘어간 슬라이드 순서" 기준 (1프레임 지나친 값은 제외)
+
+    min_seen_conf = 0.25 if video_type == "audience" else 0.28
+    slides_seen_in_video = _slides_seen_in_frames(
+        dist_matrix, raw_matches, dist_weak, min_confidence=min_seen_conf
+    )
     slides_in_sequence = set(detected_seq)
-    missing_pages = _find_missing_slides(slides_in_sequence, n_slides)
+
+    # 누락·커버리지: 프레임에서 실제로 매칭된 장 기준 (Viterbi만 보면 초반 장 오판)
+    missing_pages = _find_missing_slides(slides_seen_in_video, n_slides)
     sequence_gaps = _find_sequence_gaps(detected_seq)
 
-    # 순서: 뒤로 가지 않음 + 연속 전환(한 장씩)만 허용
+    # 순서: Viterbi 전환 + 맨 앞 장이 경로에 없어도 프레임에 잡혔으면 '1장부터 안 함' 오류 생략
     order_ok = True
     if detected_seq:
         for prev, s in zip(detected_seq, detected_seq[1:]):
             if s < prev or s - prev > 1:
                 order_ok = False
                 break
-        if detected_seq[0] > 0 or detected_seq[-1] < n_slides - 1:
+        if detected_seq[-1] < n_slides - 1:
             order_ok = False
+        if detected_seq[0] > 0:
+            prefix_unseen = [i for i in range(detected_seq[0]) if i not in slides_seen_in_video]
+            if prefix_unseen:
+                order_ok = False
 
-    coverage = len(slides_in_sequence) / n_slides
+    coverage = len(slides_seen_in_video) / n_slides
     sequence_complete = len(missing_pages) == 0 and not sequence_gaps
 
     conf_floor = 0.38 if video_type == "audience" else 0.55
@@ -577,6 +610,8 @@ def verify_ppt_video(
                 if video_type == "audience"
                 else None
             ),
+            "slides_matched_in_video": sorted(i + 1 for i in slides_seen_in_video),
+            "slides_in_viterbi_path": sorted(i + 1 for i in slides_in_sequence),
         },
         "note": (
             "일치율 = 화면 유사도 × 슬라이드 커버리지. "

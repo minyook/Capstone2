@@ -614,6 +614,10 @@
   }
 }
 
+.analysis-slide-verify--pending {
+  opacity: 0.92;
+}
+
 .analysis-slide-verify {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);

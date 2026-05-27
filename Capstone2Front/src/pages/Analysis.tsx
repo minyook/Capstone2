@@ -3,7 +3,12 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useFirestoreSyncRevision } from "../context/FirestoreSyncContext";
 import { useFolders } from "../context/FoldersContext";
 import { findSubmissionById, submissionPrimaryFileName } from "../data/folderFilesStorage";
-import { loadScoresForView, totalFromScores, type StoredRubricScores } from "../data/analysisResultStorage";
+import {
+  loadScoresForView,
+  saveAnalysisResultForSubmission,
+  totalFromScores,
+  type StoredRubricScores,
+} from "../data/analysisResultStorage";
 import { RUBRIC } from "../data/rubric";
 import {
   loadSlideVerifyForSubmission,
@@ -131,6 +136,33 @@ export function Analysis() {
   useEffect(() => {
     setSlideVerify(loadSlideVerifyForSubmission(submissionId));
   }, [submissionId]);
+
+  // 슬라이드 일치 검증은 제출 후 백그라운드 완료 → 주기적으로 다시 읽기
+  useEffect(() => {
+    if (!submissionId || slideVerify) return;
+    const poll = setInterval(() => {
+      const loaded = loadSlideVerifyForSubmission(submissionId);
+      if (!loaded) return;
+      setSlideVerify(loaded);
+      const prev = loadScoresForView(scopeId, submissionId);
+      if (prev) {
+        const contentScore = Math.round(loaded.overall_match_percent);
+        saveAnalysisResultForSubmission(scopeId, submissionId, {
+          ...prev,
+          content: {
+            category: contentScore,
+            items: [
+              Math.round(loaded.overall_match_percent),
+              Math.round(loaded.visual_match_percent),
+              Math.round(loaded.slide_coverage_percent),
+            ],
+          },
+        });
+      }
+      setScoresRevision((n) => n + 1);
+    }, 2500);
+    return () => clearInterval(poll);
+  }, [submissionId, slideVerify, scopeId]);
 
   const slideVerifyReasons = useMemo(
     () => (slideVerify ? summarizeLowMatchReasons(slideVerify) : []),
@@ -422,6 +454,15 @@ export function Analysis() {
             </div>
           </div>
         )}
+
+        {!slideVerify && submissionId && analysisStatus !== "no_job" ? (
+          <section className="analysis-section analysis-slide-verify analysis-slide-verify--pending">
+            <h2>PPT 슬라이드 일치 (영상 대조)</h2>
+            <p className="analysis-slide-verify__formula">
+              슬라이드 일치 분석 중입니다… (PPT 렌더 · 영상 프레임 추출 · 30초~2분)
+            </p>
+          </section>
+        ) : null}
 
         {slideVerify ? (
           <section className="analysis-section analysis-slide-verify">
