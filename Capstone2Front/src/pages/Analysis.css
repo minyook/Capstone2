@@ -798,6 +798,46 @@
   margin-bottom: 0.5rem;
 }
 
+/* 🌟 마크다운 테이블(격자 표) 스타일 */
+.analysis-feedback-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px -3px rgba(123, 97, 255, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e2e8f0;
+}
+
+.analysis-feedback-content th,
+.analysis-feedback-content td {
+  padding: 0.85rem 1.15rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.analysis-feedback-content th {
+  background-color: #f7fafc;
+  color: #4a5568;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.analysis-feedback-content tr:last-child td {
+  border-bottom: none;
+}
+
+.analysis-feedback-content tr:nth-child(even) td {
+  background-color: #fcfdfd;
+}
+
+.analysis-feedback-content tr:hover td {
+  background-color: #f8fafc;
+}
+
 /* 🌟 실시간 데이터 그리드 스타일 */
 .analysis-realtime-grid {
   display: grid;

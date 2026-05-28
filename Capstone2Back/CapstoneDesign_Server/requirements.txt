@@ -12,7 +12,7 @@ peft
 accelerate
 sentencepiece
 huggingface-hub
-google-generativeai
+google-genai
 
 # --- Computer Vision & Media Analysis ---
 mediapipe

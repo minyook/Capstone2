@@ -20,7 +20,7 @@ from core.exceptions import QualityException
 FRAME_RATE = 0.2
 job_status = {} 
 
-def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None, persona: str = "soft"):
+def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir: Path, custom_criteria: list = None, video_filename: str = None, persona: str = "soft", ppt_filename: str = None):
     all_vision_results = []
     audio_path = frame_dir / "audio.wav" 
     
@@ -48,12 +48,16 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         if not check_audio_quality(video_path): raise QualityException("오디오 트랙을 찾을 수 없습니다.")
 
         # 1 & 2. 오디오/프레임 추출
+        job_status[job_id] = {"status": "Analyzing", "message": "1/6: 🎬 오디오 추출 중..."}
         extract_audio(video_path, audio_path)
+        
+        job_status[job_id] = {"status": "Analyzing", "message": "2/6: 🎬 비디오 프레임 추출 중..."}
         frame_paths = extract_all_frames(video_path, frame_dir, FRAME_RATE)
         if not frame_paths: raise Exception("비디오 프레임 추출 실패.")
         
         # 3. YOLO(제스처) + MediaPipe(표정/시선) 실시간 분석
         print(f"\n[3/6] 👀 시각 데이터(YOLO & MediaPipe) 추출 중... (터미널 출력 생략)")
+        total_frames_cnt = len(frame_paths)
         for i, path in enumerate(frame_paths):
             current_time = i / FRAME_RATE
             frame = analyze_frame_vision(str(path), current_time)
@@ -67,6 +71,15 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             if hasattr(yolo_data, 'has_pelvis'):
                 if yolo_data.has_pelvis: max_visibility["pelvis"] = True
                 if yolo_data.has_ankles: max_visibility["ankles"] = True
+            
+            # 🌟 실시간 프레임 분석 진행률(%) 피드백 연동하여 로딩바 싱크 완벽 조절!
+            # 5프레임 단위로 상태 메시지 갱신하여 API 오버헤드 억제 및 프론트와 싱크 매핑
+            if i % 5 == 0 or i == total_frames_cnt - 1:
+                pct = int((i + 1) / total_frames_cnt * 100)
+                job_status[job_id] = {
+                    "status": "Analyzing", 
+                    "message": f"3/6: 🤸 시각 데이터(YOLO & MediaPipe) 분석 중... ({pct}%)"
+                }
             
         print(f"   > ✅ 시각 데이터 추출 완료.")
 
@@ -88,7 +101,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                 print(f"   > ⚠️ [시각화 체크 실패] 첫 번째 프레임을 읽을 수 없습니다.")
 
         # 4 & 5. Whisper 및 Praat 음성 분석
-        job_status[job_id] = {"status": "Analyzing", "message": "4/6: 로컬 음성 인식 실행 중..."}
+        job_status[job_id] = {"status": "Analyzing", "message": "4/6: 🎙️ 로컬 음성(Whisper STT) 인식 중..."}
         # audio_analyzer.py 내부에서 파일 저장을 위해 file_id(video_filename)를 넘겨야 함
         from processing.audio_analyzer import transcribe_audio_with_timestamps
         audio_segments, whisper_error = transcribe_audio_with_timestamps(str(audio_path), video_filename=file_id)
@@ -100,11 +113,12 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             print(f"\n[4/6] ⚠️ 목소리 텍스트가 추출되지 않았습니다. (음성 분석 스킵)")
         else:
             print(f"\n[4/6] ✅ 로컬 음성 인식 완료.")
+            job_status[job_id] = {"status": "Analyzing", "message": "5/6: 🗣️ 음성 운율(Praat) 분석 중..."}
             from processing.audio_analyzer import analyze_prosody_for_segments
             audio_segments = analyze_prosody_for_segments(audio_path, audio_segments, video_filename=file_id)
             print(f"\n[5/6] ✅ 운율 분석 완료.")
 
-            job_status[job_id] = {"status": "Analyzing", "message": "6/6: 데이터 정렬 중..."}
+            job_status[job_id] = {"status": "Analyzing", "message": "6/6: 🧩 음성-시각 멀티모달 데이터 정렬 중..."}
             aligned_data = align_data(all_vision_results, audio_segments)
 
             print(f"\n[5b/6] 발화 습관·항목기준표(발표 음성) 분석 중...")
@@ -162,20 +176,72 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
 
         # PPT 분석 결과 수신
         ppt_summary = "PPT 분석 데이터 없음"
-        ppt_result_path = Path("ppt-analysis-engine/data/results/example.json")
-        if ppt_result_path.exists():
-            try:
-                with open(ppt_result_path, 'r', encoding='utf-8') as f:
-                    ppt_data = json.load(f)
-                    ppt_summary = (f"슬라이드 수: {ppt_data.get('total_slides', 0)}, "
-                                   f"주요 키워드: {', '.join(ppt_data.get('keywords', []))}")
-            except Exception:
-                ppt_summary = "PPT 결과 파일 읽기 실패"
+        ppt_metrics = {}
+        
+        # Fallback if ppt_filename not provided: look for recently created JSON in ppt_json
+        if not ppt_filename:
+            ppt_json_dir = Path("analysis_json/ppt_json")
+            if ppt_json_dir.exists():
+                json_files = list(ppt_json_dir.glob("*.json"))
+                # Filter out files that already contain a job_id (e.g. have "_total" or "_ppt" or end with "_ppt.json")
+                candidate_files = [f for f in json_files if not f.name.endswith("_ppt.json") and "total" not in f.name]
+                if candidate_files:
+                    # Get the most recently modified one
+                    candidate_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                    # If it was created within the last 5 minutes (300 seconds)
+                    if timer.time() - candidate_files[0].stat().st_mtime < 300:
+                        ppt_filename = candidate_files[0].name
+                        print(f"   > 🔎 [PPT 자동 매칭] 최근 분석된 PPT 결과 매칭: {ppt_filename}")
+
+        if ppt_filename:
+            ppt_stem = Path(ppt_filename).stem
+            possible_paths = [
+                Path("analysis_json/ppt_json") / f"{ppt_stem}.json",
+                Path("ppt-analysis-engine/data/results") / f"{ppt_stem}.json"
+            ]
+            for ppt_result_path in possible_paths:
+                if ppt_result_path.exists():
+                    try:
+                        with open(ppt_result_path, 'r', encoding='utf-8') as f:
+                            ppt_data = json.load(f)
+                            
+                        slide_count = ppt_data.get("metadata", {}).get("slide_count", 0) or ppt_data.get("quantitative_stats", {}).get("slide_count", 0)
+                        
+                        norm_metrics = ppt_data.get("normalized_metrics", {}) or {}
+                        readability = norm_metrics.get("readability", 0.8)
+                        visual_balance = norm_metrics.get("visual_balance", 0.7)
+                        consistency = norm_metrics.get("consistency", 0.8)
+                        
+                        ppt_summary = (
+                            f"슬라이드 수: {slide_count}, "
+                            f"가독성 점수: {readability * 100:.1f}/100, "
+                            f"레이아웃 균형 점수: {visual_balance * 100:.1f}/100, "
+                            f"슬라이드 일관성 점수: {consistency * 100:.1f}/100"
+                        )
+                        ppt_metrics = {
+                            "readability": readability,
+                            "visual_balance": visual_balance,
+                            "consistency": consistency
+                        }
+                        
+                        # feedback_engine이 이 JSON을 검색할 수 있도록 복사본을 `{file_id}_ppt.json` 형태로 저장해줍니다.
+                        ppt_dest_dir = Path("analysis_json/ppt_json")
+                        ppt_dest_dir.mkdir(parents=True, exist_ok=True)
+                        ppt_dest_path = ppt_dest_dir / f"{file_id}_ppt.json"
+                        with open(ppt_dest_path, 'w', encoding='utf-8') as df:
+                            json.dump(ppt_data, df, indent=4, ensure_ascii=False)
+                        print(f"   > 📊 [PPT 분석 매핑 완료] {ppt_dest_path} 복사 완료")
+                        break
+                    except Exception as e:
+                        ppt_summary = f"PPT 결과 파일 읽기 실패: {e}"
 
         # [신규] 분석 요약 데이터 생성 (Feedback Engine 및 UI용)
         active_gestures = ["오른손으로 왼쪽 가리키기", "왼손으로 오른쪽 가리키기", "손을 높여 강조", "활발한 손동작"]
         active_count = sum(1 for res in all_vision_results if res.yolo.gesture_name in active_gestures)
         
+        # [신규] 전체 대본 추출
+        full_transcript = " ".join([seg.get('text', '').strip() for seg in audio_segments]) if audio_segments else "STT 대본 없음"
+
         analysis_summary = {
             "face_detection_rate": (face_stats["detected_count"] / total_frames * 100) if total_frames > 0 else 0,
             "gaze_score": max(0, 1.0 - (face_stats["gaze_h"] + face_stats["gaze_v"])) if face_stats["detected_count"] > 0 else 0,
@@ -183,10 +249,12 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "gesture_status": "활발함" if (active_count / total_frames) > 0.1 else "정적임",
             "avg_speed": avg_speed,
             "ppt_summary": ppt_summary,
+            "ppt_metrics": ppt_metrics,  # 🌟 ppt_metrics 추가
             "voice_summary": voice_summary,
             "video_type": video_type.value,
             "voice_metrics": voice_metrics,
             "voice_scores": voice_scores,
+            "full_transcript": full_transcript,
         }
 
         # 7. AI 피드백 생성 (Fine-tuned EXAONE 모델 사용)
@@ -199,7 +267,82 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         }
         
         # 프로젝트 이름(file_id)을 기반으로 모든 데이터를 취합하여 피드백 생성
-        llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona)
+        llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona, analysis_summary=analysis_summary)
+        
+        # 🌟 AI가 직접 채점한 [SCORES_START] ... [SCORES_END] JSON 점수 블록 파싱 및 정제
+        ai_scores = None
+        import re
+        try:
+            scores_pattern = re.compile(r'\[SCORES_START\](.*?)\[SCORES_END\]', re.DOTALL)
+            match = scores_pattern.search(llama_feedback)
+            if match:
+                ai_scores = json.loads(match.group(1).strip())
+                llama_feedback = scores_pattern.sub("", llama_feedback).strip()
+                # 🌟 [교정] AI 채점 JSON 블록이 제거된 후, 리포트 끝에 남게 되는 "4. AI 초정밀 정량 채점표" 마크다운 헤더 라인과 수평선(---)을 말끔히 지워주어 잘림 현상 제거!
+                llama_feedback = re.sub(r'(?m)^#+\s*.*?AI\s*초정밀\s*정량\s*채점표.*$', '', llama_feedback).strip()
+                llama_feedback = re.sub(r'(?m)^---+$', '', llama_feedback).strip()
+                print("   > 🎯 [AI 정량 채점] AI가 직접 매긴 점수 파싱 성공!")
+        except Exception as e:
+            print(f"   > ⚠️ [AI 정량 채점 파싱 실패] {e}")
+
+        # 🌟 초정밀 예외 방어용 파이썬 채점 폴백 알고리즘 작동!
+        if not ai_scores:
+            print("   > 🛡️ [정량 채점 폴백 가동] 파이썬 초정밀 알고리즘으로 동적 채점을 적용합니다.")
+            try:
+                gaze_score_val = round(analysis_summary.get("gaze_score", 0.8) * 100)
+                smile_score_val = round(analysis_summary.get("smile_score", 0.5) * 100)
+                gesture_score_val = 90 if analysis_summary.get("gesture_status") == "활발함" else 70
+
+                att_items = [
+                    round(gaze_score_val * 0.1),
+                    round((smile_score_val * 0.5 + gesture_score_val * 0.5) * 0.1)
+                ]
+                att_total = sum(att_items)
+
+                v_scores = voice_scores or {}
+                v_items = v_scores.get("items_100") or [80, 80, 80, 80]
+                stab_score = round((v_scores.get("voice_stability_item") or v_items[1] or 80) / 10)
+                fillers_per_min = voice_metrics.get("fillers_per_minute", 0.0)
+                body_stab = max(1, min(10, round((gaze_score_val * 0.5 + (100 - fillers_per_min * 15)) / 20)))
+                fluency = round((v_scores.get("filler_control") or v_items[2] or 80) / 10)
+                
+                voice_items = [stab_score, body_stab, fluency]
+                voice_total = max(0, min(30, sum(voice_items)))
+
+                content_items = [8, 5, 8, 4]
+                has_ppt = ppt_summary != "PPT 분석 데이터 없음"
+                speech_error_cnt = voice_metrics.get("repeated_phrase_hits", 0)
+
+                if ppt_metrics:
+                    readability = ppt_metrics.get("readability", 0.8)
+                    balance = ppt_metrics.get("visual_balance", 0.7)
+                    consistency = ppt_metrics.get("consistency", 0.8)
+                    
+                    ppt_rel = 12 if has_ppt else 0
+                    del_rel = max(0, 10 - speech_error_cnt * 3)
+                    read_bal = round((readability * 0.5 + balance * 0.5) * 15)
+                    const_val = round(consistency * 10)
+                    
+                    content_items = [ppt_rel, del_rel, read_bal, const_val]
+                
+                content_total = sum(content_items)
+                if speech_error_cnt > 0 or not has_ppt:
+                    penalty = 0.45 if not has_ppt else 0.70
+                    content_total = round(content_total * penalty)
+                    content_items = [round(item * penalty) for item in content_items]
+
+                ai_scores = {
+                    "attitude": { "category": att_total, "items": att_items },
+                    "voice": { "category": voice_total, "items": voice_items },
+                    "content": { "category": content_total, "items": content_items }
+                }
+            except Exception as fe:
+                print(f"   > ❌ [폴백 알고리즘 실행 오류] {fe}")
+                ai_scores = {
+                    "attitude": { "category": 15, "items": [8, 7] },
+                    "voice": { "category": 22, "items": [7, 8, 7] },
+                    "content": { "category": 30, "items": [10, 5, 10, 5] }
+                }
         
         print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 (LoRA/RTX 5060 Ti) {'='*20}")
         print(llama_feedback)
@@ -277,7 +420,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "overall_feedback": llama_feedback,
             "timeline_feedback": timeline_feedback,
             "timeline_data": aligned_data,
-            "raw_data": optimized_raw_data # 최적화된 데이터만 저장
+            "raw_data": optimized_raw_data, # 최적화된 데이터만 저장
+            "ai_scores": ai_scores # 🌟 AI 직접 채점 데이터 저장
         }
         
         total_json_path = total_out_dir / f"{file_id}_total.json"
@@ -295,7 +439,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             "timeline_feedback": timeline_feedback,
             "raw_data": raw_data_json,
             "aligned_transcript_data": aligned_data,
-            "total_json_url": f"/results/total/{file_id}_total.json"
+            "total_json_url": f"/results/total/{file_id}_total.json",
+            "ai_scores": ai_scores # 🌟 AI 직접 채점 데이터 주입
         }
         
         job_status[job_id] = {"status": "Complete", "result": final_result}

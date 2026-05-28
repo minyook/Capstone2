@@ -95,7 +95,15 @@ def transcribe_audio_with_timestamps(audio_path: str, video_filename: str = "def
     print(f"   > [4/6] ❗️ 로컬 음성 인식(Whisper) 실행 중... (시간 소요)")
 
     try:
-        result = model.transcribe(audio_path, language="ko", fp16=False) 
+        # 🌟 Whisper의 비유창성(어, 음, 저, 그, 아 등) 무시 현상을 방해하고 강제 기록하도록 initial_prompt 제공!
+        # 온도(temperature) 및 빔 서치를 조율하고, 노이즈가 섞여 생략되는 것을 억제합니다.
+        result = model.transcribe(
+            audio_path,
+            language="ko",
+            fp16=False,
+            initial_prompt="어... 음... 그러니까 저... 그... 아... 오늘 발표는요...",
+            temperature=0.0
+        ) 
         print("   > [4/6] ✅ 음성 인식 완료.")
         return result["segments"], None 
 
@@ -132,8 +140,9 @@ def analyze_prosody_for_segments(audio_path: Path, segments: list, video_filenam
             segment['jitter'] = jitter_local * 100  
             segment['shimmer'] = shimmer_local * 100 
 
-            if np.isnan(segment['jitter']): segment['jitter'] = 0
-            if np.isnan(segment['shimmer']): segment['shimmer'] = 0
+            # NaN 발생 시 (무음이거나 노이즈 심함) 완벽한 0.0이 아닌 페널티 값 부여
+            if np.isnan(segment['jitter']): segment['jitter'] = 3.0
+            if np.isnan(segment['shimmer']): segment['shimmer'] = 15.0
 
         print(f"   > [5/6] ✅ 음성 운율 분석 완료.")
         save_voice_data(segments, video_filename=video_filename)
@@ -149,8 +158,8 @@ def analyze_prosody_for_segments(audio_path: Path, segments: list, video_filenam
         print(f"   > [5/6] ⚠️  음성 운율 분석 경고: {e}")
         for segment in segments:
             if 'jitter' not in segment:
-                segment['jitter'] = 0
+                segment['jitter'] = 3.0
             if 'shimmer' not in segment:
-                segment['shimmer'] = 0
+                segment['shimmer'] = 15.0
         save_voice_data(segments, error_message=str(e), video_filename=video_filename)
         return segments

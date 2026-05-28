@@ -18,6 +18,7 @@ import {
 } from "../data/slideVerifyStorage";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./Analysis.css";
 
 // Helper for loading step detection
@@ -366,32 +367,35 @@ export function Analysis() {
             setVoiceBlock(null);
           }
 
-          if (resData.analysis_summary) {
+          if (resData.ai_scores) {
+            // 🌟 AI가 직접 채점한 점수가 존재하면 복잡한 하드코딩 수식 없이 100% 동기화 매핑!
+            import("../data/analysisResultStorage").then(({ saveAnalysisResultForSubmission }) => {
+              saveAnalysisResultForSubmission(scopeId, submissionId, resData.ai_scores);
+              setScoresRevision((n) => n + 1);
+            });
+          } else if (resData.analysis_summary) {
+            // 🛡️ 백엔드 연동 폴백 및 로컬 점수 계산 수식 구동
             const summary = resData.analysis_summary;
             import("../data/analysisResultStorage").then(({ saveAnalysisResultForSubmission }) => {
-              // 100점 만점 구조: Attitude(20) + Voice(30) + Content(50)
               const gazeScoreVal = Math.round((summary.gaze_score || 0.8) * 100);
               const smileScoreVal = Math.round((summary.smile_score || 0.5) * 100);
               const gestureScoreVal = summary.gesture_status === "활발함" ? 90 : 70;
               
-              // Attitude: 20점 만점 (시선 10 + 제스처/표정 10)
               const attitudeItems = [
                 Math.round(gazeScoreVal * 0.10),
                 Math.round((smileScoreVal * 0.5 + gestureScoreVal * 0.5) * 0.10)
               ];
               const attitudeScore = attitudeItems[0] + attitudeItems[1];
               
-              // Voice: 30점 만점 (안정도 10 + 신체평정 10 + 유창성 10)
-              const jitter = summary.voice_metrics?.prosody?.jitter_mean ?? 1.5;
-              const shimmer = summary.voice_metrics?.prosody?.shimmer_mean ?? 7.0;
-              const stabScore = Math.max(2, Math.min(10, Math.round(10 - (jitter * 0.5 + shimmer * 0.1))));
-              const bodyStab = Math.max(3, Math.min(10, Math.round((gazeScoreVal * 0.6 + gestureScoreVal * 0.4) / 10)));
-              const fillers = summary.voice_metrics?.fillers_per_minute ?? 2.0;
-              const fluency = Math.max(2, Math.min(10, Math.round(Math.max(40, 100 - fillers * 15) / 10)));
-              const voiceItems = [stabScore, bodyStab, fluency];
-              const voiceScore = voiceItems.reduce((a, b) => a + b, 0);
+              const vScores = summary.voice_scores || {};
+              const vItems = vScores.items_100 || [80, 80, 80, 80];
+              const stabScore = Math.round((vScores.voice_stability_item ?? vItems[1] ?? 80) / 10);
+              const bodyStab = Math.max(1, Math.min(10, Math.round((gazeScoreVal * 0.5 + (100 - (summary.voice_metrics?.fillers_per_minute ?? 0) * 15)) / 20)));
+              const fluency = Math.round((vScores.filler_control ?? vItems[2] ?? 80) / 10);
               
-              // Content: 기존 슬라이드 데이터가 있으면 그걸 쓰고 없으면 기본 25점
+              const voiceItems = [stabScore, bodyStab, fluency];
+              const voiceScore = Math.max(0, Math.min(30, voiceItems.reduce((a, b) => a + b, 0)));
+              
               const storedVerify = loadSlideVerifyForSubmission(submissionId);
               let contentScore = 25;
               let contentItems = [8, 5, 8, 4];
@@ -404,6 +408,15 @@ export function Analysis() {
                   Math.round(storedVerify.visual_match_percent * 0.15),
                   Math.round(storedVerify.slide_coverage_percent * 0.10),
                 ];
+              }
+              
+              const speechErrorCnt = summary.voice_metrics?.repeated_phrase_hits ?? 0;
+              const hasPptData = summary.ppt_summary !== "PPT 분석 데이터 없음";
+              
+              if (speechErrorCnt > 0 || !hasPptData) {
+                const penaltyFactor = !hasPptData ? 0.45 : 0.7;
+                contentScore = Math.round(contentScore * penaltyFactor);
+                contentItems = contentItems.map(item => Math.round(item * penaltyFactor));
               }
 
               const calculatedScores: any = {
@@ -738,7 +751,7 @@ export function Analysis() {
             <h2>AI 전문가 심층 피드백</h2>
             <div className="analysis-feedback-card">
               <div className="analysis-feedback-content">
-                <ReactMarkdown>{overallFeedback}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{overallFeedback}</ReactMarkdown>
               </div>
             </div>
           </section>

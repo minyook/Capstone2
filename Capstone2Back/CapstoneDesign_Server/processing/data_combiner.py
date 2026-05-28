@@ -67,10 +67,16 @@ def align_data(vision_data: list, audio_segments: list) -> list:
         if gesture_counts:
             dominant_gesture = max(gesture_counts, key=gesture_counts.get)
             
-        # 5. 필러워드 추출
-        fillers = ["어", "음", "그", "저", "어어", "으음", "아", "아아"]
-        words = re.findall(r'\b\w+\b', text)
-        fillers_count = sum(1 for word in words if word in fillers)
+        # 5. 필러워드 추출 (간격/문장부호 유연성 부여)
+        # re.compile 구조화로 어..., 음... 등 단독/특이치 바인딩 필터링
+        fillers_patterns = [
+            r"\b어+\b", r"\b음+\b", r"\b그+\b", r"\b저+\b", r"\b아+\b",
+            r"\b그냥\b", r"\b그니까\b", r"\b그러니까\b", r"\b이제\b", r"\b자\b",
+            r"\b뭐\b", r"\b좀\b", r"\b으음\b"
+        ]
+        fillers_count = 0
+        for pat in fillers_patterns:
+            fillers_count += len(re.findall(pat, text))
 
         aligned_results.append({
             "start": start_time,

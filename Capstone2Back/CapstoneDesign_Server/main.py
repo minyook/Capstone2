@@ -6,6 +6,8 @@ import sys
 os.environ["FOR_DISABLE_CONSOLE_CTRL_HANDLER"] = "1"
 # 2. TensorFlow oneDNN 관련 수치 경고 끄기
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+# 3. MediaPipe / GLOG FAILED_PRECONDITION 경고 끄기
+os.environ["GLOG_minloglevel"] = "2"
 # -----------------------------------------------------------
 
 import uvicorn
@@ -147,7 +149,8 @@ async def read_diagnostic():
 async def upload_video(
     background_tasks: BackgroundTasks, 
     file: UploadFile = File(...),
-    persona: str = Form("soft")
+    persona: str = Form("soft"),
+    ppt_filename: Optional[str] = Form(None)
 ):
     job_id = str(uuid.uuid4())[:8]
     filename = file.filename or "unknown_video"
@@ -183,7 +186,8 @@ async def upload_video(
         None, 
         None, 
         file_id,
-        persona
+        persona,
+        ppt_filename
     )
     
     return {"job_id": job_id, "video_url": f"/uploads/{job_id}/{save_filename}", "video_name": original_filename}

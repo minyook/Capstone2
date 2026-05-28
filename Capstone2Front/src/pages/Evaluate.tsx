@@ -200,22 +200,30 @@ export function Evaluate() {
       verifyFormData.append("video", videoFile);
       verifyFormData.append("video_type", videoType);
 
-      // PPT 분석 + 영상 업로드만 대기 (슬라이드 일치 검증은 아래에서 백그라운드)
-      const [pptRes, videoRes] = await Promise.all([
-        fetch("http://127.0.0.1:8000/api/ppt/analyze", {
-          method: "POST",
-          body: pptFormData,
-        }),
-        fetch("http://127.0.0.1:8000/api/upload", {
-          method: "POST",
-          body: videoFormData,
-        }),
-      ]);
+      // 1. PPT 분석 먼저 실행하여 고유 파일명 받기 (순차 처리)
+      const pptRes = await fetch("http://127.0.0.1:8000/api/ppt/analyze", {
+        method: "POST",
+        body: pptFormData,
+      });
 
       if (!pptRes.ok) {
         const err = (await pptRes.json().catch(() => null)) as { detail?: string } | null;
         throw new Error(err?.detail ?? "PPT 분석 요청에 실패했습니다.");
       }
+      const pptData = await pptRes.json();
+      const pptUploadedFile = pptData.uploaded_file;
+
+      // 2. 비디오 데이터에 PPT 파일명 추가
+      if (pptUploadedFile) {
+        videoFormData.append("ppt_filename", pptUploadedFile);
+      }
+
+      // 3. 영상 업로드 호출
+      const videoRes = await fetch("http://127.0.0.1:8000/api/upload", {
+        method: "POST",
+        body: videoFormData,
+      });
+
       if (!videoRes.ok) {
         throw new Error("영상 업로드 및 분석 요청에 실패했습니다.");
       }

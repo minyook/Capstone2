@@ -14,14 +14,16 @@ from typing import Any
 import numpy as np
 
 _FILLER_RES = [
-    re.compile(r"(?:^|[\s,.!?…])어+(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])음+(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])(?:그{2,}|그냥|그니까|그러니까)(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])(?:뭐{1,2}|뭐야|뭐지)(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])(?:저{2,}|쫌|좀)(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])이제(?:[\s,.!?…]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])자(?:[,.\s]|$)"),
-    re.compile(r"(?:^|[\s,.!?…])아+(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(어+)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(음+|으+음+)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(그+)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(저+)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(아+)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(그냥|그니까|그러니까)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(뭐|뭐야|뭐지)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(쫌|좀)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(이제)(?:[\s,.!?…]|$)"),
+    re.compile(r"(?:^|[\s,.!?…])(자)(?:[,.\s]|$)"),
 ]
 
 _NGRAM_LEN = 8
@@ -338,42 +340,46 @@ def _score_speech_speed_100(cps: float) -> int:
 
 
 def _score_voice_stability_100(jm: float, sm: float) -> int:
-    """목소리 안정성 (0~100): jitter·shimmer % 스케일 분리."""
+    """목소리 안정성 (0~100): jitter·shimmer % 스케일 분리 (페널티 극대화 버전)"""
     # shimmer: Praat local % (대개 5~12), jitter: 대개 0.5~2
-    shimmer_penalty = max(0.0, (sm - 5.0) * 4.5)
-    jitter_penalty = max(0.0, (jm - 0.8) * 12.0)
+    # 아주 미세한 떨림도 과감하게 감점하도록 문턱값 하향 및 가중치 극대화
+    shimmer_penalty = max(0.0, (sm - 2.5) * 15.0) 
+    jitter_penalty = max(0.0, (jm - 0.3) * 40.0) 
     return int(max(0, min(100, round(100 - shimmer_penalty - jitter_penalty))))
 
 
 def _score_filler_habit_100(fpm: float, pause_n: int) -> int:
-    """말버릇·필러 (0~100)."""
-    if fpm < 1.0:
+    """말버릇·필러 (0~100): 냉철한 스피치 스탠다드 적용"""
+    # 분당 필러워드 4회 이상 시 과락(0점)에 수렴하도록 대대적 칼질
+    if fpm < 0.5:
         score = 95
+    elif fpm < 1.2:
+        score = 75
     elif fpm < 2.0:
-        score = 85
-    elif fpm < 4.0:
-        score = 70
-    elif fpm < 6.0:
-        score = 55
+        score = 50
+    elif fpm < 3.5:
+        score = 20
     else:
-        score = 40
-    score -= min(15, pause_n // 4 * 3)
+        score = 0
+        
+    # 물리적 무음구간 개당 감점 계수를 대폭 키우고 상한 제거
+    score -= int(pause_n * 6.5)
     return int(max(0, min(100, score)))
 
 
 def _score_repetition_100(rep_hits: int) -> int:
-    """같은 구절 반복 (0~100)."""
+    """같은 구절 반복 (0~100): 뇌 정지 현상 엄격 처벌"""
     if rep_hits <= 0:
-        return 90
+        return 95
     if rep_hits == 1:
-        return 80
-    if rep_hits <= 3:
         return 65
-    return max(40, 90 - rep_hits * 12)
+    if rep_hits <= 3:
+        return 35
+    return max(0, 90 - rep_hits * 30) # 3번 이상 반복되면 즉시 0점행
 
 
 def voice_scores_from_metrics(vm: dict[str, Any]) -> dict[str, Any]:
-    """항목기준표 「발표 음성」4항목 (각 0~100) + UI·하위 호환 필드."""
+    """항목기준표 「발표 음성」4항목 (각 0~100) + UI·하위 호환 필드 (엄격 평가 모드)"""
     if not vm:
         return {
             "items_100": [0, 0, 0, 0],
@@ -395,7 +401,11 @@ def voice_scores_from_metrics(vm: dict[str, Any]) -> dict[str, Any]:
     fillers = _score_filler_habit_100(fpm, pause_n)
     repetition = _score_repetition_100(rep)
     items = [speed, stability, fillers, repetition]
-    category = int(round(sum(items) / len(items)))
+    
+    # 🌟 평균의 함정 영구 박살: 과락형 감점 모델 강화
+    # 4가지 영역 중 가장 최악의 점수가 전체 평가를 갉아먹도록 가중치 6배 부여
+    min_score = min(items)
+    category = int(round((sum(items) + min_score * 6) / (len(items) + 6)))
 
     voice_stability_10 = _score_voice_stability_10(jm, sm)
     linguistic_fluency_10 = _score_linguistic_fluency_10(vm)
