@@ -19,6 +19,7 @@ import {
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { exportPDF, exportExcel } from "../utils/exportReport";
 import "./Analysis.css";
 
 // Helper for loading step detection
@@ -64,6 +65,7 @@ export function Analysis() {
   } | null>(null);
   const [analysisStatus, setAnalysisStatus] = useState<string>("waiting");
   const [slideVerify, setSlideVerify] = useState<SlideVerifyResult | null>(null);
+  const [pdfProgress, setPdfProgress] = useState<string>("");
   
   // 🌟 실시간 로딩용 타이머 및 상태
   const [analysisMessage, setAnalysisMessage] = useState<string>("0/6: 품질 검사 중...");
@@ -836,28 +838,10 @@ export function Analysis() {
             <button
               type="button"
               className="analysis-btn analysis-btn--outline"
-              disabled={!hasData}
+              disabled={!hasData || !!pdfProgress}
               title={!hasData ? "채점 결과가 있을 때 사용할 수 있습니다" : undefined}
               onClick={() => {
-                if (!scores) return;
-                const rows = [
-                  ["영역", "세부항목", "점수"].join(","),
-                  ...RUBRIC.flatMap((cat) => {
-                    const data = scores[cat.id];
-                    const itemRows = cat.items.map((label, idx) =>
-                      [cat.title, label, String(data.items[idx] ?? "")].join(",")
-                    );
-                    return [...itemRows, [cat.title, "영역 점수", String(data.category)].join(",")];
-                  }),
-                  ["총점", "", String(totalFromScores(scores))].join(","),
-                ];
-                const blob = new Blob(["\uFEFF" + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `analysis-report-${submissionId ?? "latest"}.csv`;
-                a.click();
-                URL.revokeObjectURL(url);
+                exportExcel(submissionMeta, scores, voiceBlock, slideVerify, overallFeedback);
               }}
             >
               EXCEL
@@ -865,13 +849,26 @@ export function Analysis() {
             <button
               type="button"
               className="analysis-btn analysis-btn--fill"
-              disabled={!hasData}
+              disabled={!hasData || !!pdfProgress}
               title={!hasData ? "채점 결과가 있을 때 사용할 수 있습니다" : undefined}
-              onClick={() => {
-                window.print();
+              onClick={async () => {
+                try {
+                  await exportPDF(
+                    submissionMeta,
+                    scores,
+                    voiceBlock,
+                    slideVerify,
+                    overallFeedback,
+                    setPdfProgress
+                  );
+                } catch (e) {
+                  console.error("PDF export failed:", e);
+                  alert("PDF 내보내기 중 오류가 발생했습니다.");
+                  setPdfProgress("");
+                }
               }}
             >
-              PDF
+              {pdfProgress || "PDF"}
             </button>
           </div>
         </section>

@@ -2,6 +2,13 @@ from pathlib import Path
 import time as timer 
 import traceback
 import json
+import sys
+import io
+
+# 터미널 출력 한글 및 유니코드 깨짐/에러 방지
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 
 # 모든 처리 모듈 임포트
 from processing.video_analyzer import extract_all_frames, extract_audio, analyze_frame_vision
@@ -343,6 +350,97 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                     "voice": { "category": 22, "items": [7, 8, 7] },
                     "content": { "category": 30, "items": [10, 5, 10, 5] }
                 }
+        
+        # 🌟 AI 초정밀 정량 채점표 (Scorecard Dashboard) 동적 마크다운 대시보드 주입!
+        if ai_scores:
+            try:
+                def make_progress_bar(score, max_score, bar_length=10):
+                    filled = int(round((score / max_score) * bar_length)) if max_score > 0 else 0
+                    filled = max(0, min(bar_length, filled))
+                    empty = bar_length - filled
+                    return "■" * filled + "□" * empty
+
+                def get_status_label(score, max_score):
+                    if max_score <= 0: return "🔴 미흡"
+                    ratio = score / max_score
+                    if ratio >= 0.85: return "⭐ 최상"
+                    elif ratio >= 0.70: return "🟢 우수"
+                    elif ratio >= 0.50: return "🟡 보통"
+                    else: return "🔴 미흡"
+
+                att_cat = ai_scores.get("attitude", {}).get("category", 0)
+                att_items = ai_scores.get("attitude", {}).get("items", [0, 0])
+                att_gaze = att_items[0] if len(att_items) > 0 else 0
+                att_motion = att_items[1] if len(att_items) > 1 else 0
+
+                voc_cat = ai_scores.get("voice", {}).get("category", 0)
+                voc_items = ai_scores.get("voice", {}).get("items", [0, 0, 0])
+                voc_stab = voc_items[0] if len(voc_items) > 0 else 0
+                voc_calm = voc_items[1] if len(voc_items) > 1 else 0
+                voc_control = voc_items[2] if len(voc_items) > 2 else 0
+
+                con_cat = ai_scores.get("content", {}).get("category", 0)
+                con_items = ai_scores.get("content", {}).get("items", [0, 0, 0, 0])
+                con_sync = con_items[0] if len(con_items) > 0 else 0
+                con_delivery = con_items[1] if len(con_items) > 1 else 0
+                con_layout = con_items[2] if len(con_items) > 2 else 0
+                con_theme = con_items[3] if len(con_items) > 3 else 0
+
+                total_score = att_cat + voc_cat + con_cat
+
+                gaze_bar = make_progress_bar(att_gaze, 10)
+                gaze_lbl = get_status_label(att_gaze, 10)
+                motion_bar = make_progress_bar(att_motion, 10)
+                motion_lbl = get_status_label(att_motion, 10)
+                att_bar = make_progress_bar(att_cat, 20)
+                att_lbl = get_status_label(att_cat, 20)
+
+                stab_bar = make_progress_bar(voc_stab, 10)
+                stab_lbl = get_status_label(voc_stab, 10)
+                calm_bar = make_progress_bar(voc_calm, 10)
+                calm_lbl = get_status_label(voc_calm, 10)
+                control_bar = make_progress_bar(voc_control, 10)
+                control_lbl = get_status_label(voc_control, 10)
+                voc_bar = make_progress_bar(voc_cat, 30)
+                voc_lbl = get_status_label(voc_cat, 30)
+
+                sync_bar = make_progress_bar(con_sync, 15)
+                sync_lbl = get_status_label(con_sync, 15)
+                delivery_bar = make_progress_bar(con_delivery, 10)
+                delivery_lbl = get_status_label(con_delivery, 10)
+                layout_bar = make_progress_bar(con_layout, 15)
+                layout_lbl = get_status_label(con_layout, 15)
+                theme_bar = make_progress_bar(con_theme, 10)
+                theme_lbl = get_status_label(con_theme, 10)
+                con_bar = make_progress_bar(con_cat, 50)
+                con_lbl = get_status_label(con_cat, 50)
+
+                total_bar = make_progress_bar(total_score, 100, bar_length=20)
+                total_lbl = get_status_label(total_score, 100)
+
+                scorecard_md = f"""
+---
+
+## 📊 AI 초정밀 정량 채점표 (Scorecard Dashboard)
+
+이 표는 AI 멀티모달 분석 결과와 채점 기준표를 매핑하여 도출된 객관적인 정량 평가 대시보드입니다.
+
+| 평가 부문 | 세부 분석 지표 | 배점 | 정량 점수 | 수준 및 시각적 달성도 |
+| :--- | :--- | :---: | :---: | :--- |
+| **🟢 발표 태도 (Attitude)** | 👁️ 카메라 정면 응시율 (시선) | 10점 | **{att_gaze}점** / 10점 | `{gaze_bar}` {gaze_lbl} |
+| (부문 합계: **{att_cat}점** / 20점) | 🤸 제스처 역동성 및 자세 (모션) | 10점 | **{att_motion}점** / 10점 | `{motion_bar}` {motion_lbl} |
+| **🔵 음성 유창성 (Voice)** | 🔊 음성 데시벨/피치 (안정도) | 10점 | **{voc_stab}점** / 10점 | `{stab_bar}` {stab_lbl} |
+| (부문 합계: **{voc_cat}점** / 30점) | 🧘 정면 시선 & 필러 밀집 (평정심) | 10점 | **{voc_calm}점** / 10점 | `{calm_bar}` {calm_lbl} |
+| | 🎙️ 불필요한 필러워드 제어 (유창성) | 10점 | **{voc_control}점** / 10점 | `{control_bar}` {control_lbl} |
+| **🟡 자료 및 내용 (Content)** | 📂 발화-PPT 싱크로율 (연관성) | 15점 | **{con_sync}점** / 15점 | `{sync_bar}` {sync_lbl} |
+| (부문 합계: **{con_cat}점** / 50점) | 📢 대본상 발화 완성도 (전달력) | 10점 | **{con_delivery}점** / 10점 | `{delivery_bar}` {delivery_lbl} |
+| | 🎨 슬라이드 균형/가독성 (디자인) | 15점 | **{con_layout}점** / 15점 | `{layout_bar}` {layout_lbl} |
+| | 📏 슬라이드 테마 통일 (일관성) | 10점 | **{con_theme}점** / 10점 | `{theme_bar}` {theme_lbl} |
+| **🏆 종합 점수 (Total Score)** | **종합 발표 스피치 스코어** | **100점** | **{total_score}점** / 100점 | `{total_bar}` **({total_score}%)** {total_lbl} |
+"""
+                llama_feedback = llama_feedback.strip() + "\n" + scorecard_md.strip()
+            except Exception as se:
+                print(f"   > ⚠️ [시각 채점표 대시보드 생성 실패] {se}")
         
         print(f"\n{'='*20} 🤖 AI 발표 코치 피드백 (LoRA/RTX 5060 Ti) {'='*20}")
         print(llama_feedback)

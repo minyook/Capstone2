@@ -8,6 +8,8 @@ os.environ["FOR_DISABLE_CONSOLE_CTRL_HANDLER"] = "1"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 # 3. MediaPipe / GLOG FAILED_PRECONDITION 경고 끄기
 os.environ["GLOG_minloglevel"] = "2"
+# 4. Intel OpenMP duplicate library 초기화 방지 (PyTorch/NumPy 충돌 Fix)
+os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 # -----------------------------------------------------------
 
 import uvicorn
