@@ -5,6 +5,7 @@
 ---
 
 ## 🏗️ System Architecture (시스템 구조)
+
 ```mermaid
 graph TD
     subgraph Client [React Frontend App]
@@ -50,8 +51,6 @@ graph TD
     LLM_Providers -->|4. 평가 점수 & 마크다운 피드백| Feedback
     Feedback -->|5. 최종 통합 JSON 생성| API
     API -->|6. 실시간 폴링 및 대시보드 반영| UI
-
----
 
 ## ✨ Key Features (핵심 기능)
 
