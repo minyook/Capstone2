@@ -1,3 +1,4 @@
+```markdown
 # 🌙 Overnight.AI : AI 기반 발표 및 스피치 멀티모달 자동 평가 시스템
 **Overnight.AI**는 발표자의 **영상(Vision), 음성(Audio), 언어/슬라이드(Text/PPT)** 데이터를 초정밀 멀티모달 파이프라인으로 동적 분석하여 계측된 정량적 수치를 바탕으로 발표 역량을 다각도로 평가하고 맞춤형 피드백을 제공하는 스피치 코칭 서비스입니다. 
 본 프로젝트는 고도화된 딥러닝 분석 엔진(FastAPI)과 반응형 시각화 대시보드(React)가 결합되어 동작합니다.
@@ -5,7 +6,6 @@
 ---
 
 ## 🏗️ System Architecture (시스템 구조)
-
 ```mermaid
 graph TD
     subgraph Client [React Frontend App]
@@ -51,6 +51,10 @@ graph TD
     LLM_Providers -->|4. 평가 점수 & 마크다운 피드백| Feedback
     Feedback -->|5. 최종 통합 JSON 생성| API
     API -->|6. 실시간 폴링 및 대시보드 반영| UI
+
+```
+
+---
 
 ## ✨ Key Features (핵심 기능)
 
