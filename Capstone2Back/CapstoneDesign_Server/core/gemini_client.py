@@ -1,9 +1,24 @@
 import os
 import time
+from pathlib import Path
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+
+_MIME_BY_EXT = {
+    ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ".ppt": "application/vnd.ms-powerpoint",
+    ".pdf": "application/pdf",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".txt": "text/plain",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
+    ".mp4": "video/mp4",
+    ".mp3": "audio/mpeg",
+}
 
 # .env 파일에서 GEMINI_API_KEY 로드
 load_dotenv()
@@ -30,6 +45,47 @@ system_instruction = """
 4. **언어**: 한국어(KO-KR)로만 답변하십시오.
 """
 
+
+def _resolve_mime_type(path: str, mime_type: Optional[str]) -> Optional[str]:
+    if mime_type:
+        return mime_type
+    return _MIME_BY_EXT.get(Path(path).suffix.lower())
+
+
+def _attachment_to_part(attachment: Any) -> types.Part:
+    """Files API 업로드 객체를 generate_content용 Part로 변환합니다."""
+    if isinstance(attachment, types.Part):
+        return attachment
+    uri = getattr(attachment, "uri", None)
+    if uri:
+        mime = getattr(attachment, "mime_type", None) or "application/octet-stream"
+        return types.Part.from_uri(file_uri=uri, mime_type=mime)
+    raise TypeError(f"지원하지 않는 첨부 형식입니다: {type(attachment)!r}")
+
+
+def _build_contents(
+    user_message: str,
+    chat_history: List[Dict[str, str]],
+    attachments: Optional[List[Any]] = None,
+) -> List[types.Content]:
+    contents: List[types.Content] = []
+    for msg in chat_history:
+        role = "user" if msg.get("role") == "user" else "model"
+        text = (msg.get("content") or "").strip() or " "
+        contents.append(
+            types.Content(role=role, parts=[types.Part.from_text(text=text)])
+        )
+
+    parts: List[types.Part] = []
+    if attachments:
+        for attachment in attachments:
+            parts.append(_attachment_to_part(attachment))
+    parts.append(types.Part.from_text(text=user_message))
+
+    contents.append(types.Content(role="user", parts=parts))
+    return contents
+
+
 def upload_to_gemini(path: str, mime_type: str = None):
     """
     Gemini Files API를 사용하여 파일을 업로드합니다.
@@ -39,7 +95,8 @@ def upload_to_gemini(path: str, mime_type: str = None):
         return None
 
     try:
-        config = {'mime_type': mime_type} if mime_type else None
+        resolved_mime = _resolve_mime_type(path, mime_type)
+        config = {"mime_type": resolved_mime} if resolved_mime else None
         file = client.files.upload(file=path, config=config)
         print(f"   > [Files API] 파일 업로드 완료: {file.uri}")
         
@@ -68,27 +125,7 @@ def stream_chat_with_gemini(user_message: str, chat_history: List[Dict[str, str]
     if chat_history is None:
         chat_history = []
 
-    # google-genai SDK 1.2+ 버전은 pydantic validation을 매우 엄격하게 합니다.
-    # 안전하게 딕셔너리 포맷 {"role": ..., "parts": [{"text": ...}]} 로 변환하여 전달합니다.
-    contents = []
-    for msg in chat_history:
-        role = "user" if msg.get("role") == "user" else "model"
-        contents.append({
-            "role": role,
-            "parts": [{"text": msg.get("content", "")}]
-        })
-
-    # 메시지 구성 (텍스트 + 파일)
-    parts = []
-    if attachments:
-        for a in attachments:
-            parts.append(a)
-    parts.append({"text": user_message})
-    
-    contents.append({
-        "role": "user",
-        "parts": parts
-    })
+    contents = _build_contents(user_message, chat_history, attachments)
 
     try:
         response = client.models.generate_content_stream(
@@ -116,25 +153,7 @@ def chat_with_gemini(user_message: str, chat_history: List[Dict[str, str]] = Non
     if chat_history is None:
         chat_history = []
 
-    contents = []
-    for msg in chat_history:
-        role = "user" if msg.get("role") == "user" else "model"
-        contents.append({
-            "role": role,
-            "parts": [{"text": msg.get("content", "")}]
-        })
-
-    # 메시지 구성 (텍스트 + 파일)
-    parts = []
-    if attachments:
-        for a in attachments:
-            parts.append(a)
-    parts.append({"text": user_message})
-    
-    contents.append({
-        "role": "user",
-        "parts": parts
-    })
+    contents = _build_contents(user_message, chat_history, attachments)
 
     try:
         response = client.models.generate_content(
@@ -156,4 +175,3 @@ def chat_with_gemini(user_message: str, chat_history: List[Dict[str, str]] = Non
             chat_history.append({"role": "user", "content": user_message})
         chat_history.append({"role": "assistant", "content": f"오류 발생: {str(e)}"})
         return chat_history
-

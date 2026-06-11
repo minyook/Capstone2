@@ -239,18 +239,25 @@ async def chat_with_ai_file(
     file: UploadFile = File(...)
 ):
     history = json.loads(chat_history)
-    temp_path = BASE_DIR / "uploads" / (file.filename or "temp_file")
+    # Gemini Files API는 비-ASCII 경로/파일명에서 인코딩 오류가 날 수 있어 ASCII 전용 임시명 사용
+    original_name = file.filename or "temp_file"
+    ext = Path(original_name).suffix
+    safe_name = f"{uuid.uuid4().hex}{ext}"
+    temp_path = BASE_DIR / "uploads" / safe_name
     temp_path.parent.mkdir(parents=True, exist_ok=True)
-    
-    with open(temp_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
 
-    gemini_file = upload_to_gemini(str(temp_path), mime_type=file.content_type)
-    if not gemini_file:
-        return JSONResponse(status_code=500, content={"message": "Gemini 파일 업로드 실패"})
+    try:
+        with open(temp_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    updated_history = chat_with_gemini(message, history, attachments=[gemini_file])
-    return {"chat_history": updated_history}
+        gemini_file = upload_to_gemini(str(temp_path), mime_type=file.content_type)
+        if not gemini_file:
+            return JSONResponse(status_code=500, content={"message": "Gemini 파일 업로드 실패"})
+
+        updated_history = chat_with_gemini(message, history, attachments=[gemini_file])
+        return {"chat_history": updated_history}
+    finally:
+        temp_path.unlink(missing_ok=True)
 
 @app.post("/api/chat/stream")
 async def chat_with_ai_stream(request: ChatRequest):
