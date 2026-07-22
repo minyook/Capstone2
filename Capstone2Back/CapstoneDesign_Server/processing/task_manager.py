@@ -55,16 +55,23 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         if not check_audio_quality(video_path): raise QualityException("오디오 트랙을 찾을 수 없습니다.")
 
         # 1 & 2. 오디오/프레임 추출
+        timing_log = {}
+        
         job_status[job_id] = {"status": "Analyzing", "message": "1/6: 🎬 오디오 추출 중..."}
+        t_start = timer.time()
         extract_audio(video_path, audio_path)
+        timing_log["audio_extraction_time"] = round(timer.time() - t_start, 2)
         
         job_status[job_id] = {"status": "Analyzing", "message": "2/6: 🎬 비디오 프레임 추출 중..."}
+        t_start = timer.time()
         frame_paths = extract_all_frames(video_path, frame_dir, FRAME_RATE)
+        timing_log["frame_extraction_time"] = round(timer.time() - t_start, 2)
         if not frame_paths: raise Exception("비디오 프레임 추출 실패.")
         
         # 3. YOLO(제스처) + MediaPipe(표정/시선) 실시간 분석
         print(f"\n[3/6] 👀 시각 데이터(YOLO & MediaPipe) 추출 중... (터미널 출력 생략)")
         total_frames_cnt = len(frame_paths)
+        t_start = timer.time()
         for i, path in enumerate(frame_paths):
             current_time = i / FRAME_RATE
             frame = analyze_frame_vision(str(path), current_time)
@@ -87,7 +94,7 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                     "status": "Analyzing", 
                     "message": f"3/6: 🤸 시각 데이터(YOLO & MediaPipe) 분석 중... ({pct}%)"
                 }
-            
+        timing_log["vision_analysis_time"] = round(timer.time() - t_start, 2)
         print(f"   > ✅ 시각 데이터 추출 완료.")
 
         # [시각화 체크용] 첫 번째 프레임의 분석 결과를 이미지로 저장
@@ -111,7 +118,10 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         job_status[job_id] = {"status": "Analyzing", "message": "4/6: 🎙️ 로컬 음성(Whisper STT) 인식 중..."}
         # audio_analyzer.py 내부에서 파일 저장을 위해 file_id(video_filename)를 넘겨야 함
         from processing.audio_analyzer import transcribe_audio_with_timestamps
+        t_start = timer.time()
         audio_segments, whisper_error = transcribe_audio_with_timestamps(str(audio_path), video_filename=file_id)
+        timing_log["speech_recognition_time"] = round(timer.time() - t_start, 2)
+        
         voice_metrics: dict = {}
         voice_scores: dict = {}
         aligned_data: list = []
@@ -122,7 +132,9 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
             print(f"\n[4/6] ✅ 로컬 음성 인식 완료.")
             job_status[job_id] = {"status": "Analyzing", "message": "5/6: 🗣️ 음성 운율(Praat) 분석 중..."}
             from processing.audio_analyzer import analyze_prosody_for_segments
+            t_start = timer.time()
             audio_segments = analyze_prosody_for_segments(audio_path, audio_segments, video_filename=file_id)
+            timing_log["prosody_analysis_time"] = round(timer.time() - t_start, 2)
             print(f"\n[5/6] ✅ 운율 분석 완료.")
 
             job_status[job_id] = {"status": "Analyzing", "message": "6/6: 🧩 음성-시각 멀티모달 데이터 정렬 중..."}
@@ -274,7 +286,9 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
         }
         
         # 프로젝트 이름(file_id)을 기반으로 모든 데이터를 취합하여 피드백 생성
+        t_start = timer.time()
         llama_feedback = feedback_engine.generate_feedback(file_id, unified_rubric, persona, analysis_summary=analysis_summary)
+        timing_log["ai_feedback_generation_time"] = round(timer.time() - t_start, 2)
         
         # 🌟 AI가 직접 채점한 [SCORES_START] ... [SCORES_END] JSON 점수 블록 파싱 및 정제
         ai_scores = None
@@ -512,7 +526,8 @@ def run_analysis_task(job_id: str, video_path: Path, frame_dir: Path, video_dir:
                 "video_filename": file_id,
                 "video_type": video_type.value,
                 "total_time": total_frames / FRAME_RATE,
-                "analysis_date": timer.strftime("%Y-%m-%d %H:%M:%S")
+                "analysis_date": timer.strftime("%Y-%m-%d %H:%M:%S"),
+                "timing_log": timing_log
             },
             "summary": analysis_summary,
             "overall_feedback": llama_feedback,

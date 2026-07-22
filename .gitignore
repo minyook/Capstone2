@@ -15,3 +15,7 @@ Capstone2Back/CapstoneDesign_Server/analysis_json/
 Capstone2Back/CapstoneDesign_Server/out/
 outputs/
 unsloth_compiled_cache/
+
+# Large model weights ignore
+**/gemma3_presenter_lora/
+**/outputs/

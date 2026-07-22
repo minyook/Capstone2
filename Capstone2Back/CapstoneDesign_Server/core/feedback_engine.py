@@ -11,13 +11,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 터미널 출력 한글 깨짐 방지
-if sys.stdout.encoding != 'utf-8':
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-
-class FeedbackEngine:
+if sys.stdout.encoding != 'utf-8':class FeedbackEngine:
     def __init__(self, provider: str = "gemma"):
         # AI 제공자 설정 (gemma 또는 gemini)
         self.provider = provider.lower()
+        self.custom_model = "overnight-coach"
         # RAM 다이어트: torch, transformers, peft 완전 제거. 부팅 속도 극대화.
         print(f"🎯 [FeedbackEngine] {self.provider.upper()} 엔진 가동 완료 (최적화 모드)")
 
@@ -142,6 +140,102 @@ class FeedbackEngine:
 
 ## 🔍 3. 타임라인 기반 정밀 팩트 체크 (현상 및 원인)
 (JSON 로그에서 수치가 낮거나 이벤트가 발생한 타임스탬프를 매핑하여 날카롭게 분석)
+
+### 🔴 오디오 파이프라인 감지 항목
+- **정밀 무음(VAD Silence)**: VAD가 감지한 물리적 무음 구간의 시작과 끝 타임스탬프(소수점 표기)를 정확하게 기록하고 발표 공백 원인을 대본과 대조하여 서술하라.
+- **필러 워드 밀집도**: Whisper의 `word_timestamps=True`를 통해 감지된 '어...', '음...' 등이 몇 초 대에 다량 분포해 있는지 정확한 초 단위 타임스탬프와 발생 텍스트를 인용하여 지적하라.
+- **발화 실수 및 자책**: 발표 중간에 대사가 꼬여 자책하는 멘트(예: "아이 뭐야", "과ㅈ...")가 터져 나온 정확한 타임스탬프와 해당 텍스트를 칼같이 집어내라.
+
+### 🔵 비전 파이프라인 감지 항목
+- **측면 서 있기 및 시선 이탈**: 어깨 Yaw 각도 벡터의 사잇각 연산에 따라 몸이 완전히 측면으로 돌아가 스크린을 보았던 타임라인 구간을 정확히 기재하고, 청중에게 등을 돌려 소통을 차단한 현상을 지적하라.
+- **제스처 활성도 미흡/과도**: 양손 손목 3D 변위 분산 분석 결과를 바탕으로, 너무 정적이거나 반대로 불필요하게 움직임이 심했던 구간을 구체적인 변위 데이터 변동폭과 함께 설명하라.
+
+### 🟡 슬라이드 파이프라인 감지 항목
+- **PPT 내용과 발화의 의미적 일치도**: 발표자가 PPT 장표를 넘기는 시점과 STT 발화 내용의 문맥이 일치하는지 분석하여 서술하라.
+
+## 🛠️ 4. 실전 커스텀 교정 솔루션 (Action Items)
+(위의 팩트 체크에서 발견된 문제점을 1:1로 치료하는 실전 피드백 처방전)
+- 각 Action Item은 **[Action N] 제목** 형식으로 시작하고, 해당 문제의 타임스탬프를 다시 인용하며, 구체적인 단계별 실천 가이드를 제시하라.
+- "열린 자세를 취하세요", "Z자로 보세요"와 같은 뻔한 교과서적인 문구는 즉시 반려된다. 발표자의 특정 타임라인 문제(예: 특정 구간 측면 서 있기, 필러 워드 폭발 지점)를 확실하게 고칠 수 있는 행동 지침을 적어라.
+
+---
+# 📊 [CRITICAL] 5. AI 초정밀 정량 채점표 (JSON)
+피드백 보고서 작성이 완전히 끝난 후, 맨 마지막 줄에 아래 스펙 및 채점 기준에 따라 한치의 뻥튀기 없는 차갑고 객관적인 정량 점수 JSON 블록을 반드시 `[SCORES_START]`와 `[SCORES_END]` 태그로 감싸서 출력하라. 절대 임의로 키 이름을 바꾸거나 주석을 넣지 말라.
+
+## 채점 기준 가이드:
+1. **attitude (태도 - 20점 만점)**:
+   - items[0] (시선 점수 - 10점 만점): 카메라 정면 응시율이 80% 이상이면 9~10점, 50% 미만이면 5점 이하로 냉정하게 매긴다.
+   - items[1] (모션 점수 - 10점 만점): 제스처 역동성이 너무 미흡(50 미만)하거나 측면 서 있기 비율이 높다면 5~7점 이하로 깎는다.
+   - category: items[0] + items[1] (20점 만점)
+2. **voice (목소리 - 30점 만점)**:
+   - items[0] (음성 안정도 - 10점 만점): 데시벨 및 주파수 변동도가 불균형하거나 안정도가 낮다면 6~7점 이하로 깎는다.
+   - items[1] (평정심 - 10점 만점): 정면 시선과 필러 밀집도를 종합하여 불안 요소가 있으면 감점한다.
+   - items[2] (유창성 - 10점 만점): 분당 필러 워드가 3회 이상이면 7점 이하, 5회 이상이면 5점 이하로 감점한다.
+   - category: items[0] + items[1] + items[2] (30점 만점)
+3. **content (내용 - 50점 만점)**:
+   - items[0] (PPT 연관성 - 15점 만점): PPT 연동이 없거나 'PPT 분석 데이터 없음' 이면 0점, 발화와 매칭율이 낮으면 8점 이하.
+   - items[1] (발화 전달력 - 10점 만점): 대본상 발화 실수가 적발되거나 꼬인 문맥이 있으면 감점한다.
+   - items[2] (슬라이드 가독성/균형 - 15점 만점): PPT 가독성 및 균형 점수가 80점 미만이면 10점 이하.
+   - items[3] (슬라이드 일관성 - 10점 만점): 일관성 점수가 낮거나 과부하 장표가 많으면 감점한다.
+   - category: items[0] + items[1] + items[2] + items[3] (50점 만점)
+
+## JSON 출력 스펙 예시 (반드시 이 포맷을 준수):
+[SCORES_START]
+{
+  "attitude": { "category": 15, "items": [8, 7] },
+  "voice": { "category": 22, "items": [7, 8, 7] },
+  "content": { "category": 34, "items": [10, 8, 9, 7] }
+}
+[SCORES_END]
+
+반드시 한국어로 답변하십시오.
+"""
+
+        # 1. Gemma (Ollama 로컬) 모드 구동
+        if self.provider == "gemma":
+            # Ollama 모델 목록을 확인하여 전이학습 모델(overnight-coach) 존재 여부 검사
+            target_model = self.custom_model
+            try:
+                models_list = ollama.list()
+                available_models = [m.get('name') or m.get('model') for m in models_list.get('models', [])]
+                if not any(target_model in str(m) for m in available_models if m):
+                    print(f"   > [AI] '{target_model}' 모델이 Ollama에 등록되어 있지 않습니다. 기본 'gemma3:4b' 모델로 진행합니다.")
+                    target_model = "gemma3:4b"
+            except Exception as le:
+                print(f"   > [AI] Ollama 모델 리스트 확인 실패 ({le}). 기본 'gemma3:4b'로 진행합니다.")
+                target_model = "gemma3:4b"
+
+            print(f"   > [AI] {target_model} (Ollama)를 사용하여 피드백 생성 중...")
+            try:
+                response = ollama.chat(
+                    model=target_model,
+                    messages=[
+                        {'role': 'system', 'content': system_prompt},
+                        {'role': 'user', 'content': user_content}
+                    ],
+                    options={
+                        'num_predict': 1600,  # 🌟 한글 답변 Truncation(잘림) 방지 및 감성적 격려 멘트의 풍부한 서술 보장
+                        'temperature': 0.7,
+                        'top_p': 0.95
+                    }
+                )
+                return response['message']['content']
+            except Exception as e:
+                print(f"❌ Gemma API 오류: {e} (Gemini API 폴백 가동)")
+                self.provider = "gemini" # 오류 발생 시 Gemini API로 강제 폴백
+
+        # 2. Gemini API 모드 구동 (시연/발표용)
+        if self.provider == "gemini":
+            print(f"   > [AI] Gemini API를 사용하여 초고속 피드백 생성 중 (3초 소요)...")
+            try:
+                from core.gemini_client import chat_with_gemini
+                chat_res = chat_with_gemini(f"{system_prompt}\n\n{user_content}", [])
+                if chat_res and len(chat_res) > 1:
+                    return chat_res[-1]["content"]
+            except Exception as e:
+                print(f"❌ Gemini API 오류: {e}")
+            
+            return "피드백 생성 엔진 작동 중 오류가 발생했습니다. API 키 및 로컬 Ollama 구동 여부를 확인해 주세요."�� 타임스탬프를 매핑하여 날카롭게 분석)
 
 ### 🔴 오디오 파이프라인 감지 항목
 - **정밀 무음(VAD Silence)**: VAD가 감지한 물리적 무음 구간의 시작과 끝 타임스탬프(소수점 표기)를 정확하게 기록하고 발표 공백 원인을 대본과 대조하여 서술하라.
